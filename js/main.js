@@ -6,5 +6,6 @@ window.onload = main;
 console.log("ah");
 
 function main(){
-  console.log("re");
+  console.log(glMatrix);
+  console.log(glMatrix.glMatrix.toRadian(90));
 }
