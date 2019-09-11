@@ -39,10 +39,43 @@ console.log(gl);
   let program = createProgram(gl, vertexShader, fragmentShader);
 
   let positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-  console.log(window);
-  console.log(glMatrix);
-  console.log(glMatrix.glMatrix.toRadian(90));
-  console.log(canvas);
+
+  let positionBuffer = gl.createBuffer();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  let positions = [
+  0, 0,
+  0, 0.5,
+  0.7, 0,
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  //webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.clearColor(1, 0, 1, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.useProgram(program);
+  gl.enableVertexAttribArray(positionAttributeLocation);
+
+  // Bind the position buffer.
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+  let size = 2;          // 2 components per iteration
+  let type = gl.FLOAT;   // the data is 32bit floats
+  let normalize = false; // don't normalize the data
+  let stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+  let offset = 0;        // start at the beginning of the buffer
+  gl.vertexAttribPointer(
+      positionAttributeLocation, size, type, normalize, stride, offset);
+
+  let primitiveType = gl.TRIANGLES;
+  let offset02 = 0;
+  let count = 3;
+  gl.drawArrays(primitiveType, offset02, count);
+
+  console.log(typeof(positionAttributeLocation));
 }
 
 
