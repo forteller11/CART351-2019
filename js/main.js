@@ -45,12 +45,13 @@ console.log(gl);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   let positions = [
-  -1, -1,
-  -1, 1,
-  0, -1,
-  1, 1,
-  1, 2.5,
-  0.5, .5,
+  -1, -1, 0, 1,
+  0, -1, 0, 1,
+  1, 1, 0, 1,
+
+  -1, 1, 0, 1,
+  -.8, 0, 0, 1,
+  -.5, 1, 0, 1,
   ];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -65,7 +66,7 @@ console.log(gl);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-  let size = 2;          // 2 components per iteration
+  let size = 4;          // 2 components per iteration
   let type = gl.FLOAT;   // the data is 32bit floats
   let normalize = false; // don't normalize the data
   let stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
@@ -94,7 +95,6 @@ function createShader(gl, type, source) {
 
   console.log(gl.getShaderInfoLog(shader));
   gl.deleteShader(shader);
-
   return null;
 }
 
@@ -110,7 +110,6 @@ function createProgram(gl, vertexShader, fragmentShader) {
 
   console.log(gl.getProgramInfoLog(program));
   gl.deleteProgram(program);
-
   return null;
 }
 
@@ -118,17 +117,23 @@ let vertString =
 `// an attribute will receive data from a buffer
  attribute vec4 a_position;
 varying vec4 a_color;
+//uniform translateMat;
  // all shaders have a main function
  void main() {
+mat4 mTranslate = mat4(
+1.0, 0.0, 0.0, 1.0,
+0.0, 1.0, 0.0, 1.0,
+0.0, 0.0, 1.0, 0.0,
+0.0, 0.0, 0.0, 1.0);
 
    // gl_Position is a special variable a vertex shader
    // is responsible for setting
    gl_Position = a_position;
-   vec4 off = vec4(1.0, 1.0, 1.0,0.0);
+   vec4 off = vec4(1.0, 1.0, 1.0, 0.0);
    //precision highp int = 2;
-
+   float a = dot(aPosition, aPosition);
+   //aPosition = aPosition * mTranslate;
    a_color = ((a_position+off) /2.0);
-
  }`;
 
  let fragString =
@@ -141,4 +146,11 @@ varying vec4 a_color;
     // is responsible for setting
     gl_FragColor = a_color; // return redish-purple
   }
-`
+`;
+
+let translateMat =[
+  1,0,0,1,
+  0,1,0,1,
+  0,0,1,0,
+  0,0,0,1
+]
