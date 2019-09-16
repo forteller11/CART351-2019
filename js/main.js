@@ -27,8 +27,8 @@ console.log(gl);
   gl.clearColor(1, 0, 1, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  let vertexShaderSourceCode = document.getElementById("2d-vertex-shader").text;
-  let fragmentShaderSourceCode = document.getElementById("2d-fragment-shader").text;
+  let vertexShaderSourceCode = vertString;
+  let fragmentShaderSourceCode = fragString;
   console.log(typeof(vertexShaderSourceCode));
   console.log(vertexShaderSourceCode);
   console.log(window);
@@ -36,6 +36,7 @@ console.log(gl);
   let vertexShader = createShader(gl, gl.VERTEX_SHADER, vertString);
   let fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragString);
 
+console.log(vertexShader);
   let program = createProgram(gl, vertexShader, fragmentShader);
 
   let positionAttributeLocation = gl.getAttribLocation(program, "a_position");
@@ -50,7 +51,7 @@ console.log(gl);
   1, 1, 0, 1,
 
   -1, 1, 0, 1,
-  -.8, 0, 0, 1,
+  -.5, 0, 0, 1,
   -.5, 1, 0, 1,
   ];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -71,13 +72,12 @@ console.log(gl);
   let normalize = false; // don't normalize the data
   let stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
   let offset = 0;        // start at the beginning of the buffer
-
   gl.vertexAttribPointer(
       positionAttributeLocation, size, type, normalize, stride, offset);
 
   let primitiveType = gl.TRIANGLES;
   let offset02 = 0;
-  let count = 6;
+  let count = 8;
   gl.drawArrays(primitiveType, offset02, count);
 
   console.log(typeof(positionAttributeLocation));
@@ -95,6 +95,7 @@ function createShader(gl, type, source) {
 
   console.log(gl.getShaderInfoLog(shader));
   gl.deleteShader(shader);
+
   return null;
 }
 
@@ -110,6 +111,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 
   console.log(gl.getProgramInfoLog(program));
   gl.deleteProgram(program);
+
   return null;
 }
 
@@ -117,23 +119,17 @@ let vertString =
 `// an attribute will receive data from a buffer
  attribute vec4 a_position;
 varying vec4 a_color;
-//uniform translateMat;
  // all shaders have a main function
  void main() {
-mat4 mTranslate = mat4(
-1.0, 0.0, 0.0, 1.0,
-0.0, 1.0, 0.0, 1.0,
-0.0, 0.0, 1.0, 0.0,
-0.0, 0.0, 0.0, 1.0);
 
    // gl_Position is a special variable a vertex shader
    // is responsible for setting
    gl_Position = a_position;
-   vec4 off = vec4(1.0, 1.0, 1.0, 0.0);
+   vec4 off = vec4(1.0, 1.0, 1.0,0.0);
    //precision highp int = 2;
-   float a = dot(aPosition, aPosition);
-   //aPosition = aPosition * mTranslate;
+
    a_color = ((a_position+off) /2.0);
+
  }`;
 
  let fragString =
@@ -146,11 +142,4 @@ mat4 mTranslate = mat4(
     // is responsible for setting
     gl_FragColor = a_color; // return redish-purple
   }
-`;
-
-let translateMat =[
-  1,0,0,1,
-  0,1,0,1,
-  0,0,1,0,
-  0,0,0,1
-]
+`
