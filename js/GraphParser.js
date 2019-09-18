@@ -1,7 +1,10 @@
 'use strict';
 
 /*
-
+  this class is responsible for understanding graphs/trees (node<-->node relationships)
+  as well as understanding and interpreting inputs from the textinput
+  providing the textBuffer strings and selecting particular nodes to open up windows
+  Disclaimer: the graphParser is super tightly coupled with the Node class 
 */
 class GraphParser {
 
@@ -11,8 +14,8 @@ class GraphParser {
     this.textBuffer = textBuffer;
     this.textInput = input;
 
-    this.textInput.addEventListener('keypress', (e) =>{
-      if (e.keyCode === 13){
+    this.textInput.addEventListener('keypress', (e) => {
+      if (e.keyCode === 13) {
         this.input(this.textInput.value);
         this.textInput.value = "";
         this.textInput.placeholder = "";
@@ -28,16 +31,16 @@ class GraphParser {
     let commands = inputString.split("/");
 
     if ((commands[0] === this.index.name) && (commands.length > 1)) {
-      commands.splice(0,1);
+      commands.splice(0, 1);
     }
 
     let doesCommandMatchIndex = false;
     while (commands.length > 0) {
-      if ((commands[0] === "..") || (commands[0] === "exit")){
+      if ((commands[0] === "..") || (commands[0] === "exit")) {
         this.exit();
         break;
       }
-      if ((commands[0] === "help") || (commands[0] === "options")){
+      if ((commands[0] === "help") || (commands[0] === "options")) {
         this.help();
         return;
       }
@@ -45,29 +48,29 @@ class GraphParser {
         this.clear();
         break;
       }
-      if (commands[0] === "graph_directory"){
+      if (commands[0] === "graph_directory") {
         this.textBuffer.emptyQueueToDivOverTime(this.root.printBranch(this.root.indentBranch, true));
         return;
       }
-      if (commands[0] === "root"){
+      if (commands[0] === "root") {
         this.index = this.root;
         break;
       }
       this.dive(commands[0]);
-      commands.splice(0,1);
+      commands.splice(0, 1);
     }
     this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
   }
 
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
     let newChildNode = this.index.findChildByName(nodeName);
-    if (newChildNode.url.length > 0){
+    if (newChildNode.url.length > 0) {
       newChildNode.select();
-    }else this.index = newChildNode;
+    } else this.index = newChildNode;
     //select do it...
   }
 
-  exit(){
+  exit() {
     if (!(this.index.parent === null)) {
       console.log("exit");
       this.index = this.index.parent;
@@ -76,7 +79,7 @@ class GraphParser {
     console.log("exit not possible");
   }
 
-  clear(){
+  clear() {
     this.textBuffer.clear();
   }
 
@@ -84,7 +87,7 @@ class GraphParser {
     return this.index.printBranch(this.index.indentBranch);
   }
 
-  help(){
+  help() {
     let help = `Enter_folder_names_to_traverse_directory
     actions_can_be_nested_using_"/"
     --------------------

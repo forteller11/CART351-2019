@@ -21,10 +21,3 @@ width:100%;
   height:100%;
   margin-top: 18px;
 }
-
-input,
-textarea,
-[contenteditable] {
-  caret-width: 25px;
-  width:10px;
-}
