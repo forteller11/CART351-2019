@@ -1,6 +1,8 @@
 'use strict';
 
+/*
 
+*/
 class GraphParser {
 
   constructor(root, textBuffer, input) {
@@ -11,9 +13,9 @@ class GraphParser {
 
     this.textInput.addEventListener('keypress', (e) =>{
       if (e.keyCode === 13){
-        console.log(this.textInput.value);
         this.input(this.textInput.value);
         this.textInput.value = "";
+        this.textInput.placeholder = "";
       }
     })
   }
@@ -29,16 +31,17 @@ class GraphParser {
       commands.splice(0,1);
     }
 
+    let doesCommandMatchIndex = false;
     while (commands.length > 0) {
       if ((commands[0] === "..") || (commands[0] === "exit")){
         this.exit();
         break;
       }
-      if (commands[0] === "help"){
+      if ((commands[0] === "help") || (commands[0] === "options")){
         this.help();
         return;
       }
-      if (commands[0] === "clear"){
+      if ((commands[0] === "clear") || (commands[0] === "cls")) {
         this.clear();
         break;
       }
@@ -46,24 +49,22 @@ class GraphParser {
         this.textBuffer.emptyQueueToDivOverTime(this.root.printBranch(this.root.indentBranch, true));
         return;
       }
-
       if (commands[0] === "root"){
         this.index = this.root;
         break;
       }
-
-
-        this.dive(commands[0]);
-
+      this.dive(commands[0]);
       commands.splice(0,1);
     }
     this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
-    this.select();
-
   }
 
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
-    this.index = this.index.findChildByName(nodeName);
+    let newChildNode = this.index.findChildByName(nodeName);
+    if (newChildNode.url.length > 0){
+      newChildNode.select();
+    }else this.index = newChildNode;
+    //select do it...
   }
 
   exit(){
@@ -83,14 +84,6 @@ class GraphParser {
     return this.index.printBranch(this.index.indentBranch);
   }
 
-  printShallowIndex(){
-
-  }
-
-  select() {
-    this.index.select();
-  }
-
   help(){
     let help = `Enter_folder_names_to_traverse_directory
     actions_can_be_nested_using_"/"
@@ -101,7 +94,6 @@ class GraphParser {
     "exit"-------------->goes_up_in_the_directory
     "root"-------------->returns_to_root_directory
     `;
-
     this.textBuffer.emptyQueueToDivOverTime(help);
   }
 

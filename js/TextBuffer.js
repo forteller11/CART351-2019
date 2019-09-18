@@ -25,19 +25,19 @@ class TextBuffer
 
     //var content = div.createTextNode(stringToShed);
     //this.emptyQueueToDivOverTime
-    console.log(this.queuedTexts);
     this.queueClearInterval = setInterval( ()=>{
-      if (this.checkIfQueueEmpty()) return;
-      this.outputDiv.innerText += this.queuedTexts.shift();
+      if (this.checkIfQueueEmpty()) {return;}
+      let charToAdd = this.queuedTexts.shift();
+      this.outputDiv.innerText += charToAdd;
+      if (charToAdd === "\n") {this.inputDiv.scrollIntoView();}
       this.checkIfQueueEmpty();
-      this.inputDiv.focus();
 
     }, this.timePerWord);
   }
 
   addToQueue(inputString, linebreak = true){
     let space = "";
-    if (linebreak) space = "\n";
+    if (linebreak) {space = "\n";}
     let inputStringSpaced = space+inputString;
     let arrOfWords = inputStringSpaced.split("");
     for (let i = 0; i < arrOfWords.length; i++){
@@ -47,7 +47,7 @@ class TextBuffer
 
   checkIfQueueEmpty(){
     if (this.queuedTexts.length === 0) {
-      //clearInterval(this.queueClearInterval);
+      clearInterval(this.queueClearInterval);
       return true;
     }
     return false;

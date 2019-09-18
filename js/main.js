@@ -20,7 +20,7 @@ function main() {
     `CART_351_Home_Page
     Charly_Yan_Miller
 
-    type_and_enter_"help"_for_options
+    "help"_for_options
     `, false);
   //graphParser.input("Github Main Page");
   graphParser.input("CART_351");
