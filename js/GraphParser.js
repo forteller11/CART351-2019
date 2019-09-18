@@ -28,59 +28,82 @@ class GraphParser {
   }
 
   input(inputString = "") {
+    this.textBuffer.addToQueue(inputString);
     let commands = inputString.split("/");
 
     if ((commands[0] === this.index.name) && (commands.length > 1)) {
       commands.splice(0, 1);
     }
 
-    let doesCommandMatchIndex = false;
+    if ((commands[0] === this.index.name) && (commands.length === 1)) {
+      this.textBuffer.emptyQueueToDivOverTime(`already_in_directory_${this.index.name}!`);
+      return;
+    }
+
+    let howManyCommandsMatchedDirectory = 0;
     while (commands.length > 0) {
       if ((commands[0] === "..") || (commands[0] === "exit")) {
-        this.exit();
+        if (this.exit() === false) {
+          this.textBuffer.emptyQueueToDivOverTime("already_in_root_node\n");
+          return;
+        }
+        howManyCommandsMatchedDirectory++;
         break;
       }
       if ((commands[0] === "help") || (commands[0] === "options")) {
         this.help();
+        howManyCommandsMatchedDirectory++;
         return;
       }
       if ((commands[0] === "clear") || (commands[0] === "cls")) {
         this.clear();
+        howManyCommandsMatchedDirectory++;
         break;
       }
       if (commands[0] === "graph") {
         this.textBuffer.emptyQueueToDivOverTime(this.root.printBranch(this.root.indentBranch, true));
+        howManyCommandsMatchedDirectory++;
         return;
       }
       if ((commands[0] === "root") || (commands[0] === "home")) {
+        if (this.index === this.root) {
+          this.textBuffer.emptyQueueToDivOverTime("already_in_root_node\n");
+          return;
+        }
         this.index = this.root;
+        howManyCommandsMatchedDirectory++;
         break;
       }
       if ((commands[0] === "draw") || (commands[0] === "assci")) {
         this.textBuffer.emptyQueueToDivOverTime(this.proceduralAssciArt());
-        break;
+        howManyCommandsMatchedDirectory++;
+        return;
       }
-      this.dive(commands[0]);
+      howManyCommandsMatchedDirectory += this.dive(commands[0]);
       commands.splice(0, 1);
     }
-    this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
+    if (howManyCommandsMatchedDirectory > 0){
+      this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
+    } else this.textBuffer.emptyQueueToDivOverTime("Could_not_understand_above_commands\n");
   }
 
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
-    let newChildNode = this.index.findChildByName(nodeName);
-    if (newChildNode.url.length > 0) {
-      newChildNode.select();
-    } else this.index = newChildNode;
-    //select do it...
+    let potentialChildNode = this.index.findChildByName(nodeName);
+    if (potentialChildNode instanceof Node){
+      if (potentialChildNode.url.length > 0) {
+        potentialChildNode.select();
+      } else this.index = potentialChildNode;
+      return 1;
+    }
+    return 0;
   }
 
   exit() {
     if (!(this.index.parent === null)) {
-      console.log("exit");
       this.index = this.index.parent;
-      return;
+      return true;
     }
-    console.log("exit not possible");
+    return false;
   }
 
   clear() {
@@ -93,8 +116,7 @@ class GraphParser {
 
   help() {
     let help =
-    `Help:
-    -------------------
+    `-------------------
     Enter_folder_names_to_traverse_directory
     actions_can_be_nested_using_"/"
     --------------------

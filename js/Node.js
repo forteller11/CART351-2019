@@ -66,8 +66,8 @@ class Node
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i].name.toLowerCase() === nameToMatch.toLowerCase()) {return this.children[i];}
     }
-    console.log("couldn't find child by name: " + nameToMatch);
-    return this;
+    //console.log("couldn't find child by name: " + nameToMatch);
+    return null;
   }
 
 }

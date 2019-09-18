@@ -32,8 +32,8 @@ function main() {
     --------------------------
 
     `, false);
-  //graphParser.input("Github Main Page");
-  graphParser.input("CART_351");
+
+  textBuffer.emptyQueueToDivOverTime(graphParser.printIndex());
   }
 
 
