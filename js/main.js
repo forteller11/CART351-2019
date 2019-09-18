@@ -16,7 +16,7 @@ function main() {
   graphParser.printIndex();
 
   //graphParser.input("Github Main Page");
-  graphParser.input("CART 351/Exercises/Exercise01");
+  graphParser.input("../CART 351/../Exercises/Exercise01/../../..");
   }
 
 

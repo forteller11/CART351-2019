@@ -21,10 +21,6 @@ class Node
     //else return this;
   }
 
-  exit(){
-    return this.parent;
-  }
-
   printBranch(currentIndent = ""){
     let branchString = "";
     branchString += currentIndent;
@@ -43,7 +39,8 @@ class Node
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i].name === nameToMatch) return this.children[i];
     }
-    return null;
+    console.log("couldn't find child by name: " + nameToMatch);
+    return this;
   }
 
   returnNodeAlongBranch(namesToMatch){

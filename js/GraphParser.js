@@ -13,26 +13,41 @@ class GraphParser {
     this.index = this.root;
   }
 
-  dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
-    let potentialNode = this.index.findChildByName(nodeName);
-    if (!(potentialNode === null)) {
-      this.index = potentialNode;
+  input(inputString = "") {
+    let commands = inputString.split("/");
+
+    if (commands[0] === this.index.name) {
+      commands.splice(0,1);
+      console.log("starting is index");
+    }
+
+    while (commands.length > 0) {
+      if ((commands[0] === "..") || (commands[0] === "/..")){
+        this.exit();
+      }
+      else {
+        this.dive(commands[0]);
+      }
+      commands.splice(0,1);
       this.printIndex();
-      this.select();
+    }
+
+    //this.select();
+
+    console.log("FINISHED INPUT: "+this.index.name);
+  }
+
+  dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
+    this.index = this.index.findChildByName(nodeName);
+  }
+
+  exit(){
+    if (!(this.index.parent === null)) {
+      console.log("exit");
+      this.index = this.index.parent;
       return;
     }
-    console.log("Couldn't find name");
-  }
-
-  input(inputString = "") {
-    let nodeNames = inputString.split("/");
-    if (nodeNames[0] === this.root.name) this.absoluteDirectorySelect(nodeNames); //if the first node is the root node name, go into directory mode
-    else this.dive(inputString);
-  }
-
-  absoluteDirectorySelect(nodeNames) {
-    let selectedNode = this.root.returnNodeAlongBranch(nodeNames);
-    console.log(selectedNode.name);
+    console.log("exit not possible");
   }
 
   printIndex() {
