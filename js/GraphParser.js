@@ -47,6 +47,8 @@ class GraphParser {
         this.index = this.root;
         break;
       }
+
+
         this.dive(commands[0]);
 
       commands.splice(0,1);
