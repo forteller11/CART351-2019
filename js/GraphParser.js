@@ -13,15 +13,6 @@ class GraphParser {
     this.index = root;
     this.textBuffer = textBuffer;
     this.textInput = input;
-    this.assciArt =
-`░░░░░░░░┌┐░┌───┬───┬───┐
-░░░░░░░┌┘└┐│┌─┐│┌──┤┌─┐│
-┌──┬──┬┴┐┌┘└┘┌┘│└──┼┘┌┘│
-│┌─┤┌┐│┌┤│░┌┐└┐├──┐├┐└┐│
-│└─┤┌┐│││└┐│└─┘├──┘│└─┘│
-└──┴┘└┴┘└─┘└───┴───┴───┘
-░░░░░░░░░░░░░░░░░░░░░░░░
-`;
 
     this.textInput.addEventListener('keypress', (e) => {
       if (e.keyCode === 13) {
@@ -66,7 +57,7 @@ class GraphParser {
         break;
       }
       if ((commands[0] === "draw") || (commands[0] === "assci")) {
-        this.textBuffer.emptyQueueToDivOverTime(this.assciArt);
+        this.textBuffer.emptyQueueToDivOverTime(this.proceduralAssciArt());
         break;
       }
       this.dive(commands[0]);
@@ -112,9 +103,25 @@ class GraphParser {
     "clear"------------->clears_the_screen
     "exit"-------------->goes_up_in_the_directory
     "root"-------------->returns_to_root_directory
-    "draw"-------------->assci_art_:)
+    "draw"-------------->assci_art_pattern_:)
     `;
     this.textBuffer.emptyQueueToDivOverTime(help);
+  }
+
+  proceduralAssciArt(){
+    const w = 14;
+    const h = 6;
+    let charType = ["░","▒","█","▄","│","║"];
+    let assciArt = "";
+
+    for (let i = 0; i < h; i++){
+      for (let j = 0; j < w; j++){
+        let index = Math.floor(Math.random() * charType.length);
+        assciArt += charType[index];
+      }
+      assciArt += "\n";
+    }
+    return assciArt;
   }
 
 }
