@@ -3,16 +3,17 @@
 
 class TextBuffer
 {
-  constructor (output)
+  constructor (output, input)
   {
     this.outputDiv = output;
+    this.inputDiv = input;
     this.consoleText = ""; //represents console
     this.queuedTexts = [];
     //maybe queued text is array
     this.timePerWord = 8; //in ms
     this.queueClearInterval;
 
-
+    window.addEventListener('onmousehover',()=>this.inputDiv.focus());
     //add text
   }
 
@@ -29,6 +30,8 @@ class TextBuffer
       if (this.checkIfQueueEmpty()) return;
       this.outputDiv.innerText += this.queuedTexts.shift();
       this.checkIfQueueEmpty();
+      this.inputDiv.focus();
+
     }, this.timePerWord);
   }
 

@@ -30,9 +30,13 @@ class GraphParser {
     }
 
     while (commands.length > 0) {
-      if (commands[0] === ".."){
+      if ((commands[0] === "..") || (commands[0] === "exit")){
         this.exit();
         break;
+      }
+      if (commands[0] === "help"){
+        this.help();
+        return;
       }
       if (commands[0] === "clear"){
         this.clear();
@@ -85,6 +89,20 @@ class GraphParser {
 
   select() {
     this.index.select();
+  }
+
+  help(){
+    let help = `Enter_folder_names_to_traverse_directory
+    actions_can_be_nested_using_"/"
+    --------------------
+    Commands:
+    "graph_directory---->displays_directory_structure_full"
+    "clear"------------->clears_the_screen
+    "exit"-------------->goes_up_in_the_directory
+    "root"-------------->returns_to_root_directory
+    `;
+
+    this.textBuffer.emptyQueueToDivOverTime(help);
   }
 
 }

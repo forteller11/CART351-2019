@@ -14,11 +14,13 @@ function main() {
   terminalInput.focus();
   terminalInput.select();
   console.log(terminalOutput)
-  let textBuffer = new TextBuffer(terminalOutput);
+  let textBuffer = new TextBuffer(terminalOutput, terminalInput);
   let graphParser = new GraphParser(root, textBuffer, terminalInput);
   textBuffer.addToQueue(
     `CART_351_Home_Page
     Charly_Yan_Miller
+
+    type_and_enter_"help"_for_options
     `, false);
   //graphParser.input("Github Main Page");
   graphParser.input("CART_351");
@@ -29,9 +31,13 @@ function main() {
     let root = new Node("CART_351");
       let baseGithub = new Node("Github_Main_Page", root, "https://github.com/forteller11/CART351-2019");
       let exercises = new Node("Exercises", root);
-        let e1 = new Node("Exercise01", exercises, "https://www.youtube.com/watch?v=uY717BJA_2I");
-        let e2 = new Node("Exercise02", exercises, "https://www.youtube.com/watch?v=k8FVUjGRSac");
-        exercises.children.push(e1, e2);
+        let e1 = new Node("Exercise01", exercises);
+          let ea = new Node("Github", exercises, "https://github.com/forteller11/CART351-2019");
+          let eb = new Node("Website", exercises, "https://forteller11.github.io/CART351-2019/exercise01");
+          e1.children.push(ea, eb)
+        let e2 = new Node("Exercise02_(placeholder)", exercises);
+        let e3 = new Node("Exercise03_(placeholder)", exercises);
+        exercises.children.push(e1, e2, e3);
       let projects = new Node("Project", root);
       let reflections = new Node("Reflections", root);
       let presentations = new Node("Presentations", root);
