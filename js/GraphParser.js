@@ -13,6 +13,15 @@ class GraphParser {
     this.index = root;
     this.textBuffer = textBuffer;
     this.textInput = input;
+    this.assciArt =
+`░░░░░░░░┌┐░┌───┬───┬───┐
+░░░░░░░┌┘└┐│┌─┐│┌──┤┌─┐│
+┌──┬──┬┴┐┌┘└┘┌┘│└──┼┘┌┘│
+│┌─┤┌┐│┌┤│░┌┐└┐├──┐├┐└┐│
+│└─┤┌┐│││└┐│└─┘├──┘│└─┘│
+└──┴┘└┴┘└─┘└───┴───┴───┘
+░░░░░░░░░░░░░░░░░░░░░░░░
+`;
 
     this.textInput.addEventListener('keypress', (e) => {
       if (e.keyCode === 13) {
@@ -54,6 +63,10 @@ class GraphParser {
       }
       if ((commands[0] === "root") || (commands[0] === "home")) {
         this.index = this.root;
+        break;
+      }
+      if ((commands[0] === "draw") || (commands[0] === "assci")) {
+        this.textBuffer.emptyQueueToDivOverTime(this.assciArt);
         break;
       }
       this.dive(commands[0]);

@@ -17,10 +17,20 @@ function main() {
   let textBuffer = new TextBuffer(terminalOutput, terminalInput);
   let graphParser = new GraphParser(root, textBuffer, terminalInput);
   textBuffer.addToQueue(
-    `CART_351_Home_Page
+    `Terminal_Home_Page
     Charly_Yan_Miller
 
+    ░░░░░░░░┌┐░┌───┬───┬───┐
+    ░░░░░░░┌┘└┐│┌─┐│┌──┤┌─┐│
+    ┌──┬──┬┴┐┌┘└┘┌┘│└──┼┘┌┘│
+    │┌─┤┌┐│┌┤│░┌┐└┐├──┐├┐└┐│
+    │└─┤┌┐│││└┐│└─┘├──┘│└─┘│
+    └──┴┘└┴┘└─┘└───┴───┴───┘
+    ░░░░░░░░░░░░░░░░░░░░░░░░
+
     "help"_for_options
+    --------------------------
+
     `, false);
   //graphParser.input("Github Main Page");
   graphParser.input("CART_351");
