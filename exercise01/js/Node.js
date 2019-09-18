@@ -22,7 +22,7 @@ class Node
     //else return this;
   }
 
-  printBranch(indentHistory = ""){
+  printBranch(indentHistory = "", deep = false){
     let branchString = "";
     let currentIndent = "";
     let indentToAdd = this.indentBranch;
@@ -37,7 +37,8 @@ class Node
     branchString += this.newLine;
     if (this.children.length > 0){
       for (let i = 0; i < this.children.length; i ++){
-        branchString += this.children[i].printBranch(indentHistory + indentToAdd);
+        if (deep) branchString += this.children[i].printBranch(indentHistory + indentToAdd);
+        else branchString += this.children[i].printSelf(indentHistory + indentToAdd);
       }
     }
 
@@ -50,6 +51,22 @@ class Node
     }
     console.log("couldn't find child by name: " + nameToMatch);
     return this;
+  }
+
+  printSelf(indentHistory = ""){
+    let branchString = "";
+    let currentIndent = "";
+    let indentToAdd = this.indentBranch;
+    if (this.children.length === 0) indentToAdd = this.indentLeaf;
+
+    for (let i = 0; i < indentHistory.length-indentToAdd.length; i++){
+      currentIndent += "-";
+    }
+
+    branchString += currentIndent+indentToAdd;
+    branchString += this.name;
+    branchString += this.newLine;
+    return branchString;
   }
 
 

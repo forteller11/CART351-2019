@@ -38,6 +38,15 @@ class GraphParser {
         this.clear();
         break;
       }
+      if (commands[0] === "graph_directory"){
+        this.textBuffer.emptyQueueToDivOverTime(this.root.printBranch(this.root.indentBranch, true));
+        return;
+      }
+
+      if (commands[0] === "root"){
+        this.index = this.root;
+        break;
+      }
         this.dive(commands[0]);
 
       commands.splice(0,1);
@@ -66,6 +75,10 @@ class GraphParser {
 
   printIndex() {
     return this.index.printBranch(this.index.indentBranch);
+  }
+
+  printShallowIndex(){
+
   }
 
   select() {
