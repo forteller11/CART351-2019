@@ -1,7 +1,7 @@
 'use strict';
 
 
-class ConsoleResponse()
+class ConsoleResponse
 {
   constructor (div)
   {

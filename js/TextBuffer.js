@@ -1,7 +1,7 @@
 'use strict';
 
 
-class TextBuffer()
+class TextBuffer
 {
   constructor (div)
   {
@@ -14,7 +14,9 @@ class TextBuffer()
     //add text
   }
 
-  emptyQueueToDivOverTime(){
+  emptyQueueToDivOverTime(optionalString = ""){
+    this.queuedText += optionalString;
+
     if (queuedText.length < 1) return; //if empty end loop
     //find out what strings to attach to text node string ot shed
     //remove strings from queued text
@@ -33,4 +35,5 @@ class TextBuffer()
     // }
     // return outputString;
   }
+  //no parent or child, just children or no children
 }

@@ -10,10 +10,21 @@ let gl;
 console.log("ah");
 
 function main() {
-  canvas = document.getElementById("canvasId");
-  gl = canvas.getContext("webgl2");
+  let root = createGraph();
 
-  if (gl == null) {
-    console.error("Couldn't get webGL context!");
-    return;
+  let graphParser = new GraphParser(root);
+  graphParser.printIndex();
+  }
+
+
+  function createGraph(){
+    let root = new Node("CART 351");
+      let baseGithub = new Node("Github Main Page", root, "https://github.com/forteller11/CART351-2019");
+      let exercises = new Node("Exercises", root);
+      let projects = new Node("Project", root);
+      let reflections = new Node("Reflections", root);
+      let presentations = new Node("Presentations", root);
+    root.children.push(baseGithub, exercises, projects, reflections, presentations);
+
+    return root;
   }
