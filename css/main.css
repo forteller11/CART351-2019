@@ -1,7 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap');
 
-h2{
-  text-align: center;
+* {
+  box-sizing: border-box;
+  background-color: rgba(46, 61, 46, 1);
+  font-family: 'Ubuntu Mono', monospace;
+  color: rgba(131, 245, 181, 1);
 }
-h3{
-  text-align: center;
+#terminalOutput{
+height:100%;
+}
+#terminalInput{
+  outline:none;
+  width:100%;
+
 }

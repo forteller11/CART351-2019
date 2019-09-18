@@ -3,9 +3,11 @@
 
 class TextBuffer
 {
-  constructor (div=null)
+  constructor (input, output)
   {
-    this.div = div;
+    console.log(output);
+    this.inputTextBox = input;
+    this.outputDiv = output;
     this.consoleText = ""; //represents console
     this.queuedTexts = [];
     //maybe queued text is array
@@ -26,7 +28,7 @@ class TextBuffer
     //this.emptyQueueToDivOverTime
 
     this.queueClearInterval = setInterval( ()=>{
-      console.log(this.queuedTexts.pop());
+      this.outputDiv.innerText += this.queuedTexts.pop();
       this.checkIfQueueEmpty();
     }, this.timePerWord);
   }

@@ -11,9 +11,11 @@ console.log("ah");
 
 function main() {
   let root = createGraph();
-
-  let div = function(){console.log("place holder div");}
-  let textBuffer = new TextBuffer(div);
+  let terminalOutput = document.getElementById("terminalOutput");
+  let terminalInput = document.getElementById("terminalInput");
+  terminalInput.focus();
+  console.log(terminalOutput)
+  let textBuffer = new TextBuffer(terminalInput, terminalOutput);
   let graphParser = new GraphParser(root, textBuffer);
   graphParser.printIndex();
 
