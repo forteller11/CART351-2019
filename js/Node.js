@@ -11,28 +11,28 @@ class Node
     this.children = [];
 
     this.newLine = "\n";
-    this.indentSpace = "___";
+    this.indentSpace = "--> ";
   }
 
-  selected(){
+  select(){
     //console.error("Method not implemented!");
     if (this.url.length > 0) window.open(this.url, '_blank');
-    if (this.children.length > 0) return this.children; //change directory?
-    else return this;
+    //if (this.children.length > 0) return this.children; //change directory?
+    //else return this;
   }
 
   exit(){
     return this.parent;
   }
 
-  printBranch(currentIndent = "__"){
+  printBranch(currentIndent = ""){
     let branchString = "";
+    branchString += currentIndent;
     branchString += this.name;
     branchString += this.newLine;
     if (this.children.length > 0){
-      branchString += currentIndent;
       for (let i = 0; i < this.children.length; i ++){
-        branchString += this.children[0].printBranch(currentIndent + this.indentSpace);
+        branchString += this.children[i].printBranch(currentIndent + this.indentSpace);
       }
     }
 

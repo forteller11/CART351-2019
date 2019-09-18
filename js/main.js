@@ -14,6 +14,8 @@ function main() {
 
   let graphParser = new GraphParser(root);
   graphParser.printIndex();
+
+  graphParser.dive("Github Main Page");
   }
 
 
