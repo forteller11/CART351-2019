@@ -39,4 +39,25 @@ class Node
     return branchString;
   }
 
+  findChildByName(nameToMatch){
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i].name === nameToMatch) return this.children[i];
+    }
+    return null;
+  }
+
+  returnNodeAlongBranch(namesToMatch){
+    namesToMatch.splice(0,1);
+
+    console.log(`in "${this.name}" with array "${namesToMatch}"`);
+
+    if (namesToMatch.length === 0){ //if no more left to dive
+      this.select();
+      return this;
+    }
+
+    let deeperNode = this.findChildByName(namesToMatch[0]);
+    return deeperNode.returnNodeAlongBranch(namesToMatch); //recursion
+  }
+
 }
