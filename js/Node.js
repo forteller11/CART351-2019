@@ -11,7 +11,8 @@ class Node
     this.children = [];
 
     this.newLine = "\n";
-    this.indentSpace = "--> ";
+    this.indentBranch = " >";
+    this.indentLeaf = " >";
   }
 
   select(){
@@ -21,14 +22,22 @@ class Node
     //else return this;
   }
 
-  printBranch(currentIndent = ""){
+  printBranch(indentHistory = ""){
     let branchString = "";
-    branchString += currentIndent;
+    let currentIndent = "";
+    let indentToAdd = this.indentBranch;
+    if (this.children.length === 0) indentToAdd = this.indentLeaf;
+
+    for (let i = 0; i < indentHistory.length-indentToAdd.length; i++){
+      currentIndent += " ";
+    }
+
+    branchString += currentIndent+indentToAdd;
     branchString += this.name;
     branchString += this.newLine;
     if (this.children.length > 0){
       for (let i = 0; i < this.children.length; i ++){
-        branchString += this.children[i].printBranch(currentIndent + this.indentSpace);
+        branchString += this.children[i].printBranch(indentHistory + indentToAdd);
       }
     }
 
@@ -43,18 +52,5 @@ class Node
     return this;
   }
 
-  returnNodeAlongBranch(namesToMatch){
-    namesToMatch.splice(0,1);
-
-    console.log(`in "${this.name}" with array "${namesToMatch}"`);
-
-    if (namesToMatch.length === 0){ //if no more left to dive
-      this.select();
-      return this;
-    }
-
-    let deeperNode = this.findChildByName(namesToMatch[0]);
-    return deeperNode.returnNodeAlongBranch(namesToMatch); //recursion
-  }
 
 }

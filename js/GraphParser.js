@@ -32,8 +32,6 @@ class GraphParser {
       this.printIndex();
     }
 
-    //this.select();
-
     console.log("FINISHED INPUT: "+this.index.name);
   }
 
