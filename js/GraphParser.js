@@ -3,10 +3,19 @@
 
 class GraphParser {
 
-  constructor(root, textBuffer) {
+  constructor(root, textBuffer, input) {
     this.root = root;
     this.index = root;
     this.textBuffer = textBuffer;
+    this.textInput = input;
+
+    this.textInput.addEventListener('keypress', (e) =>{
+      if (e.keyCode === 13){
+        console.log(this.textInput.value);
+        this.input(this.textInput.value);
+        this.textInput.value = "";
+      }
+    })
   }
 
   returnToBaseNode() {
@@ -16,23 +25,22 @@ class GraphParser {
   input(inputString = "") {
     let commands = inputString.split("/");
 
-    if (commands[0] === this.index.name) {
+    if ((commands[0] === this.index.name) && (commands.length > 1)) {
       commands.splice(0,1);
-      console.log("starting is index");
     }
 
     while (commands.length > 0) {
-      if ((commands[0] === "..") || (commands[0] === "/..")){
+      if (commands[0] === ".."){
         this.exit();
       }
       else {
         this.dive(commands[0]);
       }
       commands.splice(0,1);
-      this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
     }
+    this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
+    this.select();
 
-    console.log("FINISHED INPUT: "+this.index.name);
   }
 
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
@@ -49,7 +57,7 @@ class GraphParser {
   }
 
   printIndex() {
-    return this.index.printBranch();
+    return this.index.printBranch(this.index.indentBranch);
   }
 
   select() {

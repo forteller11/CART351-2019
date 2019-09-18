@@ -11,8 +11,8 @@ class Node
     this.children = [];
 
     this.newLine = "\n";
-    this.indentBranch = " ->";
-    this.indentLeaf = " ->";
+    this.indentBranch = "--";
+    this.indentLeaf = ">>";
   }
 
   select(){
@@ -29,7 +29,7 @@ class Node
     if (this.children.length === 0) indentToAdd = this.indentLeaf;
 
     for (let i = 0; i < indentHistory.length-indentToAdd.length; i++){
-      currentIndent += " ";
+      currentIndent += "-";
     }
 
     branchString += currentIndent+indentToAdd;
@@ -46,7 +46,7 @@ class Node
 
   findChildByName(nameToMatch){
     for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].name === nameToMatch) return this.children[i];
+      if (this.children[i].name.toLowerCase() === nameToMatch.toLowerCase()) return this.children[i];
     }
     console.log("couldn't find child by name: " + nameToMatch);
     return this;

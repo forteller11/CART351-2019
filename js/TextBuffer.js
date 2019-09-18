@@ -3,50 +3,50 @@
 
 class TextBuffer
 {
-  constructor (input, output)
+  constructor (output)
   {
-    console.log(output);
-    this.inputTextBox = input;
     this.outputDiv = output;
     this.consoleText = ""; //represents console
     this.queuedTexts = [];
     //maybe queued text is array
     this.timePerWord = 8; //in ms
-    this.queueClearInterval = null;
+    this.queueClearInterval;
+
 
     //add text
   }
 
   emptyQueueToDivOverTime(optionalString = ""){
-    console.log("empty queue div");
-    this.addToQueue(optionalString);
 
+    this.addToQueue(optionalString);
     //find out what strings to attach to text node string ot shed
     //remove strings from queued text
 
     //var content = div.createTextNode(stringToShed);
     //this.emptyQueueToDivOverTime
-
+    console.log(this.queuedTexts);
     this.queueClearInterval = setInterval( ()=>{
-      this.outputDiv.innerText += this.queuedTexts.pop();
+      if (this.checkIfQueueEmpty()) return;
+      this.outputDiv.innerText += this.queuedTexts.shift();
       this.checkIfQueueEmpty();
     }, this.timePerWord);
   }
 
   addToQueue(inputString){
-    let arrOfWords = inputString.split("");
+    let space = "\n";
+    let inputStringSpaced = space+inputString;
+    let arrOfWords = inputStringSpaced.split("");
     for (let i = 0; i < arrOfWords.length; i++){
       this.queuedTexts.push(arrOfWords[i]); //add to array of chars in event blob
     }
   }
 
   checkIfQueueEmpty(){
-    if ((this.queuedTexts.length === 0) && (!(this.queueClearInterval === null)) ) {
-      console.log("cleartimeout");
-      clearTimeout(this.queueClearInterval);
-      this.queueClearInterval = null;
-      return;
+    if (this.queuedTexts.length === 0) {
+      //clearInterval(this.queueClearInterval);
+      return true;
     }
+    return false;
   }
 
 

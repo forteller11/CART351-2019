@@ -7,26 +7,27 @@ let canvas;
 let gl;
 
 
-console.log("ah");
-
 function main() {
   let root = createGraph();
   let terminalOutput = document.getElementById("terminalOutput");
   let terminalInput = document.getElementById("terminalInput");
   terminalInput.focus();
+  terminalInput.select();
   console.log(terminalOutput)
-  let textBuffer = new TextBuffer(terminalInput, terminalOutput);
-  let graphParser = new GraphParser(root, textBuffer);
-  graphParser.printIndex();
-
+  let textBuffer = new TextBuffer(terminalOutput);
+  let graphParser = new GraphParser(root, textBuffer, terminalInput);
+  textBuffer.addToQueue(
+    `CART_351_Home_Page
+    Charly_Yan_Miller
+    `);
   //graphParser.input("Github Main Page");
-  graphParser.input(".fadadfasfdafsdsfdasfdafsad..");
+  graphParser.input("CART_351");
   }
 
 
   function createGraph(){
-    let root = new Node("CART 351");
-      let baseGithub = new Node("Github Main Page", root, "https://github.com/forteller11/CART351-2019");
+    let root = new Node("CART_351");
+      let baseGithub = new Node("Github_Main_Page", root, "https://github.com/forteller11/CART351-2019");
       let exercises = new Node("Exercises", root);
         let e1 = new Node("Exercise01", exercises, "https://www.youtube.com/watch?v=uY717BJA_2I");
         let e2 = new Node("Exercise02", exercises, "https://www.youtube.com/watch?v=k8FVUjGRSac");
