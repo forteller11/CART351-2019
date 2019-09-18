@@ -32,10 +32,14 @@ class GraphParser {
     while (commands.length > 0) {
       if (commands[0] === ".."){
         this.exit();
+        break;
       }
-      else {
+      if (commands[0] === "clear"){
+        this.clear();
+        break;
+      }
         this.dive(commands[0]);
-      }
+
       commands.splice(0,1);
     }
     this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
@@ -54,6 +58,10 @@ class GraphParser {
       return;
     }
     console.log("exit not possible");
+  }
+
+  clear(){
+    this.textBuffer.clear();
   }
 
   printIndex() {

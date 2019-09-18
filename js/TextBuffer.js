@@ -32,8 +32,9 @@ class TextBuffer
     }, this.timePerWord);
   }
 
-  addToQueue(inputString){
-    let space = "\n";
+  addToQueue(inputString, linebreak = true){
+    let space = "";
+    if (linebreak) space = "\n";
     let inputStringSpaced = space+inputString;
     let arrOfWords = inputStringSpaced.split("");
     for (let i = 0; i < arrOfWords.length; i++){
@@ -47,6 +48,11 @@ class TextBuffer
       return true;
     }
     return false;
+  }
+
+  clear(){
+    this.queuedText = [];
+    this.outputDiv.innerText = "";
   }
 
 
