@@ -8,7 +8,9 @@ class TextBuffer()
     this.div = div;
     this.consoleText = ""; //represents console
     this.queuedText = "";
+    //maybe queued text is array
     this.timePerLine = 4; //in ms
+
     //add text
   }
 
@@ -19,5 +21,16 @@ class TextBuffer()
     var content = div.createTextNode(stringToShed);
     this.emptyQueueToDivOverTime
     window.timeout(timePerLine, this.emptyQueueToDivOverTime);
+  }
+
+  PrintGraphFromNode(rootNode){
+    // let outputString = "";
+    // let currentIndent = "";
+    // //outputString += currentNode.name;
+    //
+    // for (let child in this.children){
+    //   outputString += child.printBranch(currentIndent);
+    // }
+    // return outputString;
   }
 }

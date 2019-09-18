@@ -1,7 +1,7 @@
 'use strict';
 
 
-class EndNode()
+class EndNode extends Node
 {
   constructor (url)
   {
@@ -11,5 +11,6 @@ class EndNode()
 
   select(){
     //open url
+    window.open(url, '_blank');
   }
 }

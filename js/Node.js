@@ -1,9 +1,22 @@
 'use strict';
 
 
-class Node()
+class Node
 {
-  constructor (div)
-  {
-    this.children;
+
+  constructor(name){
+    this.name;
+    this.parent; //another node object
+
+    this.newLine = "\n";
+    this.indentSpace = "___";
+  }
+
+  onSelection(){
+    console.error("Method not implemented!");
+  }
+
+  printBranch(string indent){
+
+  }
 }
