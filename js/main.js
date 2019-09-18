@@ -33,7 +33,7 @@ function main() {
       let exercises = new Node("Exercises", root);
         let e1 = new Node("Exercise01", exercises);
           let ea = new Node("Github", exercises, "https://github.com/forteller11/CART351-2019");
-          let eb = new Node("Website", exercises, "https://forteller11.github.io/CART351-2019/exercise01");
+          let eb = new Node("Website", exercises, "https://forteller11.github.io/CART351-2019");
           e1.children.push(ea, eb)
         let e2 = new Node("Exercise02_(placeholder)", exercises);
         let e3 = new Node("Exercise03_(placeholder)", exercises);
