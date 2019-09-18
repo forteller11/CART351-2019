@@ -4,7 +4,7 @@
   this class is responsible for understanding graphs/trees (node<-->node relationships)
   as well as understanding and interpreting inputs from the textinput
   providing the textBuffer strings and selecting particular nodes to open up windows
-  Disclaimer: the graphParser is super tightly coupled with the Node class 
+  Disclaimer: the graphParser is super tightly coupled with the Node class
 */
 class GraphParser {
 
@@ -48,11 +48,11 @@ class GraphParser {
         this.clear();
         break;
       }
-      if (commands[0] === "graph_directory") {
+      if (commands[0] === "graph") {
         this.textBuffer.emptyQueueToDivOverTime(this.root.printBranch(this.root.indentBranch, true));
         return;
       }
-      if (commands[0] === "root") {
+      if ((commands[0] === "root") || (commands[0] === "home")) {
         this.index = this.root;
         break;
       }
@@ -88,14 +88,18 @@ class GraphParser {
   }
 
   help() {
-    let help = `Enter_folder_names_to_traverse_directory
+    let help =
+    `Help:
+    -------------------
+    Enter_folder_names_to_traverse_directory
     actions_can_be_nested_using_"/"
     --------------------
     Commands:
-    "graph_directory---->displays_directory_structure_full"
+    "graph-------------->displays_entire_directory_structure"
     "clear"------------->clears_the_screen
     "exit"-------------->goes_up_in_the_directory
     "root"-------------->returns_to_root_directory
+    "draw"-------------->assci_art_:)
     `;
     this.textBuffer.emptyQueueToDivOverTime(help);
   }

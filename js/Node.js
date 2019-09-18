@@ -15,9 +15,9 @@ class Node
     this.url = url; //url to open if selected
     this.children = []; //node objects
 
-    this.indentBranch = "--";
+    this.indentBranch = "---";
     this.indentUnopenedParent = "-:";
-    this.indentLeaf = "->";
+    this.indentLeaf = "-->";
   }
 
   select(){
@@ -29,9 +29,11 @@ class Node
     let newNameInfo = this.printSelf(indentHistory);
     let branchString = "";
     branchString += newNameInfo.name;
+    newNameInfo.indentHistory += this.indentBranch;
+
     if (this.children.length > 0){
       for (let i = 0; i < this.children.length; i ++){
-        if (deep) {branchString += this.children[i].printBranch(newNameInfo.indentHistory);}
+        if (deep) branchString += this.children[i].printBranch(newNameInfo.indentHistory, true);
         else branchString += this.children[i].printSelf(newNameInfo.indentHistory).name;
       }
     }

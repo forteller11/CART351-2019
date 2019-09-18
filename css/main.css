@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap');
 
 * {
+  line-height: 1.2;
   padding: 2px;
   box-sizing: border-box;
   background-color: rgba(36, 51, 40, 1);
   font-family: 'Ubuntu Mono', monospace;
   color: rgba(131, 245, 181, 1);
-  font-size: 18px;
+  font-size: 14px;
 }
 #terminalOutput{
 height:auto;
