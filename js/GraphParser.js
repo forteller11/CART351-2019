@@ -3,10 +3,10 @@
 
 class GraphParser {
 
-  constructor(root) {
+  constructor(root, textBuffer) {
     this.root = root;
     this.index = root;
-    this.textBuffer;
+    this.textBuffer = textBuffer;
   }
 
   returnToBaseNode() {
@@ -29,7 +29,7 @@ class GraphParser {
         this.dive(commands[0]);
       }
       commands.splice(0,1);
-      this.printIndex();
+      this.textBuffer.emptyQueueToDivOverTime(this.printIndex());
     }
 
     console.log("FINISHED INPUT: "+this.index.name);
@@ -49,7 +49,7 @@ class GraphParser {
   }
 
   printIndex() {
-    console.log(this.index.printBranch());
+    return this.index.printBranch();
   }
 
   select() {

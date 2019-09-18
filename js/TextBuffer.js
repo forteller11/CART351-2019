@@ -3,37 +3,49 @@
 
 class TextBuffer
 {
-  constructor (div)
+  constructor (div=null)
   {
     this.div = div;
     this.consoleText = ""; //represents console
-    this.queuedText = "";
+    this.queuedTexts = [];
     //maybe queued text is array
-    this.timePerLine = 4; //in ms
+    this.timePerWord = 8; //in ms
+    this.queueClearInterval = null;
 
     //add text
   }
 
   emptyQueueToDivOverTime(optionalString = ""){
-    this.queuedText += optionalString;
+    console.log("empty queue div");
+    this.addToQueue(optionalString);
 
-    if (queuedText.length < 1) return; //if empty end loop
     //find out what strings to attach to text node string ot shed
     //remove strings from queued text
-    var content = div.createTextNode(stringToShed);
-    this.emptyQueueToDivOverTime
-    window.timeout(timePerLine, this.emptyQueueToDivOverTime);
+
+    //var content = div.createTextNode(stringToShed);
+    //this.emptyQueueToDivOverTime
+
+    this.queueClearInterval = setInterval( ()=>{
+      console.log(this.queuedTexts.pop());
+      this.checkIfQueueEmpty();
+    }, this.timePerWord);
   }
 
-  PrintGraphFromNode(rootNode){
-    // let outputString = "";
-    // let currentIndent = "";
-    // //outputString += currentNode.name;
-    //
-    // for (let child in this.children){
-    //   outputString += child.printBranch(currentIndent);
-    // }
-    // return outputString;
+  addToQueue(inputString){
+    let arrOfWords = inputString.split("");
+    for (let i = 0; i < arrOfWords.length; i++){
+      this.queuedTexts.push(arrOfWords[i]); //add to array of chars in event blob
+    }
   }
-  //no parent or child, just children or no children
+
+  checkIfQueueEmpty(){
+    if ((this.queuedTexts.length === 0) && (!(this.queueClearInterval === null)) ) {
+      console.log("cleartimeout");
+      clearTimeout(this.queueClearInterval);
+      this.queueClearInterval = null;
+      return;
+    }
+  }
+
+
 }

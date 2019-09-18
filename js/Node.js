@@ -11,8 +11,8 @@ class Node
     this.children = [];
 
     this.newLine = "\n";
-    this.indentBranch = " >";
-    this.indentLeaf = " >";
+    this.indentBranch = " ->";
+    this.indentLeaf = " ->";
   }
 
   select(){

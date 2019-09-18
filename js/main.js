@@ -12,11 +12,13 @@ console.log("ah");
 function main() {
   let root = createGraph();
 
-  let graphParser = new GraphParser(root);
+  let div = function(){console.log("place holder div");}
+  let textBuffer = new TextBuffer(div);
+  let graphParser = new GraphParser(root, textBuffer);
   graphParser.printIndex();
 
   //graphParser.input("Github Main Page");
-  graphParser.input("../CART 351/../Exercises/Exercise01/../../..");
+  graphParser.input(".fadadfasfdafsdsfdasfdafsad..");
   }
 
 
