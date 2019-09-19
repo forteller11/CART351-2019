@@ -28,16 +28,22 @@ class GraphParser {
   }
 
   input(inputString = "") {
+
+    if (inputString === "") return;
     this.textBuffer.addToQueue(inputString);
-    let commands = inputString.split("/");
+    let inputStringLowerCase = inputString.toLowerCase();
 
-    if ((commands[0] === this.index.name) && (commands.length > 1)) {
-      commands.splice(0, 1);
-    }
+    let commands = inputStringLowerCase.split("/");
 
-    if ((commands[0] === this.index.name) && (commands.length === 1)) {
-      this.textBuffer.emptyQueueToDivOverTime(`already_in_directory_${this.index.name}!`);
+    console.log(commands[0] + this.index.name);
+    if (commands[0] === this.index.name.toLowerCase()) {
+      if (commands.length <= 1){
+      this.textBuffer.emptyQueueToDivOverTime(`already_in_directory_"${this.index.name}"`);
       return;
+    }
+      else {
+        commands.splice(0, 1);
+      }
     }
 
     let howManyCommandsMatchedDirectory = 0;
@@ -90,9 +96,8 @@ class GraphParser {
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
     let potentialChildNode = this.index.findChildByName(nodeName);
     if (potentialChildNode instanceof Node){
-      if (potentialChildNode.url.length > 0) {
-        potentialChildNode.select();
-      } else this.index = potentialChildNode;
+      if (potentialChildNode.url.length > 0) potentialChildNode.select();
+      else this.index = potentialChildNode;
       return 1;
     }
     return 0;
