@@ -14,6 +14,12 @@
   #e {
       background-color: #45391b;
       border: 3px solid #fec02d;}
+      #displayText{
+        display:inline;
+        display:none;
+        animation-name:example;
+        animation-duration:2s;
+      }
 
   body{
         background:black;}
@@ -23,11 +29,12 @@
       height: 10vw;
       margin-left: 1%;
       margin-top: 1%;
-      display:inline-block;
+      display:block;
     }
   .wrapper{
     margin-left:30%;
     margin-top:15%;
+    display:block;
   }
   </style>
   <script>
@@ -36,8 +43,25 @@
     let p = document.getElementById("displayText");
     for (let i = 0; i < boxes.length; i++){
       boxes[i].addEventListener("click", () => {
-         p.innerText = "This is text for Box " + boxes[i].id;
+        onElementClick(event);
       });
+
+      boxes[i].addEventListener("mouseover", (e) => e.target.style.opacity = 0.5);
+      boxes[i].addEventListener("mouseout" , (e) => e.target.style.opacity = 1);
+    }
+
+    p.addEventListener("click", () => {
+        onElementClick(event);
+    });
+
+    function onElementClick(e){
+      console.log(e.target);
+      p.style.display = "inline";
+      p.innerText = "This is text for Box " + e.target.id;
+      if (p === e.target){
+        p.innerText = "";
+        p.style.display = "none";
+      }
     }
     //let boxC = getElementById("c");
   } //on load
@@ -51,7 +75,7 @@
   <div id = "d" class = "box"></div>
   <div id = "e" class = "box"></div>
   <br />
-  <p style = ";" id = "displayText" class = "para"></p>
+  <p id = "displayText" class = "para"></p>
 </div>
 
 </body>
