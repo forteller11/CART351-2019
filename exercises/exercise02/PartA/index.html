@@ -32,7 +32,14 @@
   </style>
   <script>
   window.onload = function(){
-    console.log("testing");
+    let boxes = document.getElementsByClassName("box");
+    let p = document.getElementById("displayText");
+    for (let i = 0; i < boxes.length; i++){
+      boxes[i].addEventListener("click", () => {
+         p.innerText = "This is text for Box " + boxes[i].id;
+      });
+    }
+    //let boxC = getElementById("c");
   } //on load
 
 
@@ -44,7 +51,7 @@
   <div id = "d" class = "box"></div>
   <div id = "e" class = "box"></div>
   <br />
-  <p style = "display:none;" id = "displayText" class = "para"></p>
+  <p style = ";" id = "displayText" class = "para"></p>
 </div>
 
 </body>
