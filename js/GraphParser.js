@@ -96,7 +96,10 @@ class GraphParser {
   dive(nodeName = "") { //if nodeName matches a child, print the branch and focus on it
     let potentialChildNode = this.index.findChildByName(nodeName);
     if (potentialChildNode instanceof Node){
-      if (potentialChildNode.url.length > 0) potentialChildNode.select();
+      if (potentialChildNode.url.length > 0) {
+        potentialChildNode.select();
+        this.textBuffer.addToQueue(`window_opened_"${potentialChildNode.url}"`);
+      }
       else this.index = potentialChildNode;
       return 1;
     }
