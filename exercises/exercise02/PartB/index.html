@@ -61,14 +61,12 @@ It also shows you how to access the associated drawing context
 and adding the relevent event listeners. You can follow this code for
 accessing the other canvases and their associated contexts.
 */
+let canvases = document.getElementsByClassName("box");
+for (let i = 0; i < canvases.length; i++){
+  canvases[i].addEventListener('mousemove',mouseoverhandler);
+  canvases[i].addEventListener('mousemove',mouseoverhandler);
+}
 
-let canvasAniA = document.getElementById("canvasAniA")
-//get the context
-let contextA = canvasAniA.getContext("2d");
-
-// register event listeners with 1st box
-canvasAniA.addEventListener('mousemove',mouseoverhandler );
-canvasAniA.addEventListener('mouseout',mouseouthandler);
 
 
 /*** The lists of objects that will be indide each canvas **/
