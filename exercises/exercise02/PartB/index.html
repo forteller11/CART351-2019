@@ -79,9 +79,21 @@ let rectList = []; // variable to hold your list of rectangles
 let ellipsesList = []; //variable to hold your list of ellipses
 let freeShapeList = []; //variable to hold your list of free shapes
 for (let i = 0; i < 10; i++){
-  rectList[i] = new RectShapeObject(Math.random()*canvases[0].width, Math.random()*canvases[0].height, Math.random()*canvases[0].width/2, Math.random()*canvases[0].height/2, 'black', contexts[0], canvases[0]);
+  rectList[i] = new RectShapeObject(Math.random()*canvases[0].width, Math.random()*canvases[0].height, Math.random()*canvases[0].width, Math.random()*canvases[0].height/2, 'black', contexts[0], canvases[0]);
     rectList[i].display();
 }
+
+for (let i = 0; i < 10; i++){
+  console.log(contexts[1]);
+  ellipsesList[i] = new EllipseShapeObject(Math.random()*canvases[1].width, Math.random()*canvases[1].height, 40, 20, 'black', contexts[1], canvases[1]);
+    ellipsesList[i].display();
+    console.log(ellipsesList[i]);
+}
+for (let i = 0; i < 10; i++){
+
+}
+
+
 
 /* STEP 2:: CREATE 10 RectShapeObject instances and put into the rectList */
 /* STEP 3:: CREATE 10 EllipseShapeObject instances and put into the ellipsesList */
@@ -153,17 +165,27 @@ constructor takes an initial xpos, ypos, width and height for the shape.
 You also need to give the context and canvas associated
 with the potential instance of this shape
 */
-function EllipseShapeObject(x,y,w,h,context,canvas){
+function EllipseShapeObject(x,y,w,h,color,context,canvas){
   this.context = context;
   this.canvas = canvas;
+  this.color = color;
   this.x =x;
   this.y =y;
   this.w=w;
   this.h=h;
+
   // method to display - needs to be filled in
   this.display = function(){
-      this.context.beginPath();
+    let quality = 20;
+    this.context.fillStyle = this.color;
+    this.context.beginPath();
+    for (let i = 0; i < quality; i ++){
+      let xOff = Math.cos(Math.PI*2* i/quality)*this.w/2;
+      let yOff = Math.sin(Math.PI*2* i/quality)*this.h/2;
 
+      this.context.lineTo(xOff+this.x, yOff+this.y);
+    }
+      this.context.fill();
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
