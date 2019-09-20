@@ -13,15 +13,15 @@
   }
   #c {
       background-color: #3e181b;
-      border: 3px solid #db1d2d;}
+    }
 
   #d {
       background-color: #422018;
-      border: 3px solid #f0421c;}
+    }
 
   #e {
       background-color: #45391b;
-      border: 3px solid #fec02d;}
+    }
 
 
   body{background:black;}
@@ -61,10 +61,15 @@ It also shows you how to access the associated drawing context
 and adding the relevent event listeners. You can follow this code for
 accessing the other canvases and their associated contexts.
 */
-let canvases = document.getElementsByClassName("box");
+let canvases = document.getElementsByClassName("canvas");
+let contexts = [];
 for (let i = 0; i < canvases.length; i++){
   canvases[i].addEventListener('mousemove',mouseoverhandler);
   canvases[i].addEventListener('mousemove',mouseoverhandler);
+  console.log(canvases[i]);
+  contexts[i] = canvases[i].getContext("2d");
+  contexts[i].fillStyle = "white";
+  contexts[i].fillRect(0, 0, canvases[i].width, canvases[i].height)
 }
 
 
@@ -73,6 +78,10 @@ for (let i = 0; i < canvases.length; i++){
 let rectList = []; // variable to hold your list of rectangles
 let ellipsesList = []; //variable to hold your list of ellipses
 let freeShapeList = []; //variable to hold your list of free shapes
+for (let i = 0; i < 10; i++){
+  rectList[i] = new RectShapeObject(Math.random()*canvases[0].width, Math.random()*canvases[0].height, Math.random()*canvases[0].width/2, Math.random()*canvases[0].height/2, 'black', contexts[0], canvases[0]);
+    rectList[i].display();
+}
 
 /* STEP 2:: CREATE 10 RectShapeObject instances and put into the rectList */
 /* STEP 3:: CREATE 10 EllipseShapeObject instances and put into the ellipsesList */
@@ -116,16 +125,20 @@ with the potential instance of this shape
 */
 
 
-function RectShapeObject(x,y,w,h,context,canvas){
-  this.context =context;
-  this.canvas = canvas;
+function RectShapeObject(x,y,w,h,color,context,canvas){
   this.x =x;
   this.y =y;
   this.w=w;
   this.h=h;
+  this.color = color;
+  this.context =context;
+  console.log(context);
+  this.canvas = canvas;
   // method to display - needs to be filled in
   this.display = function(){
-
+    console.log(this.context);
+    this.context.fillStyle = this.color;
+    this.context.fillRect(this.x, this.y, this.w, this.h);
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
@@ -141,7 +154,7 @@ You also need to give the context and canvas associated
 with the potential instance of this shape
 */
 function EllipseShapeObject(x,y,w,h,context,canvas){
-  this.context =context;
+  this.context = context;
   this.canvas = canvas;
   this.x =x;
   this.y =y;
@@ -149,6 +162,7 @@ function EllipseShapeObject(x,y,w,h,context,canvas){
   this.h=h;
   // method to display - needs to be filled in
   this.display = function(){
+      this.context.beginPath();
 
   }
   // method to update (animation) - needs to be filled in
@@ -172,7 +186,13 @@ function FreeShapeObject(x,y,w,h,context,canvas){
   this.h=h;
   // method to display - needs to be filled in
   this.display = function(){
-
+    for (let i = -1; i < 2; i+=2){
+      for (let j = 0; j < 2; j++){
+        this.context.lineTo(this.x+this.w*i, this.y+this.h*i); //upper left
+      }
+    }
+    this.context.strokeStyle = "black";
+    this.context.stroke();
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
@@ -187,9 +207,9 @@ function FreeShapeObject(x,y,w,h,context,canvas){
 </head>
 <body>
   <div class = "wrapper">
-  <div id = "c" class = "box"><canvas id = "canvasAniA"></canvas></div>
-  <div id = "d" class = "box"><canvas id = "canvasAniB"></canvas></div>
-  <div id = "e" class = "box"><canvas id = "canvasAniC"></canvas></div>
+  <div id = "c" class = "box"><canvas id = "canvasAniA" class = "canvas"></canvas></div>
+  <div id = "d" class = "box"><canvas id = "canvasAniB" class = "canvas"></canvas></div>
+  <div id = "e" class = "box"><canvas id = "canvasAniC" class = "canvas"></canvas></div>
 </div>
 
 </body>
