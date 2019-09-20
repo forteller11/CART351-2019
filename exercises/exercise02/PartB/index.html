@@ -164,11 +164,9 @@ function RectShapeObject(x,y,w,h,color,context,canvas){
   this.h=h;
   this.color = color;
   this.context =context;
-  console.log(context);
   this.canvas = canvas;
   // method to display - needs to be filled in
   this.display = function(color='black'){
-    console.log(this.context);
     this.context.fillStyle = color;
     this.context.fillRect(this.x, this.y, this.w, this.h);
   }
