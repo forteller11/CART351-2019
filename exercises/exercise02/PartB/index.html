@@ -20,6 +20,7 @@
     }
 
   #e {
+
       background-color: #45391b;
     }
 
@@ -74,7 +75,6 @@ let contexts = [];
 for (let i = 0; i < canvases.length; i++){
   canvases[i].addEventListener('mouseover',mouseoverhandler);
   canvases[i].addEventListener('mouseout',mouseouthandler);
-  console.log(canvases[i]);
   contexts[i] = canvases[i].getContext("2d");
   contexts[i].fillStyle = "white";
   contexts[i].fillRect(0, 0, canvases[i].width, canvases[i].height)
@@ -98,8 +98,6 @@ for (let i = 0; i < 10; i++){
 for (let i = 0; i < 10; i++){
   freeShapeList[i] = new FreeShapeObject(Math.random()*canvases[2].width, Math.random()*canvases[2].height, 80, 40, 'black', contexts[2], canvases[2]);
     freeShapeList[i].display();
-    console.log(contexts[1]);
-    console.log(freeShapeList[i]);
 }
 
 
