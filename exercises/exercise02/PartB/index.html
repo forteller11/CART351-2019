@@ -13,15 +13,16 @@
   }
   #c {
       background-color: #3e181b;
-      border: 3px solid #db1d2d;}
+    }
 
   #d {
       background-color: #422018;
-      border: 3px solid #f0421c;}
+    }
 
   #e {
+
       background-color: #45391b;
-      border: 3px solid #fec02d;}
+    }
 
 
   body{background:black;}
@@ -52,6 +53,14 @@ let mouseIn = 'none'; // this variable will keep track of when and if the mouse 
 // this event handler will register that the mouse is no longer over a particular box
 let mouseouthandler = function(event){
   console.log("the mouse is no longer over canvas:: "+event.target.id);
+  let ctx = event.target.getContext("2d");
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0,0,event.target.width, event.target.height);
+  for (let i = 0; i < ellipsesList.length; i++){
+      ellipsesList[i].display();
+      if (event.target.id === "canvasAniC") freeShapeList[i].display();
+      rectList[i].display();
+  }
  mouseIn = 'none';
 }
 
@@ -61,20 +70,37 @@ It also shows you how to access the associated drawing context
 and adding the relevent event listeners. You can follow this code for
 accessing the other canvases and their associated contexts.
 */
+let canvases = document.getElementsByClassName("canvas");
+let contexts = [];
+for (let i = 0; i < canvases.length; i++){
+  canvases[i].addEventListener('mouseover',mouseoverhandler);
+  canvases[i].addEventListener('mouseout',mouseouthandler);
+  contexts[i] = canvases[i].getContext("2d");
+  contexts[i].fillStyle = "white";
+  contexts[i].fillRect(0, 0, canvases[i].width, canvases[i].height)
+}
 
-let canvasAniA = document.getElementById("canvasAniA")
-//get the context
-let contextA = canvasAniA.getContext("2d");
-
-// register event listeners with 1st box
-canvasAniA.addEventListener('mousemove',mouseoverhandler );
-canvasAniA.addEventListener('mouseout',mouseouthandler);
 
 
 /*** The lists of objects that will be indide each canvas **/
 let rectList = []; // variable to hold your list of rectangles
 let ellipsesList = []; //variable to hold your list of ellipses
 let freeShapeList = []; //variable to hold your list of free shapes
+for (let i = 0; i < 10; i++){
+  rectList[i] = new RectShapeObject(Math.random()*canvases[0].width, Math.random()*canvases[0].height, Math.random()*canvases[0].width, Math.random()*canvases[0].height/2, 'black', contexts[0], canvases[0]);
+    rectList[i].display();
+}
+
+for (let i = 0; i < 10; i++){
+  ellipsesList[i] = new EllipseShapeObject(Math.random()*canvases[1].width, Math.random()*canvases[1].height, 40, 20, 'black', contexts[1], canvases[1]);
+    ellipsesList[i].display();
+}
+for (let i = 0; i < 10; i++){
+  freeShapeList[i] = new FreeShapeObject(Math.random()*canvases[2].width, Math.random()*canvases[2].height, 80, 40, 'black', contexts[2], canvases[2]);
+    freeShapeList[i].display();
+}
+
+
 
 /* STEP 2:: CREATE 10 RectShapeObject instances and put into the rectList */
 /* STEP 3:: CREATE 10 EllipseShapeObject instances and put into the ellipsesList */
@@ -88,21 +114,34 @@ The animation and design of your shape(s) is up to you */
 requestAnimationFrame(animationLoop);
  /*MAIN ANIMATION LOOP */
 function animationLoop(){
-
-  if(mouseIn ==="canvasAniA"){
+//if (canvases === undefined) return;
+  if(mouseIn === canvases[0].id){
     console.log("over canvas A");
+
+    for (let i = 0; i < rectList.length; i++){
+      rectList[i].update();
+      rectList[i].display(randomColor());
+    }
     // put code here to display and update contents in canvasAniA
     /* STEP 6:: go through the rectList  and display and update shapes  */
 
   }
-  else if(mouseIn ==="canvasAniB"){
+  else if(mouseIn === canvases[1].id){
       console.log("over canvas B");
+      for (let i = 0; i < ellipsesList.length; i++){
+        ellipsesList[i].update();
+        ellipsesList[i].display(randomColor());
+      }
       // put code here to display and update contents in canvasAniB
       /* STEP 7:: go through the ellipsesList  and display and update shapes  */
 
   }
-  else if(mouseIn ==="canvasAniC"){
+  else if(mouseIn ===canvases[2].id){
       console.log("over canvas C");
+      for (let i = 0; i < freeShapeList.length; i++){
+        freeShapeList[i].update();
+        freeShapeList[i].display(randomColor());
+      }
       // put code here to display and update contents in canvasAniC
         /* STEP 8:: go through the freeShapeList  and display and update shapes  */
 
@@ -118,20 +157,23 @@ with the potential instance of this shape
 */
 
 
-function RectShapeObject(x,y,w,h,context,canvas){
-  this.context =context;
-  this.canvas = canvas;
+function RectShapeObject(x,y,w,h,color,context,canvas){
   this.x =x;
   this.y =y;
   this.w=w;
   this.h=h;
+  this.color = color;
+  this.context =context;
+  this.canvas = canvas;
   // method to display - needs to be filled in
-  this.display = function(){
-
+  this.display = function(color='black'){
+    this.context.fillStyle = color;
+    this.context.fillRect(this.x, this.y, this.w, this.h);
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
-
+    this.x += (Math.random()-0.5) * 2;
+    this.y += (Math.random()-0.5) * 2;
   }
 
 
@@ -142,43 +184,76 @@ constructor takes an initial xpos, ypos, width and height for the shape.
 You also need to give the context and canvas associated
 with the potential instance of this shape
 */
-function EllipseShapeObject(x,y,w,h,context,canvas){
-  this.context =context;
+function EllipseShapeObject(x,y,w,h,color,context,canvas){
+  this.context = context;
   this.canvas = canvas;
+  this.color = color;
   this.x =x;
   this.y =y;
   this.w=w;
   this.h=h;
-  // method to display - needs to be filled in
-  this.display = function(){
 
+  // method to display - needs to be filled in
+  this.display = function(color = "black"){
+    let quality = 20;
+    this.context.fillStyle = color;
+    this.context.beginPath();
+    for (let i = 0; i < quality; i ++){
+      let xOff = Math.cos(Math.PI*2* i/quality)*this.w/2;
+      let yOff = Math.sin(Math.PI*2* i/quality)*this.h/2;
+
+      this.context.lineTo(xOff+this.x, yOff+this.y);
+    }
+      this.context.fill();
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
-
+    this.x += (Math.random()-0.5) * 2;
+    this.y += (Math.random()-0.5) * 2;
   }
 
 
+}
+
+function randomColor(){
+  return  `rgba(${r255()},${r255()},${r255()})`;
+}
+
+function r255(){
+  return Math.random()*255;
 }
 /* OBJECT DEFINITION FOR A Free OBJECT SHAPE
 constructor takes an initial xpos, ypos, width and height for the shape.
 You also need to give the context and canvas associated
 with the potential instance of this shape
 */
-function FreeShapeObject(x,y,w,h,context,canvas){
+function FreeShapeObject(x,y,w,h,color,context,canvas){
   this.context =context;
   this.canvas = canvas;
+  this.color = color;
   this.x =x;
   this.y =y;
   this.w=w;
   this.h=h;
   // method to display - needs to be filled in
-  this.display = function(){
+  this.display = function(color='black'){
+      let quality = 20;
+      this.context.fillStyle = color;
+      this.context.beginPath();
+      for (let i = 0; i < quality; i ++){
+        let index = i/quality + (1/quality)*Math.random();
+        let xOff = Math.cos(Math.PI*2* index)*this.w/2 * Math.random();
+        let yOff = Math.sin(Math.PI*2* index)*this.h/2 * Math.random();
+
+        this.context.lineTo(xOff+this.x, yOff+this.y);
+      }
+        this.context.fill();
 
   }
   // method to update (animation) - needs to be filled in
   this.update = function(){
-
+    this.x += (Math.random()-0.5) * 2;
+    this.y += (Math.random()-0.5) * 2;
   }
 }
 
@@ -189,9 +264,9 @@ function FreeShapeObject(x,y,w,h,context,canvas){
 </head>
 <body>
   <div class = "wrapper">
-  <div id = "c" class = "box"><canvas id = "canvasAniA"></canvas></div>
-  <div id = "d" class = "box"><canvas id = "canvasAniB"></canvas></div>
-  <div id = "e" class = "box"><canvas id = "canvasAniC"></canvas></div>
+  <div id = "c" class = "box"><canvas id = "canvasAniA" class = "canvas"></canvas></div>
+  <div id = "d" class = "box"><canvas id = "canvasAniB" class = "canvas"></canvas></div>
+  <div id = "e" class = "box"><canvas id = "canvasAniC" class = "canvas"></canvas></div>
 </div>
 
 </body>
