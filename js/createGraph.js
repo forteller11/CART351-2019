@@ -18,7 +18,10 @@ function createGraph(){
         e2.children.push(e2A, e2B, e2Github);
       let e3 = new Node("Exercise03_(placeholder)", exercises);
       exercises.children.push(e1, e2, e3);
-    let projects = new Node("Project", root);
+    let projects = new Node("Final_Project", root);
+      let propsal = new Node("Proposal", root, "./assets/FinalProjectProposal.pdf");
+      let project = new Node("Project", root);
+      projects.children.push(propsal, project);
     let reflections = new Node("Reflections", root);
     let presentations = new Node("Presentations", root);
   root.children.push(baseGithub, exercises, projects, reflections, presentations);
