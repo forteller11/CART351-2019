@@ -1,0 +1,10 @@
+*{
+  background-color: rgb(51,51,51);
+  box-sizing:border-box;
+  border:1px;
+  padding:1px;
+}
+
+.input{
+  background-color: rgb(255,255,255);
+}
