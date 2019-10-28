@@ -1,0 +1,52 @@
+// Censorship
+//
+// An example Google Chrome extension that takes the current page
+// and randomly censors the text on it.
+//
+// Based heavily on the code for Jailbreak the Patriarchy, notably
+// for the idea of using a Treewalker to be able to step through
+// the text of a page and perform actions on it.
+
+{
+  "manifest_version": 2,
+
+  "name": "test sabine simple",
+  "author": "Sabine Rosenberg",
+  "description": "test extension drawRect",
+  "version": "1.0",
+
+  "icons": {  "16" : "icon.png",
+              "48" : "icon.png",
+              "128" : "icon.png"
+            },
+
+  "content_scripts": [
+    {
+      "js": [ "p5.js","p5.dom.js","testExt.js","jquery-3.1.1.min.js"],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_end"
+    }
+  ],
+
+  "background": {
+    "scripts": ["p5.js","background_script.js","p5.dom.js","jquery-3.1.1.min.js"]
+  },
+
+  "browser_action": {
+    "default_title": "Test Sabine.",
+    "default_icon": {
+      "19": "icon_19.png"
+    }
+  },
+
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "storage"
+  ],
+
+"web_accessible_resources": []
+
+}
