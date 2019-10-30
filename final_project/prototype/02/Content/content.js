@@ -59,7 +59,7 @@ function main(){
   createCanvas();
   console.log(canvas);
   console.log(canvasCtx);
-  canvasCtx.fillStyle = "green";
+  canvasCtx.fillStyle = "rgba(0,255,0,.5)";
   console.log("width: "+canvas.width);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
   repaintCanvasBasedOnStrokes(canvasCtx); //create canvas and draw to it based on strokes
@@ -101,13 +101,20 @@ function getCollectiveStrokes(){
 }
 
 function createCanvas(){
+  
   console.log("createcanvas");
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
-  canvas.style.zIndex = "-10000000";
+  canvas.style.zIndex = "1000000000000000000";
   resizeCanvas();
   document.body.appendChild(canvas);
   canvasCtx = canvas.getContext("2d");
+
+  let t = document.createElement("div");
+  t.style.backgroundColor = "red";
+  t.style.width = "500px";
+  t.style.height = "500px";
+  document.body.appendChild(t);
 }
 
 function resizeCanvas(){
