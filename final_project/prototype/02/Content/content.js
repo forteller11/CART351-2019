@@ -3,8 +3,7 @@
 
 
 class ITool {
-  constructor (canvas){
-    this.canvas = canvas;
+  constructor (ctx){
     this.drag = false;
   }
   onClick(){
@@ -22,14 +21,13 @@ class ITool {
 }
 
 class Brush extends ITool{
-  constructor(canvas){
-    super.constructor(canvas);
+  constructor(ctx){
+    super.constructor(ctx);
     this.r = 0;
     this.g = 0;
     this.b = 0;
     this.a = 255;
     this.radius;
-    this.canvas;
     this.pressure = 0.5;
   }
   onClick(){
@@ -42,11 +40,14 @@ class Brush extends ITool{
     localStorage.setItem(url, strokes);
   }
 }
+
+
 let url = window.location.pathname;
 let endOfStroke = 54321;
 //r,g,b, x,y,width,x,y,width....'stop'
 let strokes = [255, 0, 0, 255,   0, 0, 40,   500, 500, 100,   endOfStroke];
 let tool;
+let canvasCtx;
 let canvas;
 
 window.onload = main;
@@ -55,15 +56,28 @@ function main(){
   console.log("main");
   console.log(window.location.href);
 
+  createCanvas();
+  console.log(canvas);
+  console.log(canvasCtx);
+  canvasCtx.fillStyle = "green";
+  console.log("width: "+canvas.width);
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+  repaintCanvasBasedOnStrokes(canvasCtx); //create canvas and draw to it based on strokes
+
   strokes = getCollectiveStrokes(); //get paintings of any previous users
 
-  repaintCanvasBasedOnStrokes(canvas); //create canvas and draw to it based on strokes
 
-  window.addEventListener("scroll", repaintCanvasBasedOnStrokes);
-  window.addEventListener("resize", repaintCanvasBasedOnStrokes);
+  window.addEventListener("scroll", () => {
+    repaintCanvasBasedOnStrokes;
+  });
+
+  window.addEventListener("resize", () => {
+    repaintCanvasBasedOnStrokes;
+    resizeCanvas(canvasCtx);
+  });
 
   //set up mouse events
-  tool = new ITool(canvas);
+  tool = new ITool();
   window.addEventListener("mousedown", () => {
     tool.onClick();
   })
@@ -81,9 +95,25 @@ function getCollectiveStrokes(){
 
   console.log("url: "+ url);
   let history = localStorage.getItem(url);
-  console.log("testval: " + testVal);
-  if (value != null) strokes = history;
+  console.log("history: " + history);
+  if (history != null) strokes = history;
 
+}
+
+function createCanvas(){
+  console.log("createcanvas");
+  canvas = document.createElement("CANVAS");
+  canvas.style.position = "fixed";
+  canvas.style.zIndex = "-10000000";
+  resizeCanvas();
+  document.body.appendChild(canvas);
+  canvasCtx = canvas.getContext("2d");
+}
+
+function resizeCanvas(){
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  console.log("resize; width: " + canvas.width + "; height: " + canvas.height);
 }
 
 function paintLoop(){
@@ -92,5 +122,5 @@ function paintLoop(){
 }
 
 function repaintCanvasBasedOnStrokes(cvs){
-  cvs
+
 }
