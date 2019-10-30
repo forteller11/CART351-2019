@@ -46,6 +46,8 @@ class Brush {
     this.a = 1;
     this.w = 2;
 
+    this.quality = 32; //quality of drawing
+
     document.addEventListener("keydown", (e) =>{
       let colInc = 15;
       console.log("ah");
@@ -129,11 +131,13 @@ class Brush {
     canvasCtx.fillStyle = rgbaCol(this.r,this.g,this.b,this.a);
     canvasCtx.beginPath();
       //first stroke
-      canvasCtx.moveTo(x1, y1);
-      canvasCtx.lineTo(x1, y2);
-      canvasCtx.lineTo(x2, y2);
-      canvasCtx.lineTo(x2, y1);
-
+      canvasCtx.moveTo(mouseX+this.w/2, mouseY+this.w/2);
+      for (let i = 1; i < this.quality; i++){
+        let index = (i/this.quality) * Math.PI * 2;
+        let xx = mouseX + (Math.cos(index) * this.w/2);
+        let yy = mouseY + (Math.sin(index) * this.w/2);
+        canvasCtx.lineTo(xx, yy);
+      }
       canvasCtx.fill();
 }
 }
@@ -223,6 +227,7 @@ function paintLoop(){
   //canvasCtx = canvas.getContext("2d");
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   canvasCtx.lineWidth = 20;
+  canvasCtx.lineCap = "round";
   canvasCtx.strokeStyle = rgbaCol(0,255,0,.5);
   canvasCtx.strokeRect(0, 0, canvas.width, canvas.height);
 
