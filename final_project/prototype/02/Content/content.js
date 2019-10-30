@@ -14,6 +14,7 @@ let mouseYPrev = 0;
 let mouseX=0;
 let mouseY=0;
 
+let pEvent = true;
 class ITool {
   constructor (ctx){
     this.drag = false;
@@ -81,6 +82,17 @@ class Brush {
           else this.a += 0.1;
           this.a = constrain(this.a,0,1);
           break;
+        case 90: //z
+          console.log("toggle pointer event");
+          if (pEvent) {
+            canvas.style.pointerEvents = "none";
+            pEvent = false;
+          }
+          else {
+            canvas.style.pointerEvents = "auto";
+            pEvent = true;
+          }
+          break;
 
         default:
           break;
@@ -122,23 +134,25 @@ class Brush {
   }
 
   drawSelf(){
-    let x1 = mouseX - this.w/2;
-    let x2 = mouseX + this.w/2;
-    let y1 = mouseY + this.w/2;
-    let y2 = mouseY - this.w/2;
+
 
     canvasCtx = canvas.getContext("2d");
     canvasCtx.fillStyle = rgbaCol(this.r,this.g,this.b,this.a);
+    canvasCtx.strokeStyle = rgbaCol(this.r,this.g,this.b,this.a);
+    canvasCtx.lineWidth = this.w/10;
     canvasCtx.beginPath();
       //first stroke
-      canvasCtx.moveTo(mouseX+this.w/2, mouseY+this.w/2);
+      canvasCtx.moveTo(mouseX+this.w/2, mouseY);[[]]
       for (let i = 1; i < this.quality; i++){
         let index = (i/this.quality) * Math.PI * 2;
         let xx = mouseX + (Math.cos(index) * this.w/2);
         let yy = mouseY + (Math.sin(index) * this.w/2);
         canvasCtx.lineTo(xx, yy);
       }
+      canvasCtx.closePath();
+      if (pEvent)
       canvasCtx.fill();
+      else canvasCtx.stroke();
 }
 }
 
@@ -205,7 +219,7 @@ function createCanvas(){
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
   canvas.style.zIndex = 999999999999999999;
-  //
+  canvas.style.pointerEvents = "auto";
   resizeCanvas();
   document.body.appendChild(canvas);
 }
