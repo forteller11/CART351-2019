@@ -12,11 +12,12 @@
   "content_scripts": [
     {
       "js": [
-        "Content/main.js"
+        "Content/content.js"
       ],
       "matches": [
         "http://*/*",
-        "https://*/*"
+        "https://*/*",
+        "<all_urls>"
       ],
       "run_at": "document_end"
     }
