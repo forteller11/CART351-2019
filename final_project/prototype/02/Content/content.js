@@ -45,6 +45,26 @@ class Brush {
     this.b = 0;
     this.a = 1;
     this.w = 2;
+
+    document.addEventListener("keydown", (e) =>{
+      console.log("ah");
+      console.log(e.keyCode);
+      switch (e.keyCode){
+        case 219:
+          if (this.w > 2) this.w *= .8;
+          console.log('decrease size');
+          break;
+        case 221:
+          this.w *= 1.2;
+          console.log('increase size');
+          break;
+        default:
+          break;
+        //color
+      }
+      console.log(e);
+
+    })
   }
   onClick(e){
     this.drag = true;
@@ -77,6 +97,23 @@ class Brush {
     console.log(strokes);
   }
 
+  drawSelf(){
+    let x1 = mouseX - this.w/2;
+    let x2 = mouseX + this.w/2;
+    let y1 = mouseY + this.w/2;
+    let y2 = mouseY - this.w/2;
+
+    canvasCtx = canvas.getContext("2d");
+    canvasCtx.fillStyle = rgbaCol(this.r,this.g,this.b,this.a);
+    canvasCtx.beginPath();
+      //first stroke
+      canvasCtx.moveTo(x1, y1);
+      canvasCtx.lineTo(x1, y2);
+      canvasCtx.lineTo(x2, y2);
+      canvasCtx.lineTo(x2, y1);
+
+      canvasCtx.fill();
+}
 }
 
 window.onload = main;
@@ -174,6 +211,8 @@ function paintLoop(){
      }
      //console.log("index1: "+index);
    }
+
+   tool.drawSelf();
 
    //if diff between frames
    if (mouseX != mouseXPrev || mouseY != mouseYPrev){
