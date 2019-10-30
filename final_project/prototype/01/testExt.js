@@ -1,5 +1,5 @@
 // is the extension activated?
-
+//git
 var x; // to store mouse x
 var y; // to store mouse y
 var imgArray =[]; // array of images

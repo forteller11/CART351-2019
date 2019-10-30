@@ -1,5 +1,6 @@
 'use strict';
 
+//git
 let url = "graffitiExtension" + window.location.href;
 let endOfStroke = 123456789;
 //r,g,b,a,width, x,y,x,y....'stop'
