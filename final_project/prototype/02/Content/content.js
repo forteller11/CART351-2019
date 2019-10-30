@@ -4,6 +4,7 @@ let url = window.location.pathname;
 let endOfStroke = 123456789;
 //r,g,b,a,width, x,y,x,y....'stop'
 let strokes = [255, 0, 0, 1, 40,   0, 0,   500, 500,   endOfStroke];
+console.log(strokes);
 let tool;
 let canvasCtx;
 let canvas;
@@ -18,7 +19,7 @@ class ITool {
     console.log("onToolClick");
   }
   onDrag(e){
-    if (this.drag == false) return;
+    if (this.drag === false) return;
     //console.log("onToolDrag");
   }
   onRelease(expfun){
@@ -34,6 +35,7 @@ class ITool {
 class Brush extends ITool{
   constructor(){
     super();
+    console.log("drag "+this.drag);
     this.r = 0;
     this.g = 0;
     this.b = 0;
@@ -42,7 +44,9 @@ class Brush extends ITool{
   }
   onClick(e){
     super.onClick(e);
-    console.log("e: "+e);
+    console.log(e);
+    console.log(strokes);
+    strokes.append(this.r);
     strokes.push(
       this.r,
       this.g,
@@ -56,7 +60,8 @@ class Brush extends ITool{
   }
 
   onDrag(e){
-    super.onDrag(e);
+    super.onDrag();
+    if (this.drag === false) return;
     strokes.push(e.clientX, e.clientX);
   }
 
@@ -79,7 +84,7 @@ function main(){
   console.log(canvas);
   console.log(canvasCtx);
 
-  //getCollectiveStrokes(); //get paintings of any previous users
+  getCollectiveStrokes(); //get paintings of any previous users
 
 
   window.addEventListener("scroll", () => {
@@ -90,7 +95,7 @@ function main(){
   });
 
   //set up mouse events
-  tool = new ITool();
+  tool = new Brush();
   window.addEventListener("mousedown", (event) => {
     tool.onClick(event);
   });
@@ -152,7 +157,7 @@ function paintLoop(){
 
    if (strokes != null || strokes.length > 3) {
      let index = 0;
-     while (index < strokes.length){
+     while (index < strokes.length && index < 25){
        index = drawLine(index);
      }
    }
@@ -176,7 +181,7 @@ function drawLine(index){
   index += 2;
 
   //other strokes
-  while (index != endOfStroke){
+  while (strokes[index] != endOfStroke && index < 25){
     canvasCtx.lineTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
     index += 2;
   }
