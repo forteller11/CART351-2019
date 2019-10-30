@@ -1,6 +1,13 @@
 'use strict';
 
-
+let url = window.location.pathname;
+let endOfStroke = 123456789;
+//r,g,b,a,width, x,y,x,y....'stop'
+let strokes = [255, 0, 0, 1, 40,   0, 0,   500, 500,   endOfStroke];
+let tool;
+let canvasCtx;
+let canvas;
+let debuggingFillStyle = rgbaCol(0,0,255,0.5);
 
 class ITool {
   constructor (ctx){
@@ -36,41 +43,31 @@ class Brush extends ITool{
   onClick(e){
     super.onClick(e);
     console.log("e: "+e);
-    strokes.push(this.r);
-    strokes.push(this.g);
-    strokes.push(this.b);
-    strokes.push(this.a);
-    strokes.push(this.w);
-    strokes.push(e.clientX);
-    strokes.push(e.clientY);
+    strokes.push(
+      this.r,
+      this.g,
+      this.b,
+      this.a,
+      this.w,
+      e.clientX,
+      e.clientY
+    );
+
   }
 
   onDrag(e){
     super.onDrag(e);
-    strokes.push
-    strokes.push(e.clientX);
-    strokes.push(e.clientY);
+    strokes.push(e.clientX, e.clientX);
   }
 
   onRelease(e){
     super.onRelease(e);
-    strokes.push(e.clientX);
-    strokes.push(e.clientY);
+    strokes.push(e.clientX, e.clientY, endOfStroke);
     localStorage.setItem(url, strokes);
     console.log(strokes);
   }
 
 }
-
-
-let url = window.location.pathname;
-let endOfStroke = 54321;
-//r,g,b,a,width, x,y,x,y....'stop'
-let strokes = [255, 0, 0, 1, 40,   0, 0,   500, 500,   endOfStroke];
-let tool;
-let canvasCtx;
-let canvas;
-let debuggingFillStyle = rgbaCol(0,0,255,0.5);
 
 window.onload = main;
 
@@ -81,12 +78,8 @@ function main(){
   createCanvas();
   console.log(canvas);
   console.log(canvasCtx);
-  console.log("width: "+canvas.width);
 
-
-  repaintCanvasBasedOnStrokes(); //create canvas and draw to it based on strokes
-
-  getCollectiveStrokes(); //get paintings of any previous users
+  //getCollectiveStrokes(); //get paintings of any previous users
 
 
   window.addEventListener("scroll", () => {
@@ -97,7 +90,7 @@ function main(){
   });
 
   //set up mouse events
-  tool = new Brush();
+  tool = new ITool();
   window.addEventListener("mousedown", (event) => {
     tool.onClick(event);
   });
@@ -157,9 +150,11 @@ function paintLoop(){
   canvasCtx.fillStyle = rgbaCol(0,255,0,.5);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-   let index = 0;
-   while (index < strokes.length){
-     index = drawLine(index);
+   if (strokes != null || strokes.length > 3) {
+     let index = 0;
+     while (index < strokes.length){
+       index = drawLine(index);
+     }
    }
 
   window.requestAnimationFrame(paintLoop);
@@ -191,9 +186,6 @@ function drawLine(index){
   return index; //index of r on new stroke or nothing
 }
 
-function repaintCanvasBasedOnStrokes(cvs){
-
-}
 
 function rgbaCol(r,g,b,a){
   return "rgba("+r+","+g+","+b+","+a+")";
