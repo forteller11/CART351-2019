@@ -22,7 +22,7 @@
 
   "content_scripts": [
     {
-      "js": [ "p5.js","p5.dom.js","testExt.js","jquery-3.1.1.min.js"],
+      "js": [ "p5.js","p5.dom.js","Content/main.js","Content/Tools/Tool.js","Content/Tools/Brush.js","jquery-3.1.1.min.js"],
       "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_end"
     }
@@ -38,7 +38,7 @@
       "19": "icon_19.png"
     },
     "default_popup": "popup.html",
-    "default_title": "A popup will come here."
+    "default_title": "Begin Painting?"
   },
 
   "permissions": [

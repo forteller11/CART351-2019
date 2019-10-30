@@ -1,8 +1,8 @@
-Class ITool {
-  constructor ITool(canvas){
+class ITool {
+  constructor (canvas){
     this.canvas = canvas;
   }
-  this.onClick(){}
-  this.onDrag(){}
-  this.onRelease(){}
+  onClick(){}
+  onDrag(){}
+  onRelease(){}
 }

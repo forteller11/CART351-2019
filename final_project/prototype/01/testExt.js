@@ -22,6 +22,7 @@ if (response.value != 'true') { // if the extension has been activated
 
 
 function drawAnimation(){
+  console.log("d");
   // Not paused, so make any changes to the document you want here!
 
       // First we specify a sketch object that will do all the stuff

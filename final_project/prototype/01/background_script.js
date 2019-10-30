@@ -22,18 +22,27 @@ chrome.runtime.onInstalled.addListener(function() {
 // If the extension's icon is clicked, toggle it
 
 chrome.browserAction.onClicked.addListener(function(tab){
+  console.log(tab);
+  graffiti = true ? false : true;
   state = localStorage.getItem('paused') == 'true'
   setPaused(!state);
   chrome.tabs.update(tab.id, {url: tab.url});
+
+  chrome.tabs.executeScript({file: "Content/main.js"}, function() {
+         console.log("content loaded");
+     });
 });
 
 // Receive messages from the content script
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  console.log("b");
   if (message.name == "isPaused?") {
     sendResponse({value: localStorage.getItem('paused')});
   }
 });
+
+
 
 // Set the badge to be correct
 
