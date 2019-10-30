@@ -3,12 +3,20 @@
 let url = window.location.pathname;
 let endOfStroke = 123456789;
 //r,g,b,a,width, x,y,x,y....'stop'
-let strokes = [255, 0, 0, 1, 40,   0, 0,   500, 500,   endOfStroke];
+let dog = [];
+dog.push (1, 2, 3, 20);
+let strokes = [255, 0, 0, 1, 40,
+     0, 0,   500, 500,
+     endOfStroke];
 console.log(strokes);
 let tool;
 let canvasCtx;
 let canvas;
 let debuggingFillStyle = rgbaCol(0,0,255,0.5);
+let mouseXPrev = 0;
+let mouseYPrev = 0;
+let mouseX=0;
+let mouseY=0;
 
 class ITool {
   constructor (ctx){
@@ -18,7 +26,7 @@ class ITool {
     this.drag = true;
     console.log("onToolClick");
   }
-  onDrag(e){
+  onDrag(mouseX, mouseY){
     if (this.drag === false) return;
     //console.log("onToolDrag");
   }
@@ -32,21 +40,20 @@ class ITool {
   }
 }
 
-class Brush extends ITool{
+class Brush {
   constructor(){
-    super();
+    this.drag = false;
     console.log("drag "+this.drag);
     this.r = 0;
-    this.g = 0;
+    this.g = 255;
     this.b = 0;
     this.a = 1;
     this.w = 10;
   }
   onClick(e){
-    super.onClick(e);
+    this.drag = true;
     console.log(e);
     console.log(strokes);
-    strokes.append(this.r);
     strokes.push(
       this.r,
       this.g,
@@ -60,13 +67,15 @@ class Brush extends ITool{
   }
 
   onDrag(e){
-    super.onDrag();
-    if (this.drag === false) return;
-    strokes.push(e.clientX, e.clientX);
+    if (this.drag === true){
+      //if (this.drag === false) return;
+      strokes.push(mouseX, mouseY);
+    }
   }
 
   onRelease(e){
-    super.onRelease(e);
+    this.drag = false;
+  //  super.onRelease(e);
     strokes.push(e.clientX, e.clientY, endOfStroke);
     localStorage.setItem(url, strokes);
     console.log(strokes);
@@ -101,7 +110,9 @@ function main(){
   });
 
   window.addEventListener("mousemove", (event) => {
-    tool.onDrag(event);
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    //tool.onDrag(event);
   });
 
   window.addEventListener("mouseup", (event) => {
@@ -116,7 +127,16 @@ function getCollectiveStrokes(){
   console.log("url: "+ url);
   let history = localStorage.getItem(url);
   console.log("history: " + history);
-  if (history != null) strokes = history;
+  if (history != null) {
+    let strings = history.split(",");
+    let newHistory = [];
+    for (let i = 0; i < strings.length; i++){
+      newHistory.push(parseInt(strings[i],10));
+    }
+    console.log(strings);
+    strokes = newHistory;
+  }
+  console.log(strokes);
 
 }
 
@@ -155,14 +175,21 @@ function paintLoop(){
   canvasCtx.fillStyle = rgbaCol(0,255,0,.5);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-   if (strokes != null || strokes.length > 3) {
+   if ((strokes != null) && (strokes != undefined) && (strokes.length > 3)) {
      let index = 0;
-     while (index < strokes.length && index < 25){
+     while (index < strokes.length){
        index = drawLine(index);
      }
+     //console.log("index1: "+index);
    }
 
-  window.requestAnimationFrame(paintLoop);
+   //if diff between frames
+   if (mouseX != mouseXPrev || mouseY != mouseYPrev){
+     tool.onDrag();
+   }
+   mouseXPrev = mouseX;
+   mouseYPrev = mouseY;
+  //window.requestAnimationFrame(paintLoop);
 }
 
 function drawLine(index){
@@ -176,16 +203,21 @@ function drawLine(index){
 
   index += 5;
 
+canvasCtx.beginPath();
+
   //first stroke
   canvasCtx.moveTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
+  console.log("X: "+strokes[index+0] + " Y: "+ strokes[index+1]);
   index += 2;
 
+  //console.log(strokes[index]);
   //other strokes
-  while (strokes[index] != endOfStroke && index < 25){
+  while ((strokes[index] != endOfStroke)){
+    console.log("X: "+strokes[index] + " Y: "+ strokes[index+1]);
     canvasCtx.lineTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
     index += 2;
-  }
-
+  } //console.log("index2: "+index);
+  index++;
   canvasCtx.stroke();
 
   return index; //index of r on new stroke or nothing
