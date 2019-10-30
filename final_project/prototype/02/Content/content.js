@@ -1,13 +1,9 @@
 'use strict';
 
-let url = window.location.pathname;
+let url = window.location.href;
 let endOfStroke = 123456789;
 //r,g,b,a,width, x,y,x,y....'stop'
-let dog = [];
-dog.push (1, 2, 3, 20);
-let strokes = [255, 0, 0, 1, 40,
-     0, 0,   500, 500,
-     endOfStroke];
+let strokes = [];
 console.log(strokes);
 let tool;
 let canvasCtx;
@@ -48,7 +44,7 @@ class Brush {
     this.g = 255;
     this.b = 0;
     this.a = 1;
-    this.w = 10;
+    this.w = 2;
   }
   onClick(e){
     this.drag = true;
@@ -172,12 +168,13 @@ function paintLoop(){
   canvas.height = window.innerHeight;
   //canvasCtx = canvas.getContext("2d");
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  canvasCtx.fillStyle = rgbaCol(0,255,0,.5);
-  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.lineWidth = 20;
+  canvasCtx.strokeStyle = rgbaCol(0,255,0,.5);
+  canvasCtx.strokeRect(0, 0, canvas.width, canvas.height);
 
    if ((strokes != null) && (strokes != undefined) && (strokes.length > 3)) {
      let index = 0;
-     while (index < strokes.length){
+     while ((index < strokes.length)&&(index < 10000)){
        index = drawLine(index);
      }
      //console.log("index1: "+index);
