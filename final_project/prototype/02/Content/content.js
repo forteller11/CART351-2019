@@ -49,6 +49,7 @@ let strokes = [255, 0, 0, 255,   0, 0, 40,   500, 500, 100,   endOfStroke];
 let tool;
 let canvasCtx;
 let canvas;
+let debuggingFillStyle = "rgba(0,255,0,.5)";
 
 window.onload = main;
 
@@ -59,12 +60,12 @@ function main(){
   createCanvas();
   console.log(canvas);
   console.log(canvasCtx);
-  canvasCtx.fillStyle = "rgba(0,255,0,.5)";
   console.log("width: "+canvas.width);
-  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-  repaintCanvasBasedOnStrokes(canvasCtx); //create canvas and draw to it based on strokes
 
-  strokes = getCollectiveStrokes(); //get paintings of any previous users
+
+  repaintCanvasBasedOnStrokes(); //create canvas and draw to it based on strokes
+
+  getCollectiveStrokes(); //get paintings of any previous users
 
 
   window.addEventListener("scroll", () => {
@@ -73,7 +74,8 @@ function main(){
 
   window.addEventListener("resize", () => {
     repaintCanvasBasedOnStrokes;
-    resizeCanvas(canvasCtx);
+    resizeCanvas();
+
   });
 
   //set up mouse events
@@ -101,11 +103,11 @@ function getCollectiveStrokes(){
 }
 
 function createCanvas(){
-  
+
   console.log("createcanvas");
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
-  canvas.style.zIndex = "1000000000000000000";
+  canvas.style.zIndex = Math.Infinity;
   resizeCanvas();
   document.body.appendChild(canvas);
   canvasCtx = canvas.getContext("2d");
@@ -120,11 +122,17 @@ function createCanvas(){
 function resizeCanvas(){
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
+  canvasCtx = canvas.getContext("2d");
+  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
   console.log("resize; width: " + canvas.width + "; height: " + canvas.height);
 }
 
 function paintLoop(){
-  //console.log("paintLoop");
+  console.log("paintLoop");
+  canvasCtx.fillStyle = debuggingFillStyle;
+  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
   window.requestAnimationFrame(paintLoop);
 }
 
