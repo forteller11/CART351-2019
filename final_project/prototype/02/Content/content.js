@@ -6,42 +6,58 @@ class ITool {
   constructor (ctx){
     this.drag = false;
   }
-  onClick(){
+  onClick(e){
     this.drag = true;
     console.log("onToolClick");
   }
-  onDrag(){
+  onDrag(e){
     if (this.drag == false) return;
     //console.log("onToolDrag");
   }
-  onRelease(){
+  onRelease(expfun){
     this.drag = false;
     console.log("onToolRelease");
   }
 
-  drawSelf(){
+  drawSelf(e){
       console.log("tool being drawn");
   }
 }
 
 class Brush extends ITool{
-  constructor(ctx){
-    super.constructor(ctx);
+  constructor(){
+    super();
     this.r = 0;
     this.g = 0;
     this.b = 0;
-    this.a = 255;
-    this.radius;
-    this.pressure = 0.5;
+    this.a = 1;
+    this.w = 10;
   }
-  onClick(){
-    super.onClick();
-    console.log("dog");
+  onClick(e){
+    super.onClick(e);
+    console.log("e: "+e);
+    strokes.push(this.r);
+    strokes.push(this.g);
+    strokes.push(this.b);
+    strokes.push(this.a);
+    strokes.push(this.w);
+    strokes.push(e.clientX);
+    strokes.push(e.clientY);
   }
 
-  onRelease(){
-    super.onRelease();
+  onDrag(e){
+    super.onDrag(e);
+    strokes.push
+    strokes.push(e.clientX);
+    strokes.push(e.clientY);
+  }
+
+  onRelease(e){
+    super.onRelease(e);
+    strokes.push(e.clientX);
+    strokes.push(e.clientY);
     localStorage.setItem(url, strokes);
+    console.log(strokes);
   }
 
 }
@@ -81,16 +97,18 @@ function main(){
   });
 
   //set up mouse events
-  tool = new ITool();
-  window.addEventListener("mousedown", () => {
-    tool.onClick();
-  })
-  window.addEventListener("mousemove", () => {
-    tool.onDrag();
-  })
-  window.addEventListener("mouseup", () => {
-    tool.onRelease();
-  })
+  tool = new Brush();
+  window.addEventListener("mousedown", (event) => {
+    tool.onClick(event);
+  });
+
+  window.addEventListener("mousemove", (event) => {
+    tool.onDrag(event);
+  });
+
+  window.addEventListener("mouseup", (event) => {
+    tool.onRelease(event);
+  });
 
   window.requestAnimationFrame(paintLoop); //animation loop
 }
