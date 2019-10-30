@@ -1,6 +1,6 @@
 'use strict';
 
-let url = window.location.href;
+let url = "graffitiExtension" + window.location.href;
 let endOfStroke = 123456789;
 //r,g,b,a,width, x,y,x,y....'stop'
 let strokes = [];
@@ -41,7 +41,7 @@ class Brush {
     this.drag = false;
     console.log("drag "+this.drag);
     this.r = 0;
-    this.g = 255;
+    this.g = 0;
     this.b = 0;
     this.a = 1;
     this.w = 2;
@@ -56,8 +56,8 @@ class Brush {
       this.b,
       this.a,
       this.w,
-      e.clientX,
-      e.clientY
+      e.clientX + window.scrollX,
+      e.clientY + window.scrollY
     );
 
   }
@@ -65,14 +65,14 @@ class Brush {
   onDrag(e){
     if (this.drag === true){
       //if (this.drag === false) return;
-      strokes.push(mouseX, mouseY);
+      strokes.push(mouseX + window.scrollX, mouseY + window.scrollY);
     }
   }
 
   onRelease(e){
     this.drag = false;
   //  super.onRelease(e);
-    strokes.push(e.clientX, e.clientY, endOfStroke);
+    strokes.push(e.clientX + window.scrollX, e.clientY + window.scrollY, endOfStroke);
     localStorage.setItem(url, strokes);
     console.log(strokes);
   }
@@ -142,14 +142,9 @@ function createCanvas(){
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
   canvas.style.zIndex = 999999999999999999;
+  //
   resizeCanvas();
   document.body.appendChild(canvas);
-
-  let t = document.createElement("div");
-  t.style.backgroundColor = "red";
-  t.style.width = "500px";
-  t.style.height = "500px";
-  document.body.appendChild(t);
 }
 
 function resizeCanvas(){
@@ -223,4 +218,8 @@ canvasCtx.beginPath();
 
 function rgbaCol(r,g,b,a){
   return "rgba("+r+","+g+","+b+","+a+")";
+}
+
+function updateUrl(){
+  url = "graffitiExtension" + window.location.href;
 }
