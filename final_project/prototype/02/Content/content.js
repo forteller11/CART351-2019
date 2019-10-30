@@ -5,10 +5,20 @@
 class ITool {
   constructor (canvas){
     this.canvas = canvas;
+    this.drag = false;
   }
-  onClick(){}
-  onDrag(){}
-  onRelease(){}
+  onClick(){
+    this.drag = true;
+    console.log("onToolClick");
+  }
+  onDrag(){
+    if (this.drag == false) return;
+    console.log("onToolDrag");
+  }
+  onRelease(){
+    this.drag = false;
+    console.log("onToolRelease");
+  }
 }
 
 class Brush extends ITool{
@@ -23,15 +33,21 @@ class Brush extends ITool{
     this.pressure = 0.5;
   }
   onClick(){
+    super.onClick();
+    console.log("dog");
+  }
 
+  onRelease(){
+    super.onRelease();
+    localStorage.setItem(url, strokes);
   }
 }
-
-let graffiti = false;
-let strokes = [];
-let pageAcessTimes = 100;
-let testVal = 0;
-let tool = new ITool();
+let url = window.location.pathname;
+let endOfStroke = 54321;
+//r,g,b, x,y,width,x,y,width....'stop'
+let strokes = [255, 0, 0, 255,   0, 0, 40,   500, 500, 100,   endOfStroke];
+let tool;
+let canvas;
 
 window.onload = main;
 
@@ -39,32 +55,42 @@ function main(){
   console.log("main");
   console.log(window.location.href);
 
-  getCollectiveCanvas(); //get paintings of any previous users
-  window.requestAnimationFrame(graffitiGUI); //animation loop
+  strokes = getCollectiveStrokes(); //get paintings of any previous users
+
+  repaintCanvasBasedOnStrokes(canvas); //create canvas and draw to it based on strokes
+
+  window.addEventListener("scroll", repaintCanvasBasedOnStrokes);
+  window.addEventListener("resize", repaintCanvasBasedOnStrokes);
+
+  //set up mouse events
+  tool = new ITool(canvas);
+  window.addEventListener("mousedown", () => {
+    tool.onClick();
+  })
+  window.addEventListener("mousemove", () => {
+    tool.onDrag();
+  })
+  window.addEventListener("mouseup", () => {
+    tool.onRelease();
+  })
+
+  window.requestAnimationFrame(paintLoop); //animation loop
 }
 
-function getCollectiveCanvas(){
-  let url = window.location.pathname;
+function getCollectiveStrokes(){
+
   console.log("url: "+ url);
-  testVal = localStorage.getItem(url);
+  let history = localStorage.getItem(url);
   console.log("testval: " + testVal);
-  if (testVal == null) testVal = 0;
-  testVal ++;
-  localStorage.setItem(url, testVal);
-
-  //if there is a key that matches window.location.href then get tht json and deserialize it
-  chrome.storage.local.get([url], (result) => {
-          console.log('Value currently is ' + result.key);
-          if (result.key == undefined) pageAcessTimes = 0;
-          else pageAcessTimes = result.key++;
-          chrome.storage.local.set({url : pageAcessTimes}, () => {
-                  console.log('Value iss set to ' + pageAcessTimes);
-                });
-        });
+  if (value != null) strokes = history;
 
 }
 
-function graffitiGUI(){
-console.log("animate");
-window.requestAnimationFrame(graffitiGUI);
+function paintLoop(){
+  //console.log("paintLoop");
+  window.requestAnimationFrame(paintLoop);
+}
+
+function repaintCanvasBasedOnStrokes(cvs){
+  cvs
 }
