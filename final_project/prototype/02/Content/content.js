@@ -189,7 +189,7 @@ function paintLoop(){
    }
    mouseXPrev = mouseX;
    mouseYPrev = mouseY;
-  //window.requestAnimationFrame(paintLoop);
+  window.requestAnimationFrame(paintLoop);
 }
 
 function drawLine(index){
@@ -207,13 +207,13 @@ canvasCtx.beginPath();
 
   //first stroke
   canvasCtx.moveTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
-  console.log("X: "+strokes[index+0] + " Y: "+ strokes[index+1]);
+  //console.log("X: "+strokes[index+0] + " Y: "+ strokes[index+1]);
   index += 2;
 
   //console.log(strokes[index]);
   //other strokes
-  while ((strokes[index] != endOfStroke)){
-    console.log("X: "+strokes[index] + " Y: "+ strokes[index+1]);
+  while ((strokes[index] != endOfStroke) && (strokes[index-1] != endOfStroke) && (index < 10000)){
+    //console.log("X: "+strokes[index] + " Y: "+ strokes[index+1]);
     canvasCtx.lineTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
     index += 2;
   } //console.log("index2: "+index);
