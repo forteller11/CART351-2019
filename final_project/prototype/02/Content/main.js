@@ -1,4 +1,4 @@
-console.log("ahhh234");
+console.log("content script loaded");
 let graffiti = false;
 let strokes = [];
 
@@ -18,4 +18,32 @@ function getCollectiveCanvas(){
 }
 function graffitiGUI(){
 console.log("animate");
+}
+
+
+class ITool {
+  constructor (canvas){
+    this.canvas = canvas;
+  }
+  onClick(){}
+  onDrag(){}
+  onRelease(){}
+}
+
+
+class Brush extends ITool{
+  constructor(canvas){
+    super.constructor(canvas);
+    this.r = 0;
+    this.g = 0;
+    this.b = 0;
+    this.a = 255;
+    this.radius;
+    this.canvas;
+    this.pressure = 0.5;
+  }
+
+  onClick(){
+
+  }
 }

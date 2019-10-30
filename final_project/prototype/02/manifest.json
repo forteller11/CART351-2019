@@ -1,38 +1,36 @@
-
 {
   "manifest_version": 2,
-
   "name": "project prototype",
   "author": "Charles Yan Miller",
   "description": "prototype",
   "version": "1.0",
-
-  "icons": {  "16" : "icon.png",
-              "48" : "icon.png",
-              "128" : "icon.png"
-            },
-
+  "icons": {
+    "16": "icon19.png",
+    "48": "icon256.png",
+    "128": "icon256.png"
+  },
   "content_scripts": [
     {
-      "js": [ "p5.js","p5.dom.js","Content/main.js","Content/Tools/Tool.js","Content/Tools/Brush.js","jquery-3.1.1.min.js"],
-      "matches": [ "http://*/*", "https://*/*" ],
+      "js": [
+        "Content/main.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
       "run_at": "document_end"
     }
   ],
-
   "background": {
     "scripts": []
   },
-
   "browser_action": {
-    "default_title": "Charly Yan Miller -- CART 351 Project Prototype.",
+    "default_title": "Begin Painting?",
     "default_icon": {
-      "19": "icon_19.png"
+      "19": "icon19.png"
     },
-    "default_popup": "popup.html",
-    "default_title": "Begin Painting?"
+    "default_popup": "popup.html"
   },
-
   "permissions": [
     "activeTab",
     "tabs",
@@ -40,7 +38,5 @@
     "https://*/*",
     "storage"
   ],
-
-"web_accessible_resources": []
-
+  "web_accessible_resources": []
 }
