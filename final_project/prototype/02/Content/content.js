@@ -44,12 +44,12 @@ class Brush extends ITool{
 
 let url = window.location.pathname;
 let endOfStroke = 54321;
-//r,g,b, x,y,width,x,y,width....'stop'
-let strokes = [255, 0, 0, 255,   0, 0, 40,   500, 500, 100,   endOfStroke];
+//r,g,b,a,width, x,y,x,y....'stop'
+let strokes = [255, 0, 0, 1, 40,   0, 0,   500, 500,   endOfStroke];
 let tool;
 let canvasCtx;
 let canvas;
-let debuggingFillStyle = "rgba(0,255,0,.5)";
+let debuggingFillStyle = rgbaCol(0,0,255,0.5);
 
 window.onload = main;
 
@@ -107,7 +107,7 @@ function createCanvas(){
   console.log("createcanvas");
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
-  canvas.style.zIndex = Math.Infinity;
+  canvas.style.zIndex = 999999999999999999;
   resizeCanvas();
   document.body.appendChild(canvas);
   canvasCtx = canvas.getContext("2d");
@@ -129,13 +129,47 @@ function resizeCanvas(){
 }
 
 function paintLoop(){
-  console.log("paintLoop");
+  //console.log("paintLoop");
   canvasCtx.fillStyle = debuggingFillStyle;
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+   let index = 0;
+   while (index < strokes.length){
+     index = drawLine(index);
+   }
+
   window.requestAnimationFrame(paintLoop);
+}
+
+function drawLine(index){
+  console.log("drawline");
+  let r = strokes[index + 0];
+  let g = strokes[index + 1];
+  let b = strokes[index + 2];
+  let a = strokes[index + 3];
+  let w = strokes[index + 4];
+  canvasCtx.strokeStyle = rgbaCol(r,g,b,a);
+  canvasCtx.lineWidth = w;
+
+  index += 5;
+  
+  canvasCtx.moveTo(index+0, index+1);
+  index += 2;
+
+  while (index != endOfStroke){
+    canvasCtx.lineTo(index+0, index+1);
+    index += 2;
+  }
+
+  canvasCtx.stroke();
+  return index; //index of r on new stroke or nothing
 }
 
 function repaintCanvasBasedOnStrokes(cvs){
 
+}
+
+function rgbaCol(r,g,b,a){
+  return "rgba("+r+","+g+","+b+","+a+")";
 }
