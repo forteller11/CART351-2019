@@ -74,13 +74,10 @@ function main(){
 
 
   window.addEventListener("scroll", () => {
-    repaintCanvasBasedOnStrokes;
   });
 
   window.addEventListener("resize", () => {
-    repaintCanvasBasedOnStrokes;
     resizeCanvas();
-
   });
 
   //set up mouse events
@@ -115,7 +112,6 @@ function createCanvas(){
   canvas.style.zIndex = 999999999999999999;
   resizeCanvas();
   document.body.appendChild(canvas);
-  canvasCtx = canvas.getContext("2d");
 
   let t = document.createElement("div");
   t.style.backgroundColor = "red";
@@ -129,14 +125,18 @@ function resizeCanvas(){
   canvas.height = window.innerHeight;
   canvasCtx = canvas.getContext("2d");
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.fillStyle = debuggingFillStyle;
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
   console.log("resize; width: " + canvas.width + "; height: " + canvas.height);
 }
 
 function paintLoop(){
   //console.log("paintLoop");
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  //canvasCtx = canvas.getContext("2d");
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  canvasCtx.fillStyle = debuggingFillStyle;
+  canvasCtx.fillStyle = rgbaCol(0,255,0,.5);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
    let index = 0;
