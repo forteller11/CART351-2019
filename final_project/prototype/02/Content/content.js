@@ -12,11 +12,15 @@ class ITool {
   }
   onDrag(){
     if (this.drag == false) return;
-    console.log("onToolDrag");
+    //console.log("onToolDrag");
   }
   onRelease(){
     this.drag = false;
     console.log("onToolRelease");
+  }
+
+  drawSelf(){
+      console.log("tool being drawn");
   }
 }
 
@@ -39,6 +43,7 @@ class Brush extends ITool{
     super.onRelease();
     localStorage.setItem(url, strokes);
   }
+
 }
 
 
@@ -130,8 +135,8 @@ function resizeCanvas(){
 
 function paintLoop(){
   //console.log("paintLoop");
-  canvasCtx.fillStyle = debuggingFillStyle;
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.fillStyle = debuggingFillStyle;
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
    let index = 0;
@@ -143,7 +148,6 @@ function paintLoop(){
 }
 
 function drawLine(index){
-  console.log("drawline");
   let r = strokes[index + 0];
   let g = strokes[index + 1];
   let b = strokes[index + 2];
@@ -153,16 +157,19 @@ function drawLine(index){
   canvasCtx.lineWidth = w;
 
   index += 5;
-  
-  canvasCtx.moveTo(index+0, index+1);
+
+  //first stroke
+  canvasCtx.moveTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
   index += 2;
 
+  //other strokes
   while (index != endOfStroke){
-    canvasCtx.lineTo(index+0, index+1);
+    canvasCtx.lineTo(strokes[index+0] - window.scrollX , strokes[index+1] - window.scrollY);
     index += 2;
   }
 
   canvasCtx.stroke();
+
   return index; //index of r on new stroke or nothing
 }
 
