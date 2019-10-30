@@ -30,7 +30,7 @@ class Brush extends ITool{
 let graffiti = false;
 let strokes = [];
 let pageAcessTimes = 100;
-
+let testVal = 0;
 let tool = new ITool();
 
 window.onload = main;
@@ -44,7 +44,14 @@ function main(){
 }
 
 function getCollectiveCanvas(){
-  let url = window.location.href;
+  let url = window.location.pathname;
+  console.log("url: "+ url);
+  testVal = localStorage.getItem(url);
+  console.log("testval: " + testVal);
+  if (testVal == null) testVal = 0;
+  testVal ++;
+  localStorage.setItem(url, testVal);
+
   //if there is a key that matches window.location.href then get tht json and deserialize it
   chrome.storage.local.get([url], (result) => {
           console.log('Value currently is ' + result.key);
