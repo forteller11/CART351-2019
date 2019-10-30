@@ -47,17 +47,39 @@ class Brush {
     this.w = 2;
 
     document.addEventListener("keydown", (e) =>{
+      let colInc = 15;
       console.log("ah");
       console.log(e.keyCode);
       switch (e.keyCode){
-        case 219:
+        case 219: //[
           if (this.w > 2) this.w *= .8;
-          console.log('decrease size');
+          this.w = constrain(this.w,0,1000);
           break;
-        case 221:
+        case 221: //]
           this.w *= 1.2;
-          console.log('increase size');
+          this.w = constrain(this.w,0,1000);
           break;
+        case 82: //r
+          if (e.shiftKey) this.r -= colInc;
+          else this.r += colInc;
+          this.r = constrain(this.r,0,255);
+          break;
+        case 71: //g
+          if (e.shiftKey) this.g -= colInc;
+          else this.g += colInc;
+          this.g = constrain(this.g,0,255);
+          break;
+        case 66: //b
+          if (e.shiftKey) this.b -= colInc;
+          else this.b += colInc;
+          this.b = constrain(this.b,0,255);
+          break;
+        case 65: //b
+          if (e.shiftKey) this.a -= 0.1;
+          else this.a += 0.1;
+          this.a = constrain(this.a,0,1);
+          break;
+
         default:
           break;
         //color
@@ -261,4 +283,10 @@ function rgbaCol(r,g,b,a){
 
 function updateUrl(){
   url = "graffitiExtension" + window.location.href;
+}
+
+function constrain (x, min, max){
+  if (x < min) x = min;
+  if (x > max) x = max;
+  return x;
 }
