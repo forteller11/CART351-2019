@@ -17,13 +17,35 @@ catch(PDOException $e) {
   }
 
   $theQuery = 'CREATE TABLE strokesCollection (
-    red INTEGER PRIMARY KEY NOT NULL,
-    green INTEGER PRIMARY KEY NOT NULL,
-    blue INTEGER PRIMARY KEY NOT NULL,
-    alpha INTEGER PRIMARY KEY NOT NULL,
+    url TEXT NOT NULL,
+    creationDate TEXT NOT NULL,
+    red INTEGER NOT NULL,
+    green INTEGER NOT NULL,
+    blue INTEGER NOT NULL,
+    alpha INTEGER NOT NULL,
     positionsWidths TEXT NOT NULL
   )';
       $file_db ->exec($theQuery);
+
+      $insertStatement = "INSERT INTO strokesCollection (
+        url,
+        creationDate,
+        red,
+        green,
+        blue,
+        alpha,
+        positionsWidths
+      )
+      VALUES (
+        'https://www.youtube.com/',
+        '2019-11-16T12-30-30',
+        255,
+        0,
+        0,
+        0,
+        '0,20,20, 200,200, 20'
+      ) ";
+
   // if everything executed error less we will arrive at this statement
       echo ("Table strokesCollection created successfully<br \>");
         // Close file db connection

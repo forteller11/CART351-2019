@@ -1,20 +1,44 @@
-<html>
-<head>
-<title>Hello world example in php</title>
-</head>
-<body>
 <?php
-echo "Hello World!";
+try {
+    /**************************************
+    * Create databases and                *
+    * open connections                    *
+    **************************************/
+
+    // Create (connect to) SQLite database in file
+    $file_db = new PDO('sqlite:../db/graffitiStrokes.db');
+    // Set errormode to exceptions
+    /* .. */
+    $file_db->setAttribute(PDO::ATTR_ERRMODE,
+                            PDO::ERRMODE_EXCEPTION);
+
+  }
+  catch(PDOException $e) {
+    // Print PDOException message
+    echo $e->getMessage();
+  }
+
+  $sql_select='SELECT * FROM strokesCollection';
+// the result set
+$result = $file_db->query($sql_select);
+//if (!$result) die("Cannot execute query.");
+echo "<||";
+
+// fetch first row ONLY...
+  $row = $result->fetch(PDO::FETCH_ASSOC);
+  var_dump($row);
+echo "||>";
+// put required html mark up
+echo"<html>\n";
+echo"<head>\n";
+echo"<title> Output from the STROKES DATABASE </title> \n";
+//include CSS Style Sheet
+//echo "<link rel='stylesheet' type='text/css' href='css/galleryStyle.css'>";
+echo"</head>\n";
+// start the body ...
+echo"<body>\n";
+// place body content here ...
+echo"</body>\n";
+echo"</html>\n";
+
 ?>
-</body>
-<?php
-
-$theQuery = 'CREATE TABLE artCollection (pieceID INTEGER PRIMARY KEY NOT NULL, artist TEXT, title TEXT,geoLoc TEXT, creationDate TEXT,descript ,image TEXT)';
-    $file_db ->exec($theQuery);
-// if everything executed error less we will arrive at this statement
-    echo ("Table artCollection created successfully<br \>");
-      // Close file db connection
-
-?>
-
-</html>
