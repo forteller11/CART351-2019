@@ -9,7 +9,7 @@ try {
   // Set errormode to exceptions
     $file_db->setAttribute(PDO::ATTR_ERRMODE,
                             PDO::ERRMODE_EXCEPTION);
-    echo("opened or connected to the database graffitiGallery");
+    echo("opened or connected to the database graffitiStrokes");
    }
 catch(PDOException $e) {
     // Print PDOException message
@@ -49,7 +49,7 @@ catch(PDOException $e) {
       $file_db ->exec($insertStatement);
 
   // if everything executed error less we will arrive at this statement
-      echo ("Table strokesCollection created successfully<br \>");
+      echo ("Table stroke created successfully<br \>");
         // Close file db connection
          $file_db = null;
   ?>
