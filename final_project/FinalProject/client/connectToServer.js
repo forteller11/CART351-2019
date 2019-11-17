@@ -7,6 +7,7 @@ function main(){
 
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "../db/getDB.php", true);
+  xhttp.responseType = "blob";
   xhttp.send();
 
   xhttp.onreadystatechange = (e) => {
