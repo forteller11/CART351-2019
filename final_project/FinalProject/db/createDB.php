@@ -46,6 +46,8 @@ catch(PDOException $e) {
         '0,20,20, 200,200, 20'
       ) ";
 
+      $file_db ->exec($insertStatement);
+
   // if everything executed error less we will arrive at this statement
       echo ("Table strokesCollection created successfully<br \>");
         // Close file db connection

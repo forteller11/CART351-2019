@@ -28,6 +28,9 @@ echo "<||";
   $row = $result->fetch(PDO::FETCH_ASSOC);
   var_dump($row);
 echo "||>";
+foreach ($row as &$val){
+  echo "<div>" . $val . '</div>';
+}
 // put required html mark up
 echo"<html>\n";
 echo"<head>\n";
