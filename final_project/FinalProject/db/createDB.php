@@ -16,7 +16,7 @@ catch(PDOException $e) {
     echo $e->getMessage();
   }
 
-  $theQuery = 'CREATE TABLE strokesCollection (
+  $theQuery = 'CREATE TABLE stroke (
     url TEXT NOT NULL,
     creationDate TEXT NOT NULL,
     red INTEGER NOT NULL,
@@ -27,7 +27,7 @@ catch(PDOException $e) {
   )';
       $file_db ->exec($theQuery);
 
-      $insertStatement = "INSERT INTO strokesCollection (
+      $insertStatement = "INSERT INTO stroke (
         url,
         creationDate,
         red,

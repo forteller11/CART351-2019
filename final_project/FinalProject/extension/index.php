@@ -18,7 +18,7 @@ try {
     echo $e->getMessage();
   }
 
-  $sql_select='SELECT * FROM strokesCollection';
+  $sql_select = "SELECT * FROM strokesCollection WHERE url = 'https://www.youtube.com/' ";
 // the result set
 $result = $file_db->query($sql_select);
 //if (!$result) die("Cannot execute query.");
