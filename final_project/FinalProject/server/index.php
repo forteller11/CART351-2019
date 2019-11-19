@@ -1,10 +1,13 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+
 //check if there has been something posted to the server to be processed
 if($_SERVER['REQUEST_METHOD'] == 'GET')
 {
   echo"<div>";
   echo "||GEsT REQUEST|| ";
-  echo $_SERVER['REQUEST_URI'];
+  echo '$SERVER: '. $_SERVER['REQUEST_URI'];
   echo"</div>";
   // exit;
 // need to process

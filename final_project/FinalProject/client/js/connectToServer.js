@@ -18,8 +18,9 @@ function main(){
   // };
 
   let postRequest = new XMLHttpRequest();
-  postRequest.open("POST", "getDB.php", true);
+  postRequest.open("POST", "../../server/index.php", true);
   console.log(postRequest);
+  postRequest.setRequestHeader('Content-Type','text/plain');
   //postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   postRequest.responseType = "text";
   let uri = window.location.pathname + '?name=John';
