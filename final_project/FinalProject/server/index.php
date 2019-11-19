@@ -1,4 +1,25 @@
 <?php
+//check if there has been something posted to the server to be processed
+if($_SERVER['REQUEST_METHOD'] == 'GET')
+{
+  echo"<div>";
+  echo "||GEsT REQUEST|| ";
+  echo $_SERVER['REQUEST_URI'];
+  echo"</div>";
+  // exit;
+// need to process
+}
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+
+
+  echo"<div>";
+  echo "||POST REQUEST|| ";
+  echo $_SERVER['REQUEST_URI'];
+  echo"</div>";
+  exit;
+// need to process
+}
 
 // put required html mark up
 echo"<html>\n";
@@ -6,44 +27,18 @@ echo"<head>\n";
 echo"<title> Output from the STROKES DATABASE </title> \n";
 //include CSS Style Sheet
 //echo "<link rel='stylesheet' type='text/css' href='css/galleryStyle.css'>";
-echo "<script src = 'connectToServer.js'></script>";
+//echo "<script src = '../client/js/connectToServer.js'></script>";
+//echo $_SERVER['URI'];
 echo"</head>\n";
 // start the body ...
 echo"<body>\n";
-echo $_SERVER['REQUEST_URI'];
-echo "\n GET REQUEST";
+echo "initial body";
 // place body content here ...
 echo"</body>\n";
 echo"</html>\n";
 
 
-//check if there has been something posted to the server to be processed
-if($_SERVER['REQUEST_METHOD'] == 'GET')
-{
-  echo $_SERVER['REQUEST_URI'];
-  echo "\n GET REQUEST";
-// need to process
-}
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
 
-
-  // put required html mark up
-  echo"<html>\n";
-  echo"<head>\n";
-  echo"<title> Output from the STROKES DATABASE </title> \n";
-  //include CSS Style Sheet
-  //echo "<link rel='stylesheet' type='text/css' href='css/galleryStyle.css'>";
-  echo"</head>\n";
-  // start the body ...
-  echo"<body>\n";
-  echo $_SERVER['REQUEST_URI'];
-  echo "\n POST REQUEST";
-  // place body content here ...
-  echo"</body>\n";
-  echo"</html>\n";
-// need to process
-}
 
 // try {
 //     /**************************************
