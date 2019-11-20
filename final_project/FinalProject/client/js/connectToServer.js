@@ -18,7 +18,7 @@ function main(){
   // };
 
   let postRequest = new XMLHttpRequest();
-  postRequest.open("POST", "../../server/index.php", true);
+  postRequest.open("POST", "https://blooming-meadow-17879.herokuapp.com/", true);
   console.log(postRequest);
   postRequest.setRequestHeader('Content-Type','text/plain');
   //postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
