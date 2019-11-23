@@ -14,13 +14,16 @@ let tool;
 
 function main () {
   //=======canvas stuff ==============
+
   canvas = document.createElement("CANVAS");
   canvas.style.position = "fixed";
   canvas.style.zIndex = 999999999999999999;
   canvas.style.pointerEvents = "auto";
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
+  canvas.style.touchAction = 'none';
   canvasCtx = canvas.getContext("2d");
+    canvasCtx.lineCap = "butt";
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   canvasCtx.fillStyle = rgbaCol(0,255,255,1);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
@@ -56,15 +59,14 @@ function drawStrokes(){
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   strokesSerialized += tool.emptyStrokeDataBuffer();
 
-  //console.log(strokesSerialized);
   let strokes = strokesSerialized.split(STROKE_DELIMITER);
   // console.log(strokesSerialized);
-  // console.log("aaaaaaaaaaaaaaaaa")
-  // console.log(strokes.length);
-  for (let i = 0; i < strokes.length; i++){
+
+  for (let i = 0; i < strokes.length; i++){ //cycle through strokes
     let attribs = strokes[i].split(ATTRIB_DELIMITER);
     canvasCtx.strokeStyle = rgbaCol(attribs[0], attribs[1], attribs[2], attribs[3]);
-    console.log(attribs);
+    //console.log(attribs);
+    //cycle through verts of strokes to actually draw
     for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
 
       canvasCtx.lineWidth = attribs[j + 2];

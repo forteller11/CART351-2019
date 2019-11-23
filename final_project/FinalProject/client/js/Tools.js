@@ -8,22 +8,25 @@ class Tool {
 
     this.mouseDown = false;
 
-    this.spacingLevel = 10;
+    this.spacingLevel = 6;
     this.spacingCounter = 0;
 
-    window.addEventListener("mousedown", (e) => {
+    window.addEventListener("pointerdown", (e) => {
+      //e.preventDefault();
       this.mouseDown = true;
       this.onInitClick(e);
     });
 
-    window.addEventListener("mousemove", (e) => {
+    window.addEventListener("pointermove", (e) => {
+      //e.preventDefault();
       if (this.mouseDown)
         tool.spacingManager(e);
     });
 
-    window.addEventListener("mouseup", (e) => {
+    window.addEventListener("pointerup", (e) => {
+      //e.preventDefault();
       this.mouseDown = false;
-      tool.onRelease(e);
+        tool.onRelease(e);
     });
 
   }
@@ -34,7 +37,9 @@ class Tool {
   }
 
   spacingManager (e){
+    if (e.pointerType != 'pen')
     this.spacingCounter++;
+    else this.spacingCounter +=5;
     if (this.spacingCounter > this.spacingLevel){
       this.spacingCounter = 0;
       this.onHold(e);
@@ -73,6 +78,7 @@ class StrokeBrush extends Tool {
 
   }
 onInitClick(e){
+  console.log(e)
   //
   let colorData =
     this.r + ATTRIB_DELIMITER +
@@ -86,18 +92,23 @@ onInitClick(e){
 }
 
 onHold(e){
-  this.strokeDataBuffer += this.serializeVertData(e) + ATTRIB_DELIMITER;
+  //console.log(e);
+    this.strokeDataBuffer += this.serializeVertData(e) + ATTRIB_DELIMITER;
 }
 
 onRelease(e){
+console.log(e);
 this.strokeDataBuffer += this.serializeVertData(e) + STROKE_DELIMITER;
 //logSerliazedStrokes(this.strokeDatas);
 
 }
-  serializeVertData(mouseEvent){
-    let xx = mouseEvent.clientX;
-    let yy = mouseEvent.clientY;
-    let ww = this.width;
+  serializeVertData(e){
+    let xx = e.clientX;
+    let yy = e.clientY;
+    let ww = (this.width * e.pressure) + 1;
+    let str = xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
+    let strs = str.split(ATTRIB_DELIMITER);
+    console.log(strs);
     return xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
   }
 }
