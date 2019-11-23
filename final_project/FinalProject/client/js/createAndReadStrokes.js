@@ -5,6 +5,7 @@ const AJAX_STROKE_DATA_DELIMITER = "|/_\\|";
 const STROKE_DELIMITER = 'd';
 const ATTRIB_DELIMITER = ',';
 const VERT_SIZE = 3;
+const BASE = 10;
 
 let canvas;
 let canvasCtx;
@@ -44,30 +45,38 @@ function main () {
   //animation frame
 //tool to strokes
 //parse
+
+// let s = "dog;cat";
+// let ss = s.split(';');
+// console.log(ss);
+console.log(parseInt('203;',10));
 }
 
 function drawStrokes(){
+  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   strokesSerialized += tool.emptyStrokeDataBuffer();
 
-  let strokes = strokesSerialized.split('');
+  //console.log(strokesSerialized);
+  let strokes = strokesSerialized.split(STROKE_DELIMITER);
   // console.log(strokesSerialized);
   // console.log("aaaaaaaaaaaaaaaaa")
   // console.log(strokes.length);
   for (let i = 0; i < strokes.length; i++){
     let attribs = strokes[i].split(ATTRIB_DELIMITER);
     canvasCtx.strokeStyle = rgbaCol(attribs[0], attribs[1], attribs[2], attribs[3]);
-    for (let j = 4; j < attribs.length-VERT_SIZE; j++){
+    console.log(attribs);
+    for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
 
       canvasCtx.lineWidth = attribs[j + 2];
       canvasCtx.beginPath();
 
       canvasCtx.moveTo(
-        attribs[j + 0] - window.scrollX ,
-        attribs[j + 1] - window.scrollY);
+        parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
+        parseInt(attribs[j + 1], BASE) - window.scrollY);
 
       canvasCtx.lineTo(
-        attribs[j + 0 + VERT_SIZE] - window.scrollX ,
-        attribs[j + 1 + VERT_SIZE] - window.scrollY);
+        parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
+        parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
 
       canvasCtx.stroke();
     }

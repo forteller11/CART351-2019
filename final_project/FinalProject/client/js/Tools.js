@@ -68,7 +68,8 @@ class StrokeBrush extends Tool {
     this.r = 255;
     this.g = 0;
     this.b = 0;
-    this.a = 0;
+    this.a = 1;
+    this.width = 5;
 
   }
 onInitClick(e){
@@ -96,6 +97,7 @@ this.strokeDataBuffer += this.serializeVertData(e) + STROKE_DELIMITER;
   serializeVertData(mouseEvent){
     let xx = mouseEvent.clientX;
     let yy = mouseEvent.clientY;
-    return xx + ATTRIB_DELIMITER + yy;
+    let ww = this.width;
+    return xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
   }
 }
