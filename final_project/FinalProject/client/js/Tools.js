@@ -8,7 +8,7 @@ class Tool {
 
     this.mouseDown = false;
 
-    this.spacingLevel = 6;
+    this.spacingLevel = 8;
     this.spacingCounter = 0;
 
     window.addEventListener("pointerdown", (e) => {
@@ -97,7 +97,7 @@ onRelease(e){
   serializeVertData(e){
     let xx = e.clientX;
     let yy = e.clientY;
-    let ww = (this.width * e.pressure) + 1;
+    let ww = (this.width * e.pressure*1.5) + this.width/4;
     let str = xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
     let strs = str.split(ATTRIB_DELIMITER);
     console.log(strs);

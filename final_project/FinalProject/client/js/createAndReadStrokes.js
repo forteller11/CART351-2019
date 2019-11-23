@@ -23,7 +23,7 @@ function main () {
   canvas.height = window.innerHeight;
   canvas.style.touchAction = 'none';
   canvasCtx = canvas.getContext("2d");
-    canvasCtx.lineCap = "butt";
+    canvasCtx.lineCap = "round";
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   canvasCtx.fillStyle = rgbaCol(0,255,255,1);
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
