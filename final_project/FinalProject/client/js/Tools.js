@@ -2,27 +2,27 @@
 
 class Tool {
 
-  constructor(canvas = null, canvasCtxt = null, strokes = null){
+  constructor(){
 
-    this.canvas;
-    this.canvasCtx;
-    this.strokes;
+    this.strokeDataBuffer = new String();
 
-    if (canvas == null || canvasCtx == null || strokes === null)
-      console.warn("TOOL not constructed fully!");
+    this.mouseDown = false;
 
     this.spacingLevel = 10;
     this.spacingCounter = 0;
 
     window.addEventListener("mousedown", (e) => {
+      this.mouseDown = true;
       this.onInitClick(e);
     });
 
     window.addEventListener("mousemove", (e) => {
-      tool.spacingManager(e);
+      if (this.mouseDown)
+        tool.spacingManager(e);
     });
 
     window.addEventListener("mouseup", (e) => {
+      this.mouseDown = false;
       tool.onRelease(e);
     });
 
@@ -30,7 +30,7 @@ class Tool {
 //simplify stroke and do less
 
   onInitClick(e){
-    console.warn("method has not been implemented!");
+    console.warn("oninitclick method has not been implemented!");
   }
 
   spacingManager (e){
@@ -42,15 +42,60 @@ class Tool {
   }
 
   onHold(e){
-    console.warn("method has not been implemented!");
+    console.warn("onhold method has not been implemented!");
   }
 
   onRelease(e){
-    console.warn("method has not been implemented!");
+    console.warn("onrelease method has not been implemented!");
   }
 
-  createVert(mouseEvent){
+  emptyStrokeDataBuffer(){
+    // if (this.strokeDataBuffer.length > 0)
+    //   console.log(this.strokeDataBuffer);
 
+    const strToUpload = this.strokeDataBuffer.slice(0); //copy string with value
+    this.strokeDataBuffer = new String();
+    return strToUpload;
   }
 
+
+}
+
+class StrokeBrush extends Tool {
+  constructor(canvas, canvasCtx, strokeDatas){
+    console.log(canvas);
+    super (canvas, canvasCtx, strokeDatas);
+    this.r = 255;
+    this.g = 0;
+    this.b = 0;
+    this.a = 0;
+
+  }
+onInitClick(e){
+  //
+  let colorData =
+    this.r + ATTRIB_DELIMITER +
+    this.g + ATTRIB_DELIMITER +
+    this.b + ATTRIB_DELIMITER +
+    this.a + ATTRIB_DELIMITER;
+    console.log(colorData);
+  let initVert = this.serializeVertData(e) + ATTRIB_DELIMITER;
+  let initStrokeSerealized = colorData + initVert;
+  this.strokeDataBuffer += initStrokeSerealized;
+}
+
+onHold(e){
+  this.strokeDataBuffer += this.serializeVertData(e) + ATTRIB_DELIMITER;
+}
+
+onRelease(e){
+this.strokeDataBuffer += this.serializeVertData(e) + STROKE_DELIMITER;
+//logSerliazedStrokes(this.strokeDatas);
+
+}
+  serializeVertData(mouseEvent){
+    let xx = mouseEvent.clientX;
+    let yy = mouseEvent.clientY;
+    return xx + ATTRIB_DELIMITER + yy;
+  }
 }
