@@ -20,7 +20,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
   echo "||POST REQUEST|| ";
   echo $_SERVER['REQUEST_URI'];
   echo"</div>";
-  exit;
+  $entityBody = file_get_contents('php://input');
+  echo"<div>";
+  echo "||POST BODY|| ";
+  echo var_dump($entityBody);
+  echo $entityBody;
+  echo"</div>";
 // need to process
 }
 
