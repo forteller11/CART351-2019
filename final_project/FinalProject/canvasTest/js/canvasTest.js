@@ -1,45 +1,78 @@
 'use strict';
 window.onload = main;
 
+let colCursor;
+let brightness = 140;
 function main(){
+
+  let canvasPicker = document.getElementById("colorCursor");
+  let ctxPicker = canvasPicker.getContext("2d");
+  ctxPicker.fillStyle = 'blue';
+  ctxPicker.fillRect(0,0,canvasPicker.width, canvasPicker.height);
+  canvasPicker.style.pointerEvents = "auto";
+  canvasPicker.style.touchAction = 'none';
+  canvasPicker.style.position = 'absolute';
+  canvasPicker.style.zIndex = 200;
+
   let canvas = document.getElementById("colorPicker");
   let ctx = canvas.getContext("2d");
-  console.log(canvas);
-  console.log(ctx);
-  ctx.fillStyle = rgbaCol(255,0,0,1);
-  ctx.fillRect(0,0, canvas.width, canvas.height);
-  let brightness = 130;
-  let value = brightness*dist(new Vertex(0,0), new Vertex(canvas.width,canvas.height));
-  console.log(value)
-  let p1 = new Vertex(canvas.width/2, 0);
-  let p2 = new Vertex(0,canvas.height);
-  let p3 = new Vertex(canvas.width,canvas.height);
+  canvas.style.pointerEvents = "auto";
+  canvas.style.touchAction = 'none';
+  canvas.style.position = 'absolute';
+  canvas.style.zIndex = 20;
+  drawTriangle(canvas, ctx, brightness);
 
-  ctx.putImageData(colorTriangle(canvas, p1, p2, p3, value),0,0);
 
-  ctx.fillStyle = rgbaCol(255,255,255,1);
+
+
+  colCursor = new ColorPickerCursor(canvas.width/2,canvas.height/2);
+
+  canvasPicker.addEventListener('pointerdown', (e)=>{
+    colCursor.mouseDown = true;
+    colCursor.reposition(e)
+    colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+  });
+
+  canvasPicker.addEventListener('pointermove', (e)=>{
+    if (colCursor.mouseDown){
+      colCursor.reposition(e);
+      colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+    }
+    });
+
+  canvasPicker.addEventListener('pointerup', (e)=>{
+      colCursor.mouseDown = false;
+      colCursor.reposition(e);
+      colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+    });
+
+}
+
+function drawTriangle(c, ctx, brightness){
+  let value = brightness*dist(new Vertex(0,0), new Vertex(c.width,c.height));
+  let c1 = new Vertex(c.width/2, 0);
+  let c2 = new Vertex(0,c.height);
+  let c3 = new Vertex(c.width,c.height);
+
+  //let dist = canvas.width/2;
+
+  let p1 = new Vertex(c.width/2, -c.height/2.5);
+  let p2 = new Vertex(-c.width/2,c.height);
+  let p3 = new Vertex(c.width+c.width/2.3,c.height);
+
+  ctx.putImageData(colorTriangle(c, p1, p2, p3, value),0,0);
 
   let clip1 = new Path2D();
   console.log(clip1);
-    clip1.moveTo(p3.x,p3.y);
-    clip1.lineTo(canvas.width,0);
-    clip1.lineTo(p1.x,p1.y);
+    clip1.moveTo(c3.x,c3.y);
+    clip1.lineTo(c.width,0);
+    clip1.lineTo(c1.x,c1.y);
     clip1.lineTo(0,0);
-    clip1.lineTo(p2.x,p2.y);
-    clip1.lineTo(p1.x,p1.y);
-  ctx.clip(clip1, "evenodd");
-  // ctx.restore();
-  // let clip2 = new Path2D();
-  // console.log(clip2);
-  //   clip2.moveTo(p1.x,p1.y);
-  //   clip2.lineTo(0,0);
-  //   clip2.lineTo(p2.x,p2.y);
-  // ctx.clip(clip2, "evenodd");
-
+    clip1.lineTo(c2.x,c2.y);
+    clip1.lineTo(c1.x,c1.y);
+  ctx.clip(clip1, "nonzero");
   ctx.fillStyle = 'white';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-
+  ctx.fillRect(0,0,c.width,c.height);
 }
 
 function rgbaCol(r,g,b,a){
@@ -98,5 +131,62 @@ class Vertex {
   constructor(x,y){
     this.x=x;
     this.y=y;
+  }
+}
+
+class ColorPickerCursor{
+  constructor(x,y){
+    this.pos = new Vertex(x,y);
+    this.col = new Color(255,0,255,255);
+    this.mouseDown = false;
+    this.holdRadius = 20;
+    this.restRadius = 10;
+  }
+
+  reposition(mouseEvent){
+    this.pos.x = mouseEvent.clientX;
+    this.pos.y = mouseEvent.clientY;
+  }
+
+  drawSelfInCanvas(canvas, ctx, ctxToPickFrom){
+    let radius = (this.mouseDown)?this.holdRadius:this.restRadius;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    let data = ctxToPickFrom.getImageData(this.pos.x, this.pos.y, 1, 1).data;
+    this.col.r = data[0];
+    this.col.g = data[1];
+    this.col.b = data[2];
+    this.col.a = data[3];
+
+    ctx.beginPath();
+    ctx.moveTo(radius/2 + this.pos.x, this.pos.y- radius/2);
+    for (let i = 1; i < 32; i++){
+      let index = (i/32) * Math.PI * 2;
+      let xx = this.pos.x + (Math.cos(index) * radius) - radius/2;
+      let yy = this.pos.y + (Math.sin(index) * radius) - radius/2;
+      ctx.lineTo(xx,yy);
+    }
+    ctx.lineTo(radius/2 + this.pos.x, this.pos.y- radius/2);
+    //ctx.fillStyle = 'black';
+    ctx.fillStyle = this.col.cssSerialize();
+    ctx.lineWidth = 6;
+
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
+    ctx.fill();
+
+  }
+}
+
+class Color {
+  constructor(r=255,g=0,b=255,a=1){
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
+
+  cssSerialize(){
+    return "rgba("+this.r+","+this.g+","+this.b+","+this.a+")";
   }
 }
