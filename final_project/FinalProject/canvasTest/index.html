@@ -4,16 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel = "stylesheet"
+    type = "text/css"
+    href = "popup.css" />
+  </head>
   <title>Document</title>
 
   <script src = "js/canvasTest.js"></script>
 </head>
 <body>
-  <div>
-    <canvas id ='colorCursor' width=256 height=256></canvas>
-    <canvas id ='colorPicker' width=256 height=256></canvas>
+  <div id= "color">
+    <div id = colorWheel >
+      <canvas id ='colorCursor' width=256 height=256></canvas>
+      <canvas id ='colorPicker' width=256 height=256></canvas>
+    </div>
+  <div id = "valuePickerDiv">
+    <input type="range" id = "valuePicker" min="100" max="250" step = ".1">
   </div>
 
+</div>
 
 </body>
 </html>

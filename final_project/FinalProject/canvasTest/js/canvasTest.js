@@ -4,14 +4,6 @@ window.onload = main;
 let colCursor;
 let brightness = 140;
 function main(){
-  let canvasPicker = document.getElementById("colorCursor");
-  let ctxPicker = canvasPicker.getContext("2d");
-  ctxPicker.fillStyle = 'blue';
-  ctxPicker.fillRect(0,0,canvasPicker.width, canvasPicker.height);
-  canvasPicker.style.pointerEvents = "auto";
-  canvasPicker.style.touchAction = 'none';
-  canvasPicker.style.position = 'absolute';
-  canvasPicker.style.zIndex = 200;
 
   let canvas = document.getElementById("colorPicker");
   let ctx = canvas.getContext("2d");
@@ -19,6 +11,15 @@ function main(){
   canvas.style.touchAction = 'none';
   canvas.style.position = 'absolute';
   canvas.style.zIndex = 20;
+
+  let canvasPicker = document.getElementById("colorCursor");
+  let ctxPicker = canvasPicker.getContext("2d");
+
+  canvasPicker.style.pointerEvents = "auto";
+  canvasPicker.style.touchAction = 'none';
+  canvasPicker.style.position = 'absolute';
+  canvasPicker.style.zIndex = 200;
+
   drawTriangle(canvas, ctx, brightness);
 
 

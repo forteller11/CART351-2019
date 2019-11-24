@@ -1,0 +1,29 @@
+*{
+  box-sizing: border-box;
+
+}
+
+#valuePicker{
+  transform: rotate(90deg);
+  width:800px;
+  height:800px;
+  background-color: red;
+  z-index: 300;
+}
+
+
+#valuePicker{
+  background-color: red;
+  color:red;
+}
+
+#valuePickerDiv{
+  background-color: red;
+  color:red;
+}
+
+#colorWheel{
+  position: relative;
+  background-color: yellow;
+  z-index: 0;
+}
