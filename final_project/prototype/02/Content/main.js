@@ -7,16 +7,19 @@ const ATTRIB_DELIMITER = ',';
 const VERT_SIZE = 3;
 const BASE = 10;
 
-let canvas;
-let canvasCtx;
-let strokesSerialized = new String();
+
+let strokeCollection; //of strokes
 let tool;
+let graffitiCanvas;
 
 function main () {
   console.log("Chrome extension main");
+
+  strokeCollection = new StrokeCollection();
+
   //=======canvas stuff ==============
 
-  canvas = document.createElement("CANVAS");
+  let canvas = document.createElement("CANVAS");
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
   canvas.style.position = "fixed";
@@ -28,25 +31,18 @@ function main () {
   canvas.style.pointerEvents = "auto";
   canvas.style.touchAction = 'none';
 
-  window.addEventListener("resize", (e) => {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvasCtx.fillStyle = rgbaCol(0,255,255,0.4);
-  });
-
-  canvasCtx = canvas.getContext("2d");
+  let canvasCtx = canvas.getContext("2d");
   canvasCtx.lineCap = "round";
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  canvasCtx.fillStyle = rgbaCol(0,255,255,0.4);
-  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
   document.body.appendChild(canvas, document.body.lastChild);
   document.body.style.margin = '0px';
   document.body.style.padding = '0px';
 
-  tool = new StrokeBrush(canvas, canvasCtx, strokesSerialized);
+  graffitiCanvas = new GraffitiCanvas(canvas, canvasCtx);
 
-  window.requestAnimationFrame(drawStrokes);
+  tool = new StrokeBrush();
+
+  window.requestAnimationFrame(drawLoop);
   //=========== end of canvas stuff ==============
 
   //parse stroke
@@ -69,38 +65,27 @@ function main () {
 console.log(parseInt('203;',10));
 }
 
-function drawStrokes(){
-  //console.log("a");
-  document.head.style.zIndex = 0
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-  strokesSerialized += tool.emptyStrokeDataBuffer();
+function drawLoop(){
+  //input
+  //console.log(strokeCollection);
+  strokeCollection.addData(tool.strokeDataBuffer);
+  tool.strokeDataBuffer = new Array();
 
-  let strokes = strokesSerialized.split(STROKE_DELIMITER);
-  // console.log(strokesSerialized);
+  graffitiCanvas.clearCanvas();
 
-  for (let i = 0; i < strokes.length; i++){ //cycle through strokes
-    let attribs = strokes[i].split(ATTRIB_DELIMITER);
-    canvasCtx.strokeStyle = rgbaCol(attribs[0], attribs[1], attribs[2], attribs[3]);
-    //console.log(attribs);
-    //cycle through verts of strokes to actually draw
-    for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
-
-      canvasCtx.lineWidth = attribs[j + 2];
-      canvasCtx.beginPath();
-
-      canvasCtx.moveTo(
-        parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
-        parseInt(attribs[j + 1], BASE) - window.scrollY);
-
-      canvasCtx.lineTo(
-        parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
-        parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
-
-      canvasCtx.stroke();
-    }
+  //draw strokes
+  for (let i = 0; i < strokeCollection.strokes.length; i ++){ //cycle through strokes
+    console.log(strokeCollection.strokes[i]);
+    graffitiCanvas.drawStrokeLine(strokeCollection.strokes[i]);
   }
-  window.requestAnimationFrame(drawStrokes);
+
+  //draw tool
+  if (tool.cursorStroke != null){
+    if (tool.mouseDown) graffitiCanvas.drawStrokeFill(tool.cursorStroke);
+    else graffitiCanvas.drawStrokeLine(tool.cursorStroke);
+  }
+
+  window.requestAnimationFrame(drawLoop);
 }
 
 function rgbaCol(r,g,b,a){
@@ -112,3 +97,45 @@ function constrain (x, min, max){
   if (x > max) x = max;
   return x;
 }
+
+// function drawLoop(ctx, strkData, fill = false){
+//   graffitiCanvas.clearCanvas();
+//   graffitiCanvas.drawStroke
+//   // let attribs = strkData[i].split(ATTRIB_DELIMITER);
+//   // ctx.strokeStyle = rgbaCol(attribs[0], attribs[1], attribs[2], attribs[3]);
+//   // //console.log(attribs);
+//   // //cycle through verts of strokes to actually draw
+//   //
+//   // if (fill){
+//   //   for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
+//   //     ctx.lineWidth = attribs[j + 2];
+//   //     ctx.beginPath();
+//   //
+//   //     ctx.moveTo(
+//   //       parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
+//   //       parseInt(attribs[j + 1], BASE) - window.scrollY);
+//   //
+//   //     ctx.lineTo(
+//   //       parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
+//   //       parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
+//   //
+//   //     ctx.stroke();
+//   //   }
+//   // }
+//   // else {
+//   //   ctx.beginPath();
+//   //   for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
+//   //     ctx.lineWidth = attribs[j + 2];
+//   //
+//   //     ctx.lineTo(
+//   //       parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
+//   //       parseInt(attribs[j + 1], BASE) - window.scrollY);
+//   //
+//   //     ctx.lineTo(
+//   //       parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
+//   //       parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
+//   //   }
+//   //   ctx.fill();
+//   // }
+//
+// }

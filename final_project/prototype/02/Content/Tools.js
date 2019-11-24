@@ -4,8 +4,8 @@ class Tool {
 
   constructor(){
 
-    this.strokeDataBuffer = new String();
-
+    this.strokeDataBuffer = new Array();
+    this.cursorStroke = null; //used to draw the brush cursor
     this.mouseDown = false;
 
     this.spacingLevel = 8;
@@ -19,12 +19,16 @@ class Tool {
     window.addEventListener("pointermove", (e) => {
       if (this.mouseDown)
         tool.spacingManager(e);
+
+      this.redrawCursor(e);
     });
 
     window.addEventListener("pointerup", (e) => {
       this.mouseDown = false;
         tool.onRelease(e);
     });
+
+
 
   }
 
@@ -54,12 +58,9 @@ class Tool {
     console.warn("onrelease method has not been implemented!");
   }
 
-  emptyStrokeDataBuffer(){
-    const strToUpload = this.strokeDataBuffer.slice(0); //copy string with value
-    this.strokeDataBuffer = new String();
-    return strToUpload;
+  redrawCursor(e){
+    console.warn("redrawCursor method has not been implemented!");
   }
-
 
 }
 
@@ -67,40 +68,84 @@ class StrokeBrush extends Tool {
   constructor(canvas, canvasCtx, strokeDatas){
     //console.log(canvas);
     super (canvas, canvasCtx, strokeDatas);
-    this.r = 255;
-    this.g = 0;
-    this.b = 0;
-    this.a = 1;
+    this.color = new Color (this.r, this.g, this.b, this.a);
     this.width = 5;
-
   }
 onInitClick(e){
+  let colorData = new Color(this.r, this.g, this.b, this.a);
+  let firstVert = this.createVertFromMouseEvent(e);
 
-  let colorData =
-    this.r + ATTRIB_DELIMITER +
-    this.g + ATTRIB_DELIMITER +
-    this.b + ATTRIB_DELIMITER +
-    this.a + ATTRIB_DELIMITER;
-    //console.log(colorData);
-  let initVert = this.serializeVertData(e) + ATTRIB_DELIMITER;
-  let initStrokeSerealized = colorData + initVert;
-  this.strokeDataBuffer += initStrokeSerealized;
+  this.strokeDataBuffer.push(colorData, firstVert);
 }
 
 onHold(e){
-    this.strokeDataBuffer += this.serializeVertData(e) + ATTRIB_DELIMITER;
+  this.strokeDataBuffer.push(this.createVertFromMouseEvent(e));
 }
 
 onRelease(e){
-  this.strokeDataBuffer += this.serializeVertData(e) + STROKE_DELIMITER;
+  this.strokeDataBuffer.push(this.createVertFromMouseEvent(e));
 }
-  serializeVertData(e){
-    let xx = e.clientX + window.scrollX;
-    let yy = e.clientY + window.scrollY;
-    let ww = (this.width * e.pressure*1.5) + this.width/4;
-    let str = xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
-    let strs = str.split(ATTRIB_DELIMITER);
-    //console.log(strs);
-    return xx + ATTRIB_DELIMITER + yy + ATTRIB_DELIMITER + ww;
+
+createVertFromMouseEvent(e){
+  let xx = e.clientX + window.scrollX;
+  let yy = e.clientY + window.scrollY;
+  let ww = (this.width * e.pressure*1.5) + this.width/4;
+  return new Vertex (xx, yy, ww);
+}
+
+  redrawCursor(e){
+    this.cursorStroke = new Stroke(this.color);
+    for (let i = 1; i < 32; i++){
+      let index = (i/32) * Math.PI * 2;
+      let xx = e.clientX + (Math.cos(index) * this.width/2);
+      let yy = e.clientY + (Math.sin(index) * this.width/2);
+      this.cursorStroke.verts.push(new Vertex(xx,yy,1));
+    }
+  //  console.log(this.cursorStroke);
   }
+}
+
+class Color {
+  constructor(r=255,g=0,b=255,a=1){
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
+
+  cssSerialize(){
+    return "rgba("+this.r+","+this.g+","+this.b+","+this.a+")";
+  }
+}
+
+class Vertex {
+  constructor(x,y,w){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+  }
+}
+
+class Stroke{
+  constructor(col){
+    this.color = col;
+    this.verts = new Array();
+  }
+}
+class StrokeCollection {
+  constructor(){
+    this.strokes = new Array();
+  }
+
+  addData(objs){
+    for (let i = 0; i < objs.length; i++){
+      //if color, create new stroke
+      if (objs[i] instanceof Color)
+        this.strokes.push(new Stroke(objs[i]))
+      else //otherwise push vertex
+        this.strokes[this.strokes.length-1].verts.push(objs[i]);
+    }
+    //create new stroke
+  }
+
 }

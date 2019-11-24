@@ -135,8 +135,6 @@ class Brush {
   }
 
   drawSelf(){
-
-
     canvasCtx = canvas.getContext("2d");
     canvasCtx.fillStyle = rgbaCol(this.r,this.g,this.b,this.a);
     canvasCtx.strokeStyle = rgbaCol(this.r,this.g,this.b,this.a);
