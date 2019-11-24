@@ -12,7 +12,9 @@
   "content_scripts": [
     {
       "js": [
-        "Content/content.js"
+        "Content/helperFunctions.js",
+        "Content/Tools.js",
+        "Content/main.js"
       ],
       "matches": [
         "http://*/*",
