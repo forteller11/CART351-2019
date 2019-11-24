@@ -4,7 +4,6 @@ window.onload = main;
 let colCursor;
 let brightness = 140;
 function main(){
-
   let canvasPicker = document.getElementById("colorCursor");
   let ctxPicker = canvasPicker.getContext("2d");
   ctxPicker.fillStyle = 'blue';
@@ -28,26 +27,43 @@ function main(){
   colCursor = new ColorPickerCursor(canvas.width/2,canvas.height/2);
 
   canvasPicker.addEventListener('pointerdown', (e)=>{
-    colCursor.mouseDown = true;
-    colCursor.reposition(e)
+    if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
+      colCursor.mouseDown = true;
+      colCursor.reposition(e);
+    }
     colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
   });
 
   canvasPicker.addEventListener('pointermove', (e)=>{
-    if (colCursor.mouseDown){
+    if ((colCursor.mouseDown) && (mouseWithinTriangle(e, canvasPicker, ctxPicker))){
       colCursor.reposition(e);
-      colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
-    }
+    } else colCursor.mouseDown = false;
+    colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
 
   canvasPicker.addEventListener('pointerup', (e)=>{
-      colCursor.mouseDown = false;
+    colCursor.mouseDown = false;
+    if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
       colCursor.reposition(e);
+    }
+    colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+    });
+
+    canvasPicker.addEventListener('pointerout ', (e)=>{
+      col.mouseDown = false;
       colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
 
 }
 
+function mouseWithinTriangle (mouseEvent, canvas, ctx){
+  let tri = new Path2D();
+  tri.moveTo(canvas.width/2,0);
+  tri.lineTo(0,canvas.height);
+  tri.lineTo(canvas.width,canvas.height);
+  console.log(ctx.isPointInPath(tri, mouseEvent.clientX, mouseEvent.clientY));
+  return ctx.isPointInPath(tri, mouseEvent.clientX, mouseEvent.clientY);
+}
 function drawTriangle(c, ctx, brightness){
   let value = brightness*dist(new Vertex(0,0), new Vertex(c.width,c.height));
   let c1 = new Vertex(c.width/2, 0);
@@ -63,7 +79,6 @@ function drawTriangle(c, ctx, brightness){
   ctx.putImageData(colorTriangle(c, p1, p2, p3, value),0,0);
 
   let clip1 = new Path2D();
-  console.log(clip1);
     clip1.moveTo(c3.x,c3.y);
     clip1.lineTo(c.width,0);
     clip1.lineTo(c1.x,c1.y);
@@ -169,9 +184,9 @@ class ColorPickerCursor{
     ctx.lineTo(radius/2 + this.pos.x, this.pos.y- radius/2);
     //ctx.fillStyle = 'black';
     ctx.fillStyle = this.col.cssSerialize();
-    ctx.lineWidth = 6;
+    ctx.lineWidth = radius/2 +3;
 
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = (this.col.avgVal() < 185)? 'white':'grey';
     ctx.stroke();
     ctx.fill();
 
@@ -188,5 +203,9 @@ class Color {
 
   cssSerialize(){
     return "rgba("+this.r+","+this.g+","+this.b+","+this.a+")";
+  }
+
+  avgVal(){
+    return (this.r+this.g+this.b)/3;
   }
 }
