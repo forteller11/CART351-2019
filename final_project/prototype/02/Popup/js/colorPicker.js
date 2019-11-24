@@ -8,7 +8,9 @@ function main(){
   console.log(ctx);
   ctx.fillStyle = rgbaCol(255,0,0,1);
   ctx.fillRect(0,0, canvas.width, canvas.height);
-  brush.addEventListener('click', ()=>{
+  console.log(ctx.getImageDate());
+
+  ctx.addEventListener('click', ()=>{
     console.log("brush clicked");
     //change tool to brush on current tab (or all tabs?)
   });
