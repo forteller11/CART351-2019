@@ -26,9 +26,8 @@ function colorCursorInit(){
   canvasValue.style.zIndex = 200;
   canvasValue.style.position = 'relative';
 
-  colCursor = new ColorPickerCursor(canvas.width/2,canvas.height/2);
+  colCursor = new ColorPickerCursor(canvas.width/2,80);
   valCursor = new ValueCursor(canvasValue.width/2, canvasValue, ctxValue);
-  valCursor.draw();
 
   canvasPicker.addEventListener('pointerdown', (e)=>{
     if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
@@ -62,7 +61,6 @@ function colorCursorInit(){
     });
 
 
-    console.log(ctxValue);
     canvasValue.addEventListener('pointerdown', (e)=>{
       valCursor.mouseDown = true;
       valCursor.reposition(e);
@@ -91,7 +89,8 @@ function colorCursorInit(){
 
 
 drawTriangle(canvas, ctx, valCursor.value);
-
+valCursor.draw();
+colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
 }
 
 function mouseWithinTriangle (mouseEvent, canvas, ctx){
@@ -221,7 +220,7 @@ class ColorPickerCursor{
     ctx.closePath();
     //ctx.fillStyle = 'black';
     ctx.fillStyle = this.col.cssSerialize();
-    ctx.lineWidth = radius/2 +3;
+    ctx.lineWidth = radius/3 +2;
 
     ctx.strokeStyle = (this.col.avgVal() < 185)? 'white':'grey';
     ctx.stroke();
@@ -242,7 +241,7 @@ class ValueCursor{
     this.gradientHeight = this.canvas.height*.3;
     this.pointerWidth = canvas.width/10;
     this.pointerHeight = canvas.height;
-    this.value = 134;
+    this.value = 100;
 
   }
   reposition(mouseEvent){
