@@ -116,6 +116,15 @@ class SizeCursor{
       this.sizeCtx.lineWidth = 16*(this.size/this.maxCursorRadius);
       this.sizeCtx.strokeStyle = 'white';
       this.sizeCtx.stroke();
+
+      //when rly light col, draw outline
+      if (colCursor != null){
+        if (colCursor.col.avgVal() > 245){
+          this.sizeCtx.lineWidth = 2;
+          this.sizeCtx.strokeStyle = 'lightGrey';
+          this.sizeCtx.stroke();
+        }
+      }
     }
 
   calcSize(){

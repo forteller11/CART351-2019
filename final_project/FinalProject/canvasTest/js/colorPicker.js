@@ -274,14 +274,13 @@ class ValueCursor{
     //rect
     this.calcValue();
 
-    console.log
-    let col = 255*(this.value-this.minBrightness)/(this.maxBrightness-this.minBrightness);
+    let col = 370*(this.value-this.minBrightness)/(this.maxBrightness-this.minBrightness);
     this.ctx.fillStyle = new Color(col,col,col,255).cssSerialize();
     let xx1 = this.x-this.pointerWidth/2;
-    let yy1 = this.canvas.height-this.pointerHeight;
-    let xx2 = this.pointerWidth;
-    let yy2 = this.pointerHeight;
-    this.ctx.fillRect(xx1,yy1,xx2,yy2);
+    let yy1 = this.canvas.height-this.pointerHeight/(1.58);
+    let w2 = this.pointerWidth;
+    let h2 = this.pointerHeight/2 +this.gradientHeight/2;
+    this.ctx.fillRect(xx1,yy1,w2,h2);
     //this.ctx.strokeStyle = (col > 128)? 'black': 'white';
     if (col > 128){
       this.ctx.strokeStyle = 'black';
