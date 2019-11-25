@@ -59,8 +59,8 @@ class SizeCursor{
 
     if (this.mouseDown)
     {
-      let minY = this.maxCursorRadius-this.scrollSize;
-      let maxY = this.sizeCanvas.height-this.scrollSize - this.minCursorRadius;
+      let minY = this.maxCursorRadius-this.scrollSize*3;
+      let maxY = this.sizeCanvas.height-this.scrollSize;
       this.y = mouseEvent.offsetY;
       console.log (this.y);
 
