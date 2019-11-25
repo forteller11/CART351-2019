@@ -28,18 +28,6 @@ class Tool {
         tool.onRelease(e);
     });
 
-    chrome.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        console.log(request);
-        console.log(sender);
-        console.log(sendResponse);
-
-          sendResponse({farewell: "GOT IT"});
-
-      });
-
-
-
   }
 
   onInitClick(e){
@@ -78,11 +66,27 @@ class StrokeBrush extends Tool {
   constructor(canvas, canvasCtx, strokeDatas){
     //console.log(canvas);
     super (canvas, canvasCtx, strokeDatas);
-    this.color = new Color (this.r, this.g, this.b, this.a);
+    this.color = new Color (255, 0, 0, 1);
     this.width = 5;
+
+    let t = this;
+    chrome.runtime.onMessage.addListener(
+      (request, sender, sendResponse) => {
+        this.color.r = request.r;
+        this.color.g = request.g;
+        this.color.b = request.b;
+        this.color.a = request.a;
+
+        console.log(request);
+        // console.log(sender);
+        // console.log(sendResponse);
+        //
+          sendResponse({farewell: "GOT IT"});
+
+      });
   }
 onInitClick(e){
-  let colorData = new Color(this.r, this.g, this.b, this.a);
+  let colorData = new Color(this.color.r, this.color.g, this.color.b, this.color.a);
   let firstVert = this.createVertFromMouseEvent(e);
 
   this.strokeDataBuffer.push(colorData, firstVert);
@@ -125,6 +129,15 @@ class Color {
 
   cssSerialize(){
     return "rgba("+this.r+","+this.g+","+this.b+","+this.a+")";
+  }
+
+  cssDeserialize(str){
+    console.log(str);
+    let arr = str.split(",");
+    this.r = parseInt(arr[0]);
+    this.g = parseInt(arr[1]);
+    this.b = parseInt(arr[2]);
+    this.a = parseInt(arr[3]);
   }
 }
 
