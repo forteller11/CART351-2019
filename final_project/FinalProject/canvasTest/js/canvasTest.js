@@ -68,9 +68,12 @@ function main(){
     });
 
     canvasValue.addEventListener('pointermove', (e)=>{
-      valCursor.reposition(e);
-      valCursor.draw();
-      drawTriangle(canvas, ctx, valCursor.value);
+      if (valCursor){
+        valCursor.reposition(e);
+        valCursor.draw();
+        drawTriangle(canvas, ctx, valCursor.value);
+        colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+      }
     });
 
     canvasValue.addEventListener('pointerup', (e)=>{
@@ -91,8 +94,7 @@ function mouseWithinTriangle (mouseEvent, canvas, ctx){
   tri.moveTo(canvas.width/2,0);
   tri.lineTo(0,canvas.height);
   tri.lineTo(canvas.width,canvas.height);
-  console.log(ctx.isPointInPath(tri, mouseEvent.clientX, mouseEvent.clientY));
-  return ctx.isPointInPath(tri, mouseEvent.clientX, mouseEvent.clientY);
+  return ctx.isPointInPath(tri, mouseEvent.offsetX, mouseEvent.offsetY);
 }
 function drawTriangle(c, ctx, brightness){
   let value = brightness*dist(new Vertex(0,0), new Vertex(c.width,c.height));
@@ -184,13 +186,13 @@ class ColorPickerCursor{
     this.pos = new Vertex(x,y);
     this.col = new Color(255,0,255,255);
     this.mouseDown = false;
-    this.holdRadius = 20;
-    this.restRadius = 10;
+    this.holdRadius = 32;
+    this.restRadius = 16;
   }
 
   reposition(mouseEvent){
-    this.pos.x = mouseEvent.clientX;
-    this.pos.y = mouseEvent.clientY;
+    this.pos.x = mouseEvent.offsetX;
+    this.pos.y = mouseEvent.offsetY;
   }
 
   drawSelfInCanvas(canvas, ctx, ctxToPickFrom){
@@ -204,14 +206,14 @@ class ColorPickerCursor{
     this.col.a = data[3];
 
     ctx.beginPath();
-    ctx.moveTo(radius/2 + this.pos.x, this.pos.y- radius/2);
+    ctx.moveTo(this.pos.x+radius, this.pos.y);
     for (let i = 1; i < 32; i++){
       let index = (i/32) * Math.PI * 2;
-      let xx = this.pos.x + (Math.cos(index) * radius) - radius/2;
-      let yy = this.pos.y + (Math.sin(index) * radius) - radius/2;
+      let xx = this.pos.x + (Math.cos(index) * radius) ;
+      let yy = this.pos.y + (Math.sin(index) * radius);
       ctx.lineTo(xx,yy);
     }
-    ctx.lineTo(radius/2 + this.pos.x, this.pos.y- radius/2);
+    ctx.closePath();
     //ctx.fillStyle = 'black';
     ctx.fillStyle = this.col.cssSerialize();
     ctx.lineWidth = radius/2 +3;
@@ -261,7 +263,6 @@ class ValueCursor{
 
     console.log
     let col = 255*(this.value-this.minBrightness)/(this.maxBrightness-this.minBrightness);
-    console.log(col)
     this.ctx.fillStyle = new Color(col,col,col,255).cssSerialize();
     let xx1 = this.x-this.pointerWidth/2;
     let yy1 = this.canvas.height-this.pointerHeight;
