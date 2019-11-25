@@ -1,3 +1,57 @@
 *{
-  box-sizing:border-box;
+  box-sizing: border-box;
+  margin:0px;
+  padding:0;
+}
+#brushTools{
+  display:flex;
+  flex-flow: row;
+  align-items:flex-start;
+
+}
+#colorWheel{
+  background-color:green;
+  margin:0;
+  position:relative;
+  width:128px;
+  height:128px;
+  z-index: 0;
+}
+
+
+#valuePicker{
+  position:relative;
+  width:'auto';
+  height:'auto';
+  /* background-color: red; */
+
+}
+#vertSpaceContainer{
+  width:auto;
+  margin-right:32px;
+
+  display:flex;
+  flex-flow: column;
+  align-items:center;
+  justify-content: center;
+}
+.vertSpacer{
+  height:32px;
+  background-color: yellow;
+}
+
+
+#color{
+display:flex;
+flex-flow: column;
+align-items:center;
+justify-content: center;
+}
+
+#sizePicker{
+  /* background-color:magenta; */
+  margin-top:0px;
+  margin-right:-16px;
+  /* background-color: lightGrey; */
+  z-index:200;
 }

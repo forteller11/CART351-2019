@@ -1,27 +1,39 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
- <meta charset = "UTF-8">
- <title>externalStyle.html</title>
- <link rel = "stylesheet"
-   type = "text/css"
-   href = "popup.css" />
- </head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel = "stylesheet"
+    type = "text/css"
+    href = "popup.css" />
+  </head>
+  <title>Document</title>
 
-  <div id="frame">
-    <div id="tools">
-      <canvas id="brush"width=64 height=64></canvas>
+  <script src = "js/colorPicker.js"></script>
+  <script src = "js/sizePicker.js"></script>
+  <script src = "js/main.js"></script>
+</head>
+<body>
+  <div id = vertSpaceContainer>
+
+    <div class= "vertSpacer"></div>
+
+    <div id="brushTools">
+      <canvas id = 'sizePicker' width=100 height=128></canvas>
+
+      <div id= "color">
+        <div id = colorWheel >
+          <canvas id ='colorCursor' width=128 height=128></canvas>
+          <canvas id ='colorPicker' width=128 height=128></canvas>
+        </div>
+        <canvas id ='valuePicker' width=128 height=16></canvas>
     </div>
 
-    <div id="color">
-      <canvas id="colorPicker"></canvas>
-      <input type="slider" id = "valuePicker" value = "5">
-    </div>
+  </div>
 
-    <div id="size">
-      <canvas id="sizePicker" width=200 height=100></canvas>
-    </div>
+  <div class="vertSpacer"></div>
 
 </div>
-<script type="text/javascript" src="js/helperFunctions.js"></script>
-  <script type="text/javascript" src="js/colorPicker.js"></script>
+</body>
 </html>
