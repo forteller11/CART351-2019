@@ -2,7 +2,7 @@
 window.onload = main;
 
 let colCursor;
-let brightness = 140;
+let valCursor;
 function main(){
 
   let canvas = document.getElementById("colorPicker");
@@ -10,7 +10,7 @@ function main(){
   canvas.style.pointerEvents = "auto";
   canvas.style.touchAction = 'none';
   canvas.style.position = 'absolute';
-  canvas.style.zIndex = 20;
+  canvas.style.zIndex = 0;
 
   let canvasPicker = document.getElementById("colorCursor");
   let ctxPicker = canvasPicker.getContext("2d");
@@ -18,14 +18,18 @@ function main(){
   canvasPicker.style.pointerEvents = "auto";
   canvasPicker.style.touchAction = 'none';
   canvasPicker.style.position = 'absolute';
-  canvasPicker.style.zIndex = 200;
+  canvasPicker.style.zIndex = 5;
 
-  drawTriangle(canvas, ctx, brightness);
-
-
-
+  let canvasValue = document.getElementById("valuePicker");
+  let ctxValue = canvasValue.getContext("2d");
+  canvasValue.style.pointerEvents = "auto";
+  canvasValue.style.touchAction = 'none';
+  canvasValue.style.zIndex = 200;
+  canvasValue.style.position = 'relative';
 
   colCursor = new ColorPickerCursor(canvas.width/2,canvas.height/2);
+  valCursor = new ValueCursor(canvasValue.width/2, canvasValue, ctxValue);
+  valCursor.draw();
 
   canvasPicker.addEventListener('pointerdown', (e)=>{
     if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
@@ -55,6 +59,31 @@ function main(){
       colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
 
+
+    console.log(ctxValue);
+    canvasValue.addEventListener('pointerdown', (e)=>{
+      valCursor.mouseDown = true;
+      valCursor.reposition(e);
+      drawTriangle(canvas, ctx, valCursor.value);
+    });
+
+    canvasValue.addEventListener('pointermove', (e)=>{
+      valCursor.reposition(e);
+      valCursor.draw();
+      drawTriangle(canvas, ctx, valCursor.value);
+    });
+
+    canvasValue.addEventListener('pointerup', (e)=>{
+      valCursor.mouseDown = false;
+    });
+
+    canvasValue.addEventListener('pointerout ', (e)=>{
+      valCursor.mouseDown = false;
+    });
+
+
+drawTriangle(canvas, ctx, valCursor.value);
+
 }
 
 function mouseWithinTriangle (mouseEvent, canvas, ctx){
@@ -73,9 +102,9 @@ function drawTriangle(c, ctx, brightness){
 
   //let dist = canvas.width/2;
 
-  let p1 = new Vertex(c.width/2, -c.height/2.5);
-  let p2 = new Vertex(-c.width/2,c.height);
-  let p3 = new Vertex(c.width+c.width/2.3,c.height);
+  let p1 = new Vertex(c.width/2, 0); //r
+  let p2 = new Vertex(0,c.height); //g
+  let p3 = new Vertex(c.width,c.height);
 
   ctx.putImageData(colorTriangle(c, p1, p2, p3, value),0,0);
 
@@ -191,6 +220,65 @@ class ColorPickerCursor{
     ctx.stroke();
     ctx.fill();
 
+  }
+}
+
+class ValueCursor{
+  constructor(x,canvas,ctx){
+    this.mouseDown = false;
+    this.x=x;
+    this.canvas=canvas;
+    this.ctx=ctx;
+    this.minBrightness = 0;
+    this.maxBrightness = 200;
+    this.gradientWidth = this.canvas.width;
+    this.gradientHeight = this.canvas.height*.3;
+    this.pointerWidth = canvas.width/10;
+    this.pointerHeight = canvas.height;
+    this.value = 134;
+
+  }
+  reposition(mouseEvent){
+    if (this.mouseDown)
+      this.x = mouseEvent.offsetX;
+  }
+  draw(){
+
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+
+    //linear gradient
+    let grd = this.ctx.createLinearGradient(0, 0, 170, 0);
+    grd.addColorStop(0, "black");
+    grd.addColorStop(1, "white");
+
+    this.ctx.fillStyle = grd;
+    this.ctx.fillRect(
+      0, (this.canvas.height-this.gradientHeight)/2,
+      this.canvas.width, this.gradientHeight);
+
+    //rect
+    this.calcValue();
+
+    console.log
+    let col = 255*(this.value-this.minBrightness)/(this.maxBrightness-this.minBrightness);
+    console.log(col)
+    this.ctx.fillStyle = new Color(col,col,col,255).cssSerialize();
+    let xx1 = this.x-this.pointerWidth/2;
+    let yy1 = this.canvas.height-this.pointerHeight;
+    let xx2 = this.pointerWidth;
+    let yy2 = this.pointerHeight;
+
+    //this.ctx.strokeStyle = (col > 128)? 'black': 'white';
+    this.ctx.strokeStyle = 'black';
+    this.ctx.fillRect(xx1,yy1,xx2,yy2);
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeRect(xx1,yy1,xx2,yy2);
+
+  }
+  calcValue(){
+    let lerpAmount = this.x/this.canvas.width;
+    let delta = this.maxBrightness - this.minBrightness;
+    this.value =  (delta * lerpAmount) + this.minBrightness;
   }
 }
 

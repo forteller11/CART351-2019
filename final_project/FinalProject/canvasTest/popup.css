@@ -1,29 +1,35 @@
 *{
   box-sizing: border-box;
-
+  margin:0px;
+  padding:0;
 }
+
+#colorWheel{
+  background-color:black;
+
+  position:relative;
+  width:256px;
+  height:256px;
+}
+
 
 #valuePicker{
-  transform: rotate(90deg);
-  width:800px;
-  height:800px;
-  background-color: red;
-  z-index: 300;
-}
+  position:relative;
+  width:'auto';
+  height:'auto';
 
-
-#valuePicker{
-  background-color: red;
-  color:red;
-}
-
-#valuePickerDiv{
-  background-color: red;
-  color:red;
 }
 
 #colorWheel{
   position: relative;
   background-color: yellow;
   z-index: 0;
+  margin:5px;
+}
+
+#color{
+  width:256px;
+display:flex;
+flex-flow: column;
+align-items:center;
 }
