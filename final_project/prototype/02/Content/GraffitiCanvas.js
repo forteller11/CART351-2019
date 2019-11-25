@@ -15,14 +15,12 @@ class GraffitiCanvas {
   }
 
   clearCanvas() {
-    console.log(this.backgroundFill.cssSerialize());
     this.ctx.fillStyle = this.backgroundFill.cssSerialize();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   drawStrokeLine(stroke) {
-    console.log(stroke);
     this.ctx.strokeStyle = stroke.color.cssSerialize();
 
     for (let i = 0; i < stroke.verts.length - 1; i++) {

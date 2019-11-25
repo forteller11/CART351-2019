@@ -45,24 +45,8 @@ function main () {
   window.requestAnimationFrame(drawLoop);
   //=========== end of canvas stuff ==============
 
-  //parse stroke
 
-  //tool to create stroke2
- //tablet, phone or screen
 
- //parse stroke
-  //rgba
-  //strokeData..... ;
-  //stroke
-
-  //animation frame
-//tool to strokes
-//parse
-
-// let s = "dog;cat";
-// let ss = s.split(';');
-// console.log(ss);
-console.log(parseInt('203;',10));
 }
 
 function drawLoop(){
@@ -75,7 +59,6 @@ function drawLoop(){
 
   //draw strokes
   for (let i = 0; i < strokeCollection.strokes.length; i ++){ //cycle through strokes
-    console.log(strokeCollection.strokes[i]);
     graffitiCanvas.drawStrokeLine(strokeCollection.strokes[i]);
   }
 

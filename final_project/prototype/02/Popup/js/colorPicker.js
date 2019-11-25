@@ -197,6 +197,15 @@ class ColorPickerCursor{
   }
 
   drawSelfInCanvas(canvas, ctx, ctxToPickFrom, firstUpdate=false){
+    console.log(this.col);
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  chrome.tabs.sendMessage(tabs[0].id, this.col, function(response) {
+    console.log(response.farewell);
+  });
+});
+
+
+
     let radius = (this.mouseDown)?this.holdRadius:this.restRadius;
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
