@@ -40,8 +40,8 @@ function colorCursorInit(){
     if ((colCursor.mouseDown) && (mouseWithinTriangle(e, canvasPicker, ctxPicker))){
       colCursor.reposition(e);
       sizeCursor.draw();
-    } else colCursor.mouseDown = false;
-    colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+      colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+    }
     });
 
   canvasPicker.addEventListener('pointerup', (e)=>{
@@ -55,7 +55,6 @@ function colorCursorInit(){
 
     canvasPicker.addEventListener('pointerout ', (e)=>{
       col.mouseDown = false;
-      colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
 
 
@@ -88,7 +87,7 @@ function colorCursorInit(){
 
 drawTriangle(canvas, ctx, valCursor.value);
 valCursor.draw();
-colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx, true);
 }
 
 function mouseWithinTriangle (mouseEvent, canvas, ctx){
@@ -186,7 +185,7 @@ class Vertex {
 class ColorPickerCursor{
   constructor(x,y){
     this.pos = new Vertex(x,y);
-    this.col = new Color(255,0,255,255);
+    this.col = new Color(0,0,0,255);
     this.mouseDown = false;
     this.holdRadius = 16;
     this.restRadius = 8;
@@ -197,16 +196,17 @@ class ColorPickerCursor{
     this.pos.y = mouseEvent.offsetY;
   }
 
-  drawSelfInCanvas(canvas, ctx, ctxToPickFrom){
+  drawSelfInCanvas(canvas, ctx, ctxToPickFrom, firstUpdate=false){
     let radius = (this.mouseDown)?this.holdRadius:this.restRadius;
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    let data = ctxToPickFrom.getImageData(this.pos.x, this.pos.y, 1, 1).data;
-    this.col.r = data[0];
-    this.col.g = data[1];
-    this.col.b = data[2];
-    this.col.a = data[3];
-
+    if (firstUpdate===false){ //only color pick after first update
+      let data = ctxToPickFrom.getImageData(this.pos.x, this.pos.y, 1, 1).data;
+      this.col.r = data[0];
+      this.col.g = data[1];
+      this.col.b = data[2];
+      this.col.a = data[3];
+  }
     ctx.beginPath();
     ctx.moveTo(this.pos.x+radius, this.pos.y);
     for (let i = 1; i < 32; i++){
@@ -220,7 +220,7 @@ class ColorPickerCursor{
     ctx.fillStyle = this.col.cssSerialize();
     ctx.lineWidth = radius/3 +2;
 
-    ctx.strokeStyle = (this.col.avgVal() < 185)? 'white':'grey';
+    ctx.strokeStyle = (this.col.avgVal() < 185)? 'white':'black';
     ctx.stroke();
     ctx.fill();
 
@@ -294,7 +294,7 @@ class ValueCursor{
 }
 
 class Color {
-  constructor(r=255,g=0,b=255,a=1){
+  constructor(r=0,g=0,b=0,a=1){
     this.r = r;
     this.g = g;
     this.b = b;
