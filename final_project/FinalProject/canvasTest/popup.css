@@ -1,12 +1,12 @@
 *{
   box-sizing: border-box;
-  margin:30px;
+  margin:0px;
   padding:0;
 }
 
 #colorWheel{
   background-color:black;
-
+  margin:0;
   position:relative;
   width:256px;
   height:256px;
@@ -17,6 +17,7 @@
   position:relative;
   width:'auto';
   height:'auto';
+  margin-top:10px;
 
 }
 
@@ -24,7 +25,7 @@
   position: relative;
   background-color: yellow;
   z-index: 0;
-  margin:5px;
+  margin:0px;
 }
 
 #color{
@@ -32,4 +33,12 @@
 display:flex;
 flex-flow: column;
 align-items:center;
+}
+
+#sizePicker{
+  /* background-color:magenta; */
+  margin-top:64px;
+  /* width:256px;
+  height:256px;
+  background-color: purple; */
 }

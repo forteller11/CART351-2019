@@ -1,9 +1,8 @@
 'use strict';
-window.onload = main;
 
 let colCursor;
 let valCursor;
-function main(){
+function colorCursorInit(){
 
   let canvas = document.getElementById("colorPicker");
   let ctx = canvas.getContext("2d");
@@ -35,6 +34,7 @@ function main(){
     if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
       colCursor.mouseDown = true;
       colCursor.reposition(e);
+      sizeCursor.draw();
     }
     colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
   });
@@ -42,6 +42,7 @@ function main(){
   canvasPicker.addEventListener('pointermove', (e)=>{
     if ((colCursor.mouseDown) && (mouseWithinTriangle(e, canvasPicker, ctxPicker))){
       colCursor.reposition(e);
+      sizeCursor.draw();
     } else colCursor.mouseDown = false;
     colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
@@ -50,6 +51,7 @@ function main(){
     colCursor.mouseDown = false;
     if (mouseWithinTriangle(e, canvasPicker, ctxPicker)){
       colCursor.reposition(e);
+      sizeCursor.draw();
     }
     colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
     });
@@ -64,13 +66,15 @@ function main(){
     canvasValue.addEventListener('pointerdown', (e)=>{
       valCursor.mouseDown = true;
       valCursor.reposition(e);
+      sizeCursor.draw();
       drawTriangle(canvas, ctx, valCursor.value);
     });
 
     canvasValue.addEventListener('pointermove', (e)=>{
-      if (valCursor){
+      if (valCursor.mouseDown){
         valCursor.reposition(e);
         valCursor.draw();
+        sizeCursor.draw();
         drawTriangle(canvas, ctx, valCursor.value);
         colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
       }
@@ -78,6 +82,7 @@ function main(){
 
     canvasValue.addEventListener('pointerup', (e)=>{
       valCursor.mouseDown = false;
+      sizeCursor.draw();
     });
 
     canvasValue.addEventListener('pointerout ', (e)=>{
@@ -242,7 +247,15 @@ class ValueCursor{
   }
   reposition(mouseEvent){
     if (this.mouseDown)
+    {
       this.x = mouseEvent.offsetX;
+      if (this.x > this.gradientWidth-this.pointerWidth/2){
+        this.x = this.gradientWidth-this.pointerWidth/2
+      }
+      if (this.x < this.pointerWidth/2){
+        this.x = this.pointerWidth/2
+      }
+    }
   }
   draw(){
 
@@ -268,12 +281,13 @@ class ValueCursor{
     let yy1 = this.canvas.height-this.pointerHeight;
     let xx2 = this.pointerWidth;
     let yy2 = this.pointerHeight;
-
-    //this.ctx.strokeStyle = (col > 128)? 'black': 'white';
-    this.ctx.strokeStyle = 'black';
     this.ctx.fillRect(xx1,yy1,xx2,yy2);
-    this.ctx.lineWidth = 1;
-    this.ctx.strokeRect(xx1,yy1,xx2,yy2);
+    //this.ctx.strokeStyle = (col > 128)? 'black': 'white';
+    if (col > 128){
+      this.ctx.strokeStyle = 'black';
+      this.ctx.lineWidth = 1;
+      // this.ctx.strokeRect(xx1,yy1,xx2,yy2);
+    }
 
   }
   calcValue(){
