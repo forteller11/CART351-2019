@@ -96,13 +96,25 @@ class SizeCursor{
 
     if (colCursor != null)
       this.sizeCtx.fillStyle = colCursor.col.cssSerialize();
+    this.sizeCtx.strokeStyle = 'white';
+    this.sizeCtx.lineWidth = 8*(this.size/this.maxCursorRadius) + 1;
     this.drawCircle(w/2, this.y, this.size);
+
+    //when rly light col, draw outline
+    if (colCursor != null){
+      if (colCursor.col.avgVal() > 235){
+        const c = .9;
+        this.sizeCtx.lineWidth = 1;
+        this.sizeCtx.strokeStyle = new Color(colCursor.col.r*c,colCursor.col.g*c,colCursor.col.b*c,1).cssSerialize();
+        this.drawCircle(w/2, this.y, this.size);
+      }
+    }
 
 
 
     }
 
-    drawCircle(x,y,r){
+    drawCircle(x,y,r, fill=true){
       this.sizeCtx.beginPath();
       this.sizeCtx.moveTo(x+r, y);
       for (let i = 1; i < 32; i++){
@@ -112,19 +124,9 @@ class SizeCursor{
         this.sizeCtx.lineTo(xx,yy);
       }
       this.sizeCtx.closePath();
-      this.sizeCtx.fill();
-      this.sizeCtx.lineWidth = 16*(this.size/this.maxCursorRadius);
-      this.sizeCtx.strokeStyle = 'white';
+      if (fill) this.sizeCtx.fill();
       this.sizeCtx.stroke();
 
-      //when rly light col, draw outline
-      if (colCursor != null){
-        if (colCursor.col.avgVal() > 245){
-          this.sizeCtx.lineWidth = 2;
-          this.sizeCtx.strokeStyle = 'lightGrey';
-          this.sizeCtx.stroke();
-        }
-      }
     }
 
   calcSize(){
