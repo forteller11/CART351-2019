@@ -14,12 +14,11 @@ let tool;
 let graffitiCanvas;
 
 function main () {
-  console.log("Chrome extension main");
+  console.log("<<Graffiti Chrome Extension [Loaded]>>");
 
   strokeCollection = new StrokeCollection();
 
   //GET DATA FROM SERVER
-  console.log(window.location.hostname);
 
   let hostname = 'hostname='+window.location.hostname;
   let getHeader = SERVER_HREF + "?" + hostname;
@@ -31,12 +30,9 @@ function main () {
 
   getRequest.onreadystatechange = (e) => {
     if (e.target.readyState  === 4){
-      console.log("GET BACK FROM SERVER:")
-      console.log(e.target.response);
+      // console.log(e.target.response);
       strokeCollection.deserializeAndJoin(e.target.response);
     }
-    console.log("GET readystate: "+ e.target.readyState)
-    console.log(e);
   };
 
   //=======canvas stuff ==============
@@ -77,37 +73,28 @@ function drawLoop(){
   //upload any new completed strokes to server
   if ((strokeCollection.newStrokeToExport) && (strokeCollection.strokes.length > 0)) {
     strokeCollection.newStrokeToExport = false;
-    console.log(strokeCollection);
     let strokeToExport = strokeCollection.strokes[strokeCollection.strokes.length-1];
 
     let postRequest = new XMLHttpRequest();
     postRequest.open("POST", "https://blooming-meadow-17879.herokuapp.com/", true);
-    console.log(postRequest);
 
     postRequest.setRequestHeader('Content-Type','text/plain');
     postRequest.responseType = "text";
 
-    console.log(strokeToExport);
     let strokeData = strokeCollection.serializeStroke(strokeToExport);
-    console.log(strokeData);
     let txtToPost = window.location.hostname + AJAX_STROKE_DATA_DELIMITER + strokeData;
 
     postRequest.send(txtToPost);
 
     postRequest.onreadystatechange = (e) => {
       if (e.target.readyState  === 4){
-        console.log("POST BACK FROM SERVER: ")
-        console.log(e.target.response);
+        // console.log(e.target.response);
       } else{
-        console.log("readystate: "+ e.target.readyState);
-        console.log(e);
+
       }
     };
   }
 
-
-  // let str = strokeCollection.serialize();
-  // strokeCollection.deserializeAndJoin(str);
 
   graffitiCanvas.clearCanvas();
 

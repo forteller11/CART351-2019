@@ -8,7 +8,7 @@ class Tool {
     this.cursorStroke = null; //used to draw the brush cursor
     this.mouseDown = false;
 
-    this.spacingLevel = 8;
+    this.spacingLevel = 2;
     this.spacingCounter = 0;
 
     window.addEventListener("pointerdown", (e) => {
@@ -65,7 +65,6 @@ class Tool {
 
 class StrokeBrush extends Tool {
   constructor(canvas, canvasCtx, strokeDatas) {
-    //console.log(canvas);
     super(canvas, canvasCtx, strokeDatas);
     this.color = new Color(255, 0, 0, 1);
     this.width = 5;
@@ -77,8 +76,8 @@ class StrokeBrush extends Tool {
     let t = this;
     chrome.runtime.onMessage.addListener(
       (request, sender, sendResponse) => {
-        console.log(request);
-        console.log(sender);
+        // console.log(request);
+        // console.log(sender);
 
         switch (request.type) {
           case 'setColor':
@@ -151,7 +150,6 @@ redrawCursor(e) {
     this.cursorStroke.verts.push(new Vertex(xx, yy, 1));
   }
   this.cursorStroke.verts.push(new Vertex(e.pageX + radius, e.pageY, 1));
-  //  console.log(this.cursorStroke);
 }
 }
 
@@ -168,7 +166,6 @@ class Color {
   }
 
   cssDeserialize(str) {
-    console.log(str);
     let arr = str.split(",");
     this.r = parseInt(arr[0]);
     this.g = parseInt(arr[1]);
@@ -227,7 +224,6 @@ class StrokeCollection {
       s.color.g + ATTRIB_DELIMITER +
       s.color.b + ATTRIB_DELIMITER +
       s.color.a;
-  // console.log(s);
     for (let i = 0; i < s.verts.length; i ++) {
       result += ATTRIB_DELIMITER +
         s.verts[i].x + ATTRIB_DELIMITER +
@@ -245,12 +241,9 @@ class StrokeCollection {
     let strokesSerialized = str.split(STROKE_DELIMITER);
     strokesSerialized.splice(strokesSerialized.length-1, 1);
     let newStrokes = new Array(strokesSerialized.length);
-    // console.log(str);
-    // console.log(strokesSerialized);
+
     for (let i = 0; i < strokesSerialized.length; i++){
       let attribs = strokesSerialized[i].split(ATTRIB_DELIMITER);
-      // attribs = attribs.splice(attribs.length-1, 1)
-      // console.log(attribs);
       newStrokes[i] = new Stroke(
         new Color (
           parseInt(attribs[0]),
@@ -260,15 +253,12 @@ class StrokeCollection {
         )
       );
 
-      // console.log(newStrokes[i].color);
-
       for (let j = COLOR_DATA_SIZE; j < attribs.length; j += VERT_SIZE){
         let newVert = new Vertex (
           (attribs[j+0]),
           (attribs[j+1]),
           (attribs[j+2])
         );
-        // console.log(newVert);
         newStrokes[i].verts.push(newVert);
       }
     } //end of newStrokes
@@ -276,7 +266,6 @@ class StrokeCollection {
     for (let i = 0; i < newStrokes.length; i++){ //add newly deserialized strokes to collection
       this.strokes.push(newStrokes[i]);
     }
-    // console.log(this.strokes);
   }
 
 }

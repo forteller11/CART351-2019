@@ -11,15 +11,15 @@ class GraffitiCanvas {
       this.canvas.height = window.innerHeight;
       this.ctx = this.canvas.getContext('2d');
       this.ctx.lineCap = "round";
-      this.ctx.fillStyle = rgbaCol(0, 255, 255, 0.4);
+      // this.ctx.fillStyle = rgbaCol(0, 255, 255, 0.4);
     });
 
   }
 
   clearCanvas() {
-    this.ctx.fillStyle = this.backgroundFill.cssSerialize();
+    // this.ctx.fillStyle = this.backgroundFill.cssSerialize();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   drawStrokeLine(stroke) {
