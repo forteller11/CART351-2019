@@ -127,6 +127,7 @@ onHold(e) {
 
 onRelease(e) {
   this.strokeDataBuffer.push(this.createVertFromMouseEvent(e));
+  strokeCollection.newStrokeToExport = true;
 }
 
 createVertFromMouseEvent(e) {
@@ -184,10 +185,12 @@ class Stroke {
   constructor(col) {
     this.color = col;
     this.verts = new Array();
+    // this.hasBeenExported = true; //if false, marks as dirty
   }
 }
 class StrokeCollection {
   constructor(str=null) {
+    this.newStrokeToExport = false;
     this.strokes = new Array();
     if (str!= null){
       this.deserialize(str);
@@ -232,7 +235,6 @@ class StrokeCollection {
   }
 
   deserializeAndJoin(str){
-    str = new String ('255,0,255,0.1,50,20,2,100,40,2,200,80,2;0,255,0,0.01,150,20,20,160,40,20;255,255,255,0.1,80,80,2,100,100,2;')
     if (str.length === 0)
       return;
 
@@ -254,7 +256,7 @@ class StrokeCollection {
         )
       );
 
-      console.log(newStrokes[i].color);
+      // console.log(newStrokes[i].color);
 
       for (let j = COLOR_DATA_SIZE; j < attribs.length; j += VERT_SIZE){
         let newVert = new Vertex (

@@ -1,13 +1,13 @@
 'use strict'
 
 window.onload = main;
-const AJAX_STROKE_DATA_DELIMITER = "|/_\\|";
+const AJAX_STROKE_DATA_DELIMITER = "|_|";
 const STROKE_DELIMITER = ';';
 const ATTRIB_DELIMITER = ',';
 const VERT_SIZE = 3;
 const COLOR_DATA_SIZE = 4;
 const BASE = 10;
-
+const SERVER_HREF = 'https://blooming-meadow-17879.herokuapp.com';
 
 let strokeCollection; //of strokes
 let tool;
@@ -19,21 +19,25 @@ function main () {
   strokeCollection = new StrokeCollection();
 
   //GET DATA FROM SERVER
-  // getDataFromServer
-  // let getRequest = new XMLHttpRequest();
-  // getRequest.open("GET", "https://blooming-meadow-17879.herokuapp.com?hostname=youtube.com", true);
-  // getRequest.responseType = "text";
-  // getRequest.send();
-  //
-  // getRequest.onreadystatechange = (e) => {
-  //   if (e.target.readyState  === 4){
-  //     console.log("GET BACK FROM SERVER:")
-  //     console.log(e.target.response);
-  //     strokeCollection += e.target
-  //   }
-  //   console.log("GET readystate: "+ e.target.readyState)
-  //   console.log(e);
-  // };
+  console.log(window.location.hostname);
+
+  let hostname = 'hostname='+window.location.hostname;
+  let getHeader = SERVER_HREF + "?" + hostname;
+
+  let getRequest = new XMLHttpRequest();
+  getRequest.open("GET", getHeader, true);
+  getRequest.responseType = "text";
+  getRequest.send();
+
+  getRequest.onreadystatechange = (e) => {
+    if (e.target.readyState  === 4){
+      console.log("GET BACK FROM SERVER:")
+      console.log(e.target.response);
+      strokeCollection.deserializeAndJoin(e.target.response);
+    }
+    console.log("GET readystate: "+ e.target.readyState)
+    console.log(e);
+  };
 
   //=======canvas stuff ==============
 
@@ -70,9 +74,40 @@ function drawLoop(){
   strokeCollection.addData(tool.strokeDataBuffer);
   tool.strokeDataBuffer = new Array(); //empty buffer
 
+  //upload any new completed strokes to server
+  if ((strokeCollection.newStrokeToExport) && (strokeCollection.strokes.length > 0)) {
+    strokeCollection.newStrokeToExport = false;
+    console.log(strokeCollection);
+    let strokeToExport = strokeCollection.strokes[strokeCollection.strokes.length-1];
 
-  let str = strokeCollection.serialize();
-  strokeCollection.deserializeAndJoin(str);
+    let postRequest = new XMLHttpRequest();
+    postRequest.open("POST", "https://blooming-meadow-17879.herokuapp.com/", true);
+    console.log(postRequest);
+
+    postRequest.setRequestHeader('Content-Type','text/plain');
+    postRequest.responseType = "text";
+
+    console.log(strokeToExport);
+    let strokeData = strokeCollection.serializeStroke(strokeToExport);
+    console.log(strokeData);
+    let txtToPost = window.location.hostname + AJAX_STROKE_DATA_DELIMITER + strokeData;
+
+    postRequest.send(txtToPost);
+
+    postRequest.onreadystatechange = (e) => {
+      if (e.target.readyState  === 4){
+        console.log("POST BACK FROM SERVER: ")
+        console.log(e.target.response);
+      } else{
+        console.log("readystate: "+ e.target.readyState);
+        console.log(e);
+      }
+    };
+  }
+
+
+  // let str = strokeCollection.serialize();
+  // strokeCollection.deserializeAndJoin(str);
 
   graffitiCanvas.clearCanvas();
 
