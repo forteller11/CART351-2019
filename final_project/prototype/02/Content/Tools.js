@@ -78,7 +78,7 @@ class StrokeBrush extends Tool {
       (request, sender, sendResponse) => {
         // console.log(request);
         // console.log(sender);
-
+        console.log(request);
         switch (request.type) {
           case 'setColor':
             this.color.r = request.r;
@@ -104,8 +104,23 @@ class StrokeBrush extends Tool {
             sendResponse({msg:"received set size"});
             break;
 
+          case 'getActivation':
+            if (graffitiCanvas != null){
+              sendResponse({active:graffitiCanvas.active});
+            } else {
+              {active:true}
+            }
+          break;
+
+          case 'setActivation':
+            if (graffitiCanvas != null){
+              graffitiCanvas.active = request.active;
+              sendResponse({msg:"recieved set activation"});
+            }
+          break;
+
           default:
-            console.warn("unrecognized type of chrome message!");
+            //console.warn("unrecognized type of chrome message!");
             break;
 
         } //end of switch
@@ -139,6 +154,9 @@ createVertFromMouseEvent(e) {
 
 redrawCursor(e) {
   this.cursorStroke = new Stroke(this.color);
+  if (graffitiCanvas === false) //if canvas not active dont draw cursor
+    this.cursorStroke.color.a = 0;
+
   let radius = (this.width/2);
   if (this.mouseDown)
     radius *= e.pressure;

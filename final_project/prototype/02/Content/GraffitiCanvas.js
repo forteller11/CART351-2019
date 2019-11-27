@@ -5,13 +5,14 @@ class GraffitiCanvas {
     this.canvas = canvas;
     this.ctx = ctx;
     this.backgroundFill = new Color(0,255,0,.2);
+    this.active = true;
 
     window.addEventListener("resize", (e) => {
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.ctx = this.canvas.getContext('2d');
       this.ctx.lineCap = "round";
-      // this.ctx.fillStyle = rgbaCol(0, 255, 255, 0.4);
+      // this.ctx.fillStyle = rgbaCol(0, 255, 0, 0);
     });
 
   }

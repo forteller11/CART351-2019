@@ -20,6 +20,7 @@
   width:128px;
   height:128px;
   z-index: 0;
+  opacity:60%;
 }
 
 
@@ -59,4 +60,14 @@ justify-content: center;
   margin-right:-16px;
   /* background-color: lightGrey; */
   z-index:200;
+}
+
+#activateButton{
+  height:16px;
+  width:auto;
+  background-color: grey;
+}
+
+#activateButton:hover {
+  filter: brightness(150%);
 }
