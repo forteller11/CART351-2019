@@ -5,6 +5,7 @@ const AJAX_STROKE_DATA_DELIMITER = "|/_\\|";
 const STROKE_DELIMITER = ';';
 const ATTRIB_DELIMITER = ',';
 const VERT_SIZE = 3;
+const COLOR_DATA_SIZE = 4;
 const BASE = 10;
 
 
@@ -52,7 +53,12 @@ function drawLoop(){
   strokeCollection.addData(tool.strokeDataBuffer);
   tool.strokeDataBuffer = new Array(); //empty buffer
 
-  console.log(strokeCollection.serialize());
+
+  let str = strokeCollection.serialize();
+  console.log(str);
+  strokeCollection.deserialize(str);
+  console.log(strokeCollection);
+
   graffitiCanvas.clearCanvas();
 
   //draw strokes

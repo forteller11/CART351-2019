@@ -188,8 +188,11 @@ class Stroke {
   }
 }
 class StrokeCollection {
-  constructor() {
+  constructor(str=null) {
     this.strokes = new Array();
+    if (str!= null){
+      this.deserialize(str);
+    }
   }
 
   addData(objs) {
@@ -227,6 +230,45 @@ class StrokeCollection {
   }
     result += STROKE_DELIMITER;
     return result;
+  }
+
+  deserialize(str){
+    str = new String ('255,0,255,1,50,20,2,100,40,2,200,80,2;0,255,0,150,20,20,160,40,20;255,255,255,1,80,80,2,100,100,2;')
+    if (str.length === 0)
+      return;
+
+    let strokes = str.split(STROKE_DELIMITER);
+    strokes.splice(strokes.length-1, 1);
+    this.strokes = new Array(strokes.length);
+    console.log(str);
+    console.log(strokes);
+    for (let i = 0; i < strokes.length; i++){
+      let attribs = strokes[i].split(ATTRIB_DELIMITER);
+      // attribs = attribs.splice(attribs.length-1, 1)
+      console.log(attribs);
+      this.strokes[i] = new Stroke(
+        new Color (
+          parseInt(attribs[0]),
+          parseInt(attribs[1]),
+          parseInt(attribs[2]),
+          parseInt(attribs[3])
+        )
+      );
+
+      console.log(this.strokes[i].color);
+
+      for (let j = COLOR_DATA_SIZE; j < attribs.length; j += VERT_SIZE){
+        let v = new Vertex (
+          (attribs[j+0]),
+          (attribs[j+1]),
+          (attribs[j+2])
+        );
+        console.log(v);
+        this.strokes[i].verts.push(
+          v
+        );
+      }
+    }
   }
 
 }
