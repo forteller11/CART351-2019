@@ -111,8 +111,8 @@ class SizeCursor{
     //when rly light col, draw outline
     if (colCursor != null){
       if (colCursor.col.avgVal() > 235){
-        const c = .9;
-        this.sizeCtx.lineWidth = 2*normRadius+1;
+        const c = .85;
+        this.sizeCtx.lineWidth = 2*normRadius+3;
         this.sizeCtx.strokeStyle = new Color(colCursor.col.r*c,colCursor.col.g*c,colCursor.col.b*c,1).cssSerialize();
         this.drawCircle(w/2, this.y, this.size, false);
       }
