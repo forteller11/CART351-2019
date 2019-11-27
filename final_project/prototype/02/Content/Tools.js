@@ -68,28 +68,35 @@ class StrokeBrush extends Tool {
     super(canvas, canvasCtx, strokeDatas);
     this.color = new Color(255, 0, 0, 1);
     this.width = 5;
+    this.pickerPos = new Vertex(64,64);
+    this.valuePos = 180;
+
 
     let t = this;
     chrome.runtime.onMessage.addListener(
       (request, sender, sendResponse) => {
-        //console.log(request); console.log(sender); console.log(sendResponse);
+        console.log(request);
+        console.log(sender);
+
         switch (request.type) {
           case 'setColor':
             this.color.r = request.r;
             this.color.g = request.g;
             this.color.b = request.b;
             this.color.a = request.a;
+            this.pickerPos.x = request.pickerPos.x;
+            this.pickerPos.y = request.pickerPos.y;
+            this.valuePos = request.valuePos;
             sendResponse({
               farewell: "GOT IT"
             });
             break;
 
           case 'getColor':
+          console.log(this.pickerPos);
             sendResponse({
-              r: this.color.r,
-              g: this.color.g,
-              b: this.color.b,
-              a: this.color.a
+              pickerPos : {x:this.pickerPos.x, y:this.pickerPos.y},
+              valuePos  : this.valuePos
             });
             break;
 
@@ -97,7 +104,7 @@ class StrokeBrush extends Tool {
             console.warn("unrecognized type of chrome message!");
 
         } //end of switch
-
+        console.log(sendResponse);
       });
 
 

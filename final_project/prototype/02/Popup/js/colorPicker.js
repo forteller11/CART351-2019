@@ -25,7 +25,7 @@ function colorCursorInit() {
   canvasValue.style.zIndex = 3;
   canvasValue.style.position = 'relative';
 
-  colCursor = new ColorPickerCursor(canvas.width / 2, 80);
+  colCursor = new ColorPickerCursor(canvas.width / 2, 80, canvasPicker, ctxPicker, ctx);
   valCursor = new ValueCursor(canvasValue.width / 2, canvasValue, ctxValue);
 
   canvasPicker.addEventListener('pointerdown', (e) => {
@@ -87,8 +87,8 @@ function colorCursorInit() {
 
 
   drawTriangle(canvas, ctx, valCursor.value);
-  valCursor.draw();
-  colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx, true);
+  // valCursor.draw();
+  // colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx, true);
 }
 
 function mouseWithinTriangle(mouseEvent, canvas, ctx) {
@@ -185,14 +185,21 @@ class Vertex {
 }
 
 class ColorPickerCursor {
-  constructor(x, y) {
-    this.pos = new Vertex(x, y);
+  constructor(x, y, canvas, ctx, ctxToPickFrom) {
+    this.canvas=canvas;
+    this.ctx=ctx;
+    this.ctxToPickFrom=ctxToPickFrom;
+
+    this.pos = new Vertex(this.canvas.width/2, this.canvas.height/8);
     this.col = new Color(0, 0, 0, 255);
     this.mouseDown = false;
     this.holdRadius = 16;
     this.restRadius = 8;
 
     console.log("Color picker created");
+
+    //this.drawSelfInCanvas(true); //draw cursor in black
+
     let t = this;
     chrome.tabs.query({
       active: true,
@@ -200,11 +207,16 @@ class ColorPickerCursor {
     }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {type: 'getColor'}, (response) => {
         console.log(response);
-        console.log(t);
-        t.col.r = response.r;
-        t.col.g = response.g;
-        t.col.b = response.b;
-        t.col.a = response.a;
+        console.log(t.pos.x);
+        colCursor.pos.x = response.pickerPos.x;
+        colCursor.pos.y = response.pickerPos.y;
+        console.log(t.pos.x);
+        valCursor.x = response.valuePos;
+        console.log(t.pos.x);
+        // drawTriangle(this.canvas, this.ctx, valCursor.value);
+        this.drawSelfInCanvas();
+        sizeCursor.draw();
+        valCursor.draw();
       });
     });
 
@@ -215,7 +227,7 @@ class ColorPickerCursor {
     this.pos.y = mouseEvent.offsetY;
   }
 
-  drawSelfInCanvas(canvas, ctx, ctxToPickFrom, firstUpdate = false) {
+  drawSelfInCanvas(firstUpdate = false) {
 
     chrome.tabs.query({
       active: true,
@@ -226,38 +238,41 @@ class ColorPickerCursor {
         r: colCursor.col.r,
         g: colCursor.col.g,
         b: colCursor.col.b,
-        a: colCursor.col.a
+        a: colCursor.col.a,
+        pickerPos: {x:colCursor.pos.x,y:colCursor.pos.y},
+        valuePos: valCursor.x
       }, (response) => {
-        console.log(response);
+        //console.log(response);
+              console.log(colCursor.pos.x)
       });
     });
 
-    let radius = (this.mouseDown) ? this.holdRadius : this.restRadius;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (firstUpdate === false) { //only color pick after first update
-      let data = ctxToPickFrom.getImageData(this.pos.x, this.pos.y, 1, 1).data;
+    let radius = (this.mouseDown) ? this.holdRadius : this.restRadius;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      let data = this.ctxToPickFrom.getImageData(this.pos.x, this.pos.y, 1, 1).data;
       this.col.r = data[0];
       this.col.g = data[1];
       this.col.b = data[2];
       this.col.a = data[3];
-    }
-    ctx.beginPath();
-    ctx.moveTo(this.pos.x + radius, this.pos.y);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.pos.x + radius, this.pos.y);
     for (let i = 1; i < 32; i++) {
       let index = (i / 32) * Math.PI * 2;
       let xx = this.pos.x + (Math.cos(index) * radius);
       let yy = this.pos.y + (Math.sin(index) * radius);
-      ctx.lineTo(xx, yy);
+      this.ctx.lineTo(xx, yy);
     }
-    ctx.closePath();
+    this.ctx.closePath();
     //ctx.fillStyle = 'black';
-    ctx.fillStyle = this.col.cssSerialize();
-    ctx.lineWidth = radius / 3 + 2;
+    this.ctx.fillStyle = this.col.cssSerialize();
+    this.ctx.lineWidth = radius / 3 + 2;
 
-    ctx.strokeStyle = (this.col.avgVal() < 185) ? 'white' : 'black';
-    ctx.stroke();
-    ctx.fill();
+    this.ctx.strokeStyle = (this.col.avgVal() < 185) ? 'white' : 'black';
+    this.ctx.stroke();
+    this.ctx.fill();
 
   }
 }
