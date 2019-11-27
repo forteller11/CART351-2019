@@ -62,17 +62,17 @@ function colorCursorInit() {
   canvasValue.addEventListener('pointerdown', (e) => {
     valCursor.mouseDown = true;
     valCursor.reposition(e);
-    sizeCursor.draw();
     drawTriangle(canvas, ctx, valCursor.value);
+    sizeCursor.draw();
   });
 
   canvasValue.addEventListener('pointermove', (e) => {
     if (valCursor.mouseDown) {
       valCursor.reposition(e);
       valCursor.draw();
-      sizeCursor.draw();
       drawTriangle(canvas, ctx, valCursor.value);
       colCursor.drawSelfInCanvas(canvasPicker, ctxPicker, ctx);
+      sizeCursor.draw();
     }
   });
 
@@ -107,7 +107,7 @@ function drawTriangle(c, ctx, brightness) {
 
   //let dist = canvas.width/2;
 
-  let p1 = new Vertex(c.width / 2, 0); //r
+  let p1 = new Vertex(c.width / 2, c.height/6.5); //r
   let p2 = new Vertex(0, c.height); //g
   let p3 = new Vertex(c.width, c.height);
 
@@ -206,17 +206,17 @@ class ColorPickerCursor {
       currentWindow: true
     }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {type: 'getColor'}, (response) => {
-        console.log(response);
-        console.log(t.pos.x);
         colCursor.pos.x = response.pickerPos.x;
         colCursor.pos.y = response.pickerPos.y;
-        console.log(t.pos.x);
         valCursor.x = response.valuePos;
-        console.log(t.pos.x);
-        // drawTriangle(this.canvas, this.ctx, valCursor.value);
+        sizeCursor.y = response.sizePos;
+        sizeCursor.calcSize();
+        console.log(response);
+        valCursor.draw();
+        sizeCursor.draw();
+        drawTriangle(this.canvas, this.ctxToPickFrom, valCursor.value);
         this.drawSelfInCanvas();
         sizeCursor.draw();
-        valCursor.draw();
       });
     });
 
@@ -240,10 +240,10 @@ class ColorPickerCursor {
         b: colCursor.col.b,
         a: colCursor.col.a,
         pickerPos: {x:colCursor.pos.x,y:colCursor.pos.y},
-        valuePos: valCursor.x
+        valuePos: valCursor.x,
       }, (response) => {
         //console.log(response);
-              console.log(colCursor.pos.x)
+              // console.log(colCursor.pos.x)
       });
     });
 

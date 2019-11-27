@@ -12,8 +12,6 @@ function sizeCursorInit(){
 
 
 sizeCursor = new SizeCursor(sizeCanvas.height-32,sizeCanvas, sizeCtx);
-sizeCursor.draw();
-console.log(sizeCursor);
 
     sizeCanvas.addEventListener('pointerdown', (e)=>{
       sizeCursor.mouseDown = true;
@@ -62,17 +60,26 @@ class SizeCursor{
       let minY = this.maxCursorRadius-this.scrollSize*3;
       let maxY = this.sizeCanvas.height-this.scrollSize;
       this.y = mouseEvent.offsetY;
-      console.log (this.y);
 
       if (this.y > maxY)
         this.y = maxY
 
       if (this.y < minY)
         this.y = minY;
-
     }
   }
   draw(){
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: 'setSize',
+        sizePos: sizeCursor.y,
+        size: sizeCursor.size
+      }, (response) => {
+      });
+    });
 
     this.sizeCtx.clearRect(0,0,this.sizeCanvas.width,this.sizeCanvas.height);
 
@@ -94,27 +101,34 @@ class SizeCursor{
     this.sizeCtx.stroke();
     this.calcSize();
 
-    if (colCursor != null)
-      this.sizeCtx.fillStyle = colCursor.col.cssSerialize();
+    let normRadius = (this.size/this.maxCursorRadius);
+
+    //outline
     this.sizeCtx.strokeStyle = 'white';
-    this.sizeCtx.lineWidth = 8*(this.size/this.maxCursorRadius) + 1;
-    this.drawCircle(w/2, this.y, this.size);
+    this.sizeCtx.lineWidth = 16*normRadius + 1;
+    this.drawCircle(w/2, this.y, this.size, false);
 
     //when rly light col, draw outline
     if (colCursor != null){
       if (colCursor.col.avgVal() > 235){
         const c = .9;
-        this.sizeCtx.lineWidth = 1;
+        this.sizeCtx.lineWidth = 2*normRadius+1;
         this.sizeCtx.strokeStyle = new Color(colCursor.col.r*c,colCursor.col.g*c,colCursor.col.b*c,1).cssSerialize();
-        this.drawCircle(w/2, this.y, this.size);
+        this.drawCircle(w/2, this.y, this.size, false);
       }
     }
 
+    //fill
+    if (colCursor != null)
+      this.sizeCtx.fillStyle = colCursor.col.cssSerialize();
+    this.sizeCtx.strokeStyle = 'purple';
+    this.drawCircle(w/2, this.y, this.size, true, false);
+
 
 
     }
 
-    drawCircle(x,y,r, fill=true){
+    drawCircle(x,y,r, fill=true, stroke=true){
       this.sizeCtx.beginPath();
       this.sizeCtx.moveTo(x+r, y);
       for (let i = 1; i < 32; i++){
@@ -125,12 +139,12 @@ class SizeCursor{
       }
       this.sizeCtx.closePath();
       if (fill) this.sizeCtx.fill();
-      this.sizeCtx.stroke();
+      if (stroke) this.sizeCtx.stroke();
 
     }
 
   calcSize(){
-    let lerpAmount = ((this.sizeCanvas.height-this.y)/this.sizeCanvas.height);
+    let lerpAmount = ((this.sizeCanvas.height-this.y-this.scrollSize)/this.sizeCanvas.height);
     let delta = this.maxCursorRadius - this.minCursorRadius;
     this.size =  (delta * lerpAmount) + this.minCursorRadius;
   }
