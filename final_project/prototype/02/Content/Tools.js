@@ -126,26 +126,27 @@ onHold(e) {
 }
 
 onRelease(e) {
+  console.log("ah");
   this.strokeDataBuffer.push(this.createVertFromMouseEvent(e));
 }
 
 createVertFromMouseEvent(e) {
-  let xx = e.clientX + window.scrollX;
-  let yy = e.clientY + window.scrollY;
+  let xx = e.pageX;
+  let yy = e.pageY;
   let ww = (this.width * e.pressure * 1.5) + this.width / 4;
   return new Vertex(xx, yy, ww);
 }
 
 redrawCursor(e) {
   this.cursorStroke = new Stroke(this.color);
-  this.cursorStroke.verts.push(new Vertex(e.clientX+this.width/2, e.clientY, 1));
+  this.cursorStroke.verts.push(new Vertex(e.pageX+this.width/2, e.pageY, 1));
   for (let i = 1; i < 32; i++) {
     let index = (i / 32) * Math.PI * 2;
-    let xx = e.clientX + (Math.cos(index) * this.width / 2);
-    let yy = e.clientY + (Math.sin(index) * this.width / 2);
+    let xx = e.pageX + (Math.cos(index) * this.width / 2);
+    let yy = e.pageY + (Math.sin(index) * this.width / 2);
     this.cursorStroke.verts.push(new Vertex(xx, yy, 1));
   }
-  this.cursorStroke.verts.push(new Vertex(e.clientX+this.width/2, e.clientY, 1));
+  this.cursorStroke.verts.push(new Vertex(e.pageX+this.width/2, e.pageY, 1));
   //  console.log(this.cursorStroke);
 }
 }
@@ -200,6 +201,32 @@ class StrokeCollection {
         this.strokes[this.strokes.length - 1].verts.push(objs[i]);
     }
     //create new stroke
+  }
+
+  serialize() {
+    let result = new String();
+    for (let i = 0; i < this.strokes.length; i++) {
+      result += this.serializeStroke(this.strokes[i]);
+    }
+    return result;
+  }
+
+  serializeStroke(s) {
+
+    let result =
+      s.color.r + ATTRIB_DELIMITER +
+      s.color.g + ATTRIB_DELIMITER +
+      s.color.b + ATTRIB_DELIMITER +
+      s.color.a;
+  console.log(s);
+    for (let i = 0; i < s.verts.length; i ++) {
+      result += ATTRIB_DELIMITER +
+        s.verts[i].x + ATTRIB_DELIMITER +
+        s.verts[i].y + ATTRIB_DELIMITER +
+        s.verts[i].w;
+  }
+    result += STROKE_DELIMITER;
+    return result;
   }
 
 }

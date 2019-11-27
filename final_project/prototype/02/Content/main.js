@@ -2,7 +2,7 @@
 
 window.onload = main;
 const AJAX_STROKE_DATA_DELIMITER = "|/_\\|";
-const STROKE_DELIMITER = 'd';
+const STROKE_DELIMITER = ';';
 const ATTRIB_DELIMITER = ',';
 const VERT_SIZE = 3;
 const BASE = 10;
@@ -45,16 +45,14 @@ function main () {
   window.requestAnimationFrame(drawLoop);
   //=========== end of canvas stuff ==============
 
-
-
 }
 
 function drawLoop(){
   //input
-  //console.log(strokeCollection);
   strokeCollection.addData(tool.strokeDataBuffer);
-  tool.strokeDataBuffer = new Array();
+  tool.strokeDataBuffer = new Array(); //empty buffer
 
+  console.log(strokeCollection.serialize());
   graffitiCanvas.clearCanvas();
 
   //draw strokes
@@ -80,45 +78,3 @@ function constrain (x, min, max){
   if (x > max) x = max;
   return x;
 }
-
-// function drawLoop(ctx, strkData, fill = false){
-//   graffitiCanvas.clearCanvas();
-//   graffitiCanvas.drawStroke
-//   // let attribs = strkData[i].split(ATTRIB_DELIMITER);
-//   // ctx.strokeStyle = rgbaCol(attribs[0], attribs[1], attribs[2], attribs[3]);
-//   // //console.log(attribs);
-//   // //cycle through verts of strokes to actually draw
-//   //
-//   // if (fill){
-//   //   for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
-//   //     ctx.lineWidth = attribs[j + 2];
-//   //     ctx.beginPath();
-//   //
-//   //     ctx.moveTo(
-//   //       parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
-//   //       parseInt(attribs[j + 1], BASE) - window.scrollY);
-//   //
-//   //     ctx.lineTo(
-//   //       parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
-//   //       parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
-//   //
-//   //     ctx.stroke();
-//   //   }
-//   // }
-//   // else {
-//   //   ctx.beginPath();
-//   //   for (let j = 4; j < attribs.length - VERT_SIZE; j += VERT_SIZE){
-//   //     ctx.lineWidth = attribs[j + 2];
-//   //
-//   //     ctx.lineTo(
-//   //       parseInt(attribs[j + 0 + 0], BASE) - window.scrollX ,
-//   //       parseInt(attribs[j + 1], BASE) - window.scrollY);
-//   //
-//   //     ctx.lineTo(
-//   //       parseInt(attribs[j + 0 + VERT_SIZE], BASE) - window.scrollX ,
-//   //       parseInt(attribs[j + 1 + VERT_SIZE], BASE) - window.scrollY);
-//   //   }
-//   //   ctx.fill();
-//   // }
-//
-// }
