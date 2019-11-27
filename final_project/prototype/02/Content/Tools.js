@@ -115,8 +115,15 @@ class StrokeBrush extends Tool {
           case 'setActivation':
             if (graffitiCanvas != null){
               graffitiCanvas.active = request.active;
-              sendResponse({msg:"recieved set activation"});
+
+              if (graffitiCanvas.active)
+                graffitiCanvas.canvas.style.pointerEvents = "initial";
+              else
+                graffitiCanvas.canvas.style.pointerEvents = "none";
+
             }
+
+            sendResponse({msg:"recieved set activation"});
           break;
 
           default:
@@ -154,8 +161,14 @@ createVertFromMouseEvent(e) {
 
 redrawCursor(e) {
   this.cursorStroke = new Stroke(this.color);
-  if (graffitiCanvas === false) //if canvas not active dont draw cursor
+
+  if (graffitiCanvas != null){
+  if (graffitiCanvas.active === false) //if canvas not active dont draw cursor
     this.cursorStroke.color.a = 0;
+  }
+  else {
+    this.cursorStroke.color.a = 1;
+  }
 
   let radius = (this.width/2);
   if (this.mouseDown)
