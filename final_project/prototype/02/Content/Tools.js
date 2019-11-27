@@ -13,6 +13,7 @@ class Tool {
 
     window.addEventListener("pointerdown", (e) => {
       this.mouseDown = true;
+      this.pressureNormalized = 1;
       this.onInitClick(e);
     });
 
@@ -139,14 +140,17 @@ createVertFromMouseEvent(e) {
 
 redrawCursor(e) {
   this.cursorStroke = new Stroke(this.color);
-  this.cursorStroke.verts.push(new Vertex(e.pageX+this.width/2, e.pageY, 1));
+  let radius = (this.width/2);
+  if (this.mouseDown)
+    radius *= e.pressure;
+  this.cursorStroke.verts.push(new Vertex(e.pageX + radius, e.pageY, 1));
   for (let i = 1; i < 32; i++) {
     let index = (i / 32) * Math.PI * 2;
-    let xx = e.pageX + (Math.cos(index) * this.width / 2);
-    let yy = e.pageY + (Math.sin(index) * this.width / 2);
+    let xx = e.pageX + (Math.cos(index) * radius);
+    let yy = e.pageY + (Math.sin(index) * radius);
     this.cursorStroke.verts.push(new Vertex(xx, yy, 1));
   }
-  this.cursorStroke.verts.push(new Vertex(e.pageX+this.width/2, e.pageY, 1));
+  this.cursorStroke.verts.push(new Vertex(e.pageX + radius, e.pageY, 1));
   //  console.log(this.cursorStroke);
 }
 }
