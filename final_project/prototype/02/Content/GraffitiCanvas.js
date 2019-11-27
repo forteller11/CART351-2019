@@ -7,9 +7,11 @@ class GraffitiCanvas {
     this.backgroundFill = new Color(0,255,0,.2);
 
     window.addEventListener("resize", (e) => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvasCtx.fillStyle = rgbaCol(0, 255, 255, 0.4);
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+      this.ctx = this.canvas.getContext('2d');
+      this.ctx.lineCap = "round";
+      this.ctx.fillStyle = rgbaCol(0, 255, 255, 0.4);
     });
 
   }

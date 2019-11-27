@@ -92,7 +92,6 @@ class StrokeBrush extends Tool {
             break;
 
           case 'getColor':
-          console.log(this.sizePos);
             sendResponse({
               pickerPos : {x:this.pickerPos.x, y:this.pickerPos.y},
               valuePos  : this.valuePos,
@@ -100,7 +99,6 @@ class StrokeBrush extends Tool {
             });
 
           case 'setSize':
-          console.log(request);
             this.width = request.size*2;
             this.sizePos = request.sizePos;
             sendResponse({msg:"received set size"});
@@ -111,7 +109,6 @@ class StrokeBrush extends Tool {
             break;
 
         } //end of switch
-        console.log(sendResponse);
       });
 
 
@@ -141,12 +138,14 @@ createVertFromMouseEvent(e) {
 
 redrawCursor(e) {
   this.cursorStroke = new Stroke(this.color);
+  this.cursorStroke.verts.push(new Vertex(e.clientX+this.width/2, e.clientY, 1));
   for (let i = 1; i < 32; i++) {
     let index = (i / 32) * Math.PI * 2;
     let xx = e.clientX + (Math.cos(index) * this.width / 2);
     let yy = e.clientY + (Math.sin(index) * this.width / 2);
     this.cursorStroke.verts.push(new Vertex(xx, yy, 1));
   }
+  this.cursorStroke.verts.push(new Vertex(e.clientX+this.width/2, e.clientY, 1));
   //  console.log(this.cursorStroke);
 }
 }
