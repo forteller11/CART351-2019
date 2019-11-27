@@ -126,7 +126,6 @@ onHold(e) {
 }
 
 onRelease(e) {
-  console.log("ah");
   this.strokeDataBuffer.push(this.createVertFromMouseEvent(e));
 }
 
@@ -221,7 +220,7 @@ class StrokeCollection {
       s.color.g + ATTRIB_DELIMITER +
       s.color.b + ATTRIB_DELIMITER +
       s.color.a;
-  console.log(s);
+  // console.log(s);
     for (let i = 0; i < s.verts.length; i ++) {
       result += ATTRIB_DELIMITER +
         s.verts[i].x + ATTRIB_DELIMITER +
@@ -232,21 +231,21 @@ class StrokeCollection {
     return result;
   }
 
-  deserialize(str){
-    str = new String ('255,0,255,1,50,20,2,100,40,2,200,80,2;0,255,0,150,20,20,160,40,20;255,255,255,1,80,80,2,100,100,2;')
+  deserializeAndJoin(str){
+    str = new String ('255,0,255,0.1,50,20,2,100,40,2,200,80,2;0,255,0,0.01,150,20,20,160,40,20;255,255,255,0.1,80,80,2,100,100,2;')
     if (str.length === 0)
       return;
 
-    let strokes = str.split(STROKE_DELIMITER);
-    strokes.splice(strokes.length-1, 1);
-    this.strokes = new Array(strokes.length);
-    console.log(str);
-    console.log(strokes);
-    for (let i = 0; i < strokes.length; i++){
-      let attribs = strokes[i].split(ATTRIB_DELIMITER);
+    let strokesSerialized = str.split(STROKE_DELIMITER);
+    strokesSerialized.splice(strokesSerialized.length-1, 1);
+    let newStrokes = new Array(strokesSerialized.length);
+    // console.log(str);
+    // console.log(strokesSerialized);
+    for (let i = 0; i < strokesSerialized.length; i++){
+      let attribs = strokesSerialized[i].split(ATTRIB_DELIMITER);
       // attribs = attribs.splice(attribs.length-1, 1)
-      console.log(attribs);
-      this.strokes[i] = new Stroke(
+      // console.log(attribs);
+      newStrokes[i] = new Stroke(
         new Color (
           parseInt(attribs[0]),
           parseInt(attribs[1]),
@@ -255,20 +254,23 @@ class StrokeCollection {
         )
       );
 
-      console.log(this.strokes[i].color);
+      console.log(newStrokes[i].color);
 
       for (let j = COLOR_DATA_SIZE; j < attribs.length; j += VERT_SIZE){
-        let v = new Vertex (
+        let newVert = new Vertex (
           (attribs[j+0]),
           (attribs[j+1]),
           (attribs[j+2])
         );
-        console.log(v);
-        this.strokes[i].verts.push(
-          v
-        );
+        // console.log(newVert);
+        newStrokes[i].verts.push(newVert);
       }
+    } //end of newStrokes
+
+    for (let i = 0; i < newStrokes.length; i++){ //add newly deserialized strokes to collection
+      this.strokes.push(newStrokes[i]);
     }
+    // console.log(this.strokes);
   }
 
 }

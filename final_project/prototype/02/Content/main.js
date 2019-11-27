@@ -18,6 +18,23 @@ function main () {
 
   strokeCollection = new StrokeCollection();
 
+  //GET DATA FROM SERVER
+  // getDataFromServer
+  // let getRequest = new XMLHttpRequest();
+  // getRequest.open("GET", "https://blooming-meadow-17879.herokuapp.com?hostname=youtube.com", true);
+  // getRequest.responseType = "text";
+  // getRequest.send();
+  //
+  // getRequest.onreadystatechange = (e) => {
+  //   if (e.target.readyState  === 4){
+  //     console.log("GET BACK FROM SERVER:")
+  //     console.log(e.target.response);
+  //     strokeCollection += e.target
+  //   }
+  //   console.log("GET readystate: "+ e.target.readyState)
+  //   console.log(e);
+  // };
+
   //=======canvas stuff ==============
 
   let canvas = document.createElement("CANVAS");
@@ -55,9 +72,7 @@ function drawLoop(){
 
 
   let str = strokeCollection.serialize();
-  console.log(str);
-  strokeCollection.deserialize(str);
-  console.log(strokeCollection);
+  strokeCollection.deserializeAndJoin(str);
 
   graffitiCanvas.clearCanvas();
 
