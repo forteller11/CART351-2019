@@ -22,7 +22,6 @@
   width:128px;
   height:128px;
   z-index: 0;
-  opacity:60%;
 }
 #colorWheel:hover{
   cursor: crosshair;
