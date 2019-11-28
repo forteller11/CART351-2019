@@ -58,7 +58,7 @@ function main(){
 
 function changeTextContentToActivateOrDeactivate(element){
   if (canvasActivation)
-    element.textContent = "Activate Brush";
+    element.textContent = "Equip Brush";
   else
-    element.textContent = "Decactivate Brush";
+    element.textContent = "Unequip Brush";
 }
