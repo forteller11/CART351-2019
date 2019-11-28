@@ -5,6 +5,26 @@
   font-family:sans-serif;
   font-weight:bold;
 }
+#randomPageButton{
+  position:absolute;
+  width:24px;
+  height:24px;
+  margin:8px;
+  right:0;
+  top:0;
+  font-size: 16px;
+  color:black;
+  background-color:white;
+  text-align:center;
+  vertical-align: middle;
+  line-height: 24px;
+}
+#randomPageButton:hover{
+  color:white;
+  background-color:black;
+  cursor: pointer;
+}
+
 
 #ultimateContainer{
   border-radius: 64px;
