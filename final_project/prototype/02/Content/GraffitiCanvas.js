@@ -5,7 +5,7 @@ class GraffitiCanvas {
     this.canvas = canvas;
     this.ctx = ctx;
     this.backgroundFill = new Color(0,255,0,.2);
-    this.active = true;
+    this.active = false;
 
     window.addEventListener("resize", (e) => {
       this.canvas.width = window.innerWidth;

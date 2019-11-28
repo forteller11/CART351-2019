@@ -1,6 +1,6 @@
 'use strict';
 
-let canvasActivation = true;
+let canvasActivation = false;
 window.onload = main;
 function main(){
   sizeCursorInit();
@@ -24,6 +24,13 @@ function main(){
     });
   });
 
+  onOff.addEventListener('pointerover', (e) =>{
+    changeTextContentToActivateOrDeactivate(onOff);
+  });
+
+  onOff.addEventListener('pointerout', (e) =>{
+      onOff.textContent = "";
+  });
 
   onOff.addEventListener('pointerdown', (e) => {
     let changedActivity;
@@ -44,6 +51,14 @@ function main(){
       chrome.tabs.sendMessage(tabs[0].id, {type: 'setActivation', active:changedActivity}, (response) => {
       });
     });
+    changeTextContentToActivateOrDeactivate(onOff);
   });
 
+}
+
+function changeTextContentToActivateOrDeactivate(element){
+  if (canvasActivation)
+    element.textContent = "Activate Brush";
+  else
+    element.textContent = "Decactivate Brush";
 }

@@ -2,6 +2,8 @@
   box-sizing: border-box;
   margin:0px;
   padding:0;
+  font-family:sans-serif;
+  font-weight:bold;
 }
 
 #ultimateContainer{
@@ -22,15 +24,20 @@
   z-index: 0;
   opacity:60%;
 }
-
+#colorWheel:hover{
+  cursor: crosshair;
+}
 
 #valuePicker{
   position:relative;
   width:'auto';
   height:'auto';
-  /* background-color: red; */
-
 }
+
+#valuePicker:hover{
+  cursor: pointer;
+}
+
 #vertSpaceContainer{
 
   width:auto;
@@ -41,8 +48,13 @@
   align-items:center;
   justify-content: center;
 }
-.vertSpacer{
+#vertSpacerTop{
   height:32px;
+  background-color: yellow;
+}
+
+#vertSpacerBot{
+  height:20px;
   background-color: yellow;
 }
 
@@ -54,6 +66,11 @@ align-items:center;
 justify-content: center;
 }
 
+
+#sizePicker:hover{
+  cursor: pointer;
+}
+
 #sizePicker{
   /* background-color:magenta; */
   margin-top:0px;
@@ -63,11 +80,18 @@ justify-content: center;
 }
 
 #activateButton{
-  height:16px;
+  height:24px;
   width:auto;
   background-color: grey;
+    text-align:center;
+    vertical-align: middle;
+    line-height: 24px;
+}
+#activateButton:hover {
+  cursor: pointer;
+  filter: brightness(150%);
 }
 
-#activateButton:hover {
-  filter: brightness(150%);
+#goToRandomDrawing{
+
 }

@@ -48,6 +48,7 @@ function main () {
   canvas.style.padding = '0px';
   canvas.style.pointerEvents = "auto";
   canvas.style.touchAction = 'none';
+  canvas.style.pointerEvents = 'none';
 
   let canvasCtx = canvas.getContext("2d");
   canvasCtx.lineCap = "round";
