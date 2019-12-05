@@ -23,7 +23,7 @@ function createGraph(){
       let project = new Node("Final", projects);
         let extension = new Node("Chrome_Tagger", project, "./final_project/FinalProject/ChromeTaggerExtension.zip");
         let extensionServer = new Node("Server_Side", project, "./final_project/FinalProject/ChromeTaggerServerSide.zip");
-        let extensionReflection = new Node("Writings", project, "./final_project/FinalProject/ChromeTaggerWritings.pdf");
+        let extensionReflection = new Node("Writings", project, "./final_project/FinalProject/ChromeTaggerWriting.pdf");
         let extensionVideo = new Node("Video", project, "youtube.com");
       project.children.push(extension, extensionReflection, extensionVideo, extensionServer);
     projects.children.push(propsall, project);
