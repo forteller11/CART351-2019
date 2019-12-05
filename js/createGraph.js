@@ -21,9 +21,9 @@ function createGraph(){
     let projects = new Node("Final_Project", root);
       let propsall = new Node("Proposal", projects, "./assets/FinalProjectProposal.pdf");
       let project = new Node("Final", projects);
-        let extension = new Node("Chrome_Tagger", project, "https://github.com/forteller11/CART351-2019/tree/master/final_project/FinalProject/ChromeTaggerExtension.zip");
-        let extensionServer = new Node("Server_Side", project, "https://github.com/forteller11/CART351-2019/tree/master/final_project/FinalProject/ChromeTaggerServerSide.zip");
-        let extensionReflection = new Node("Writings", project, "https://github.com/forteller11/CART351-2019/tree/master/final_project/FinalProject/ChromeTaggerWritings.zip");
+        let extension = new Node("Chrome_Tagger", project, "./final_project/FinalProject/ChromeTaggerExtension.zip");
+        let extensionServer = new Node("Server_Side", project, "./final_project/FinalProject/ChromeTaggerServerSide.zip");
+        let extensionReflection = new Node("Writings", project, "./final_project/FinalProject/ChromeTaggerWritings.pdf");
         let extensionVideo = new Node("Video", project, "youtube.com");
       project.children.push(extension, extensionReflection, extensionVideo, extensionServer);
     projects.children.push(propsall, project);
