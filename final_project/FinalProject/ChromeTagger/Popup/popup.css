@@ -1,0 +1,116 @@
+*{
+  box-sizing: border-box;
+  margin:0px;
+  padding:0;
+  font-family:sans-serif;
+  font-weight:bold;
+}
+#randomPageButton{
+  position:absolute;
+  width:24px;
+  height:24px;
+  margin:8px;
+  right:0;
+  top:0;
+  font-size: 16px;
+  color:black;
+  background-color:white;
+  text-align:center;
+  vertical-align: middle;
+  line-height: 24px;
+}
+#randomPageButton:hover{
+  color:white;
+  background-color:black;
+  cursor: pointer;
+}
+
+
+#ultimateContainer{
+  border-radius: 64px;
+}
+#brushTools{
+  display:flex;
+  flex-flow: row;
+  align-items:flex-start;
+
+}
+#colorWheel{
+  background-color:green;
+  margin:0;
+  position:relative;
+  width:128px;
+  height:128px;
+  z-index: 0;
+}
+#colorWheel:hover{
+  cursor: crosshair;
+}
+
+#valuePicker{
+  position:relative;
+  width:'auto';
+  height:'auto';
+}
+
+#valuePicker:hover{
+  cursor: pointer;
+}
+
+#vertSpaceContainer{
+
+  width:auto;
+  margin-right:32px;
+
+  display:flex;
+  flex-flow: column;
+  align-items:center;
+  justify-content: center;
+}
+#vertSpacerTop{
+  height:32px;
+  background-color: yellow;
+}
+
+#vertSpacerBot{
+  height:20px;
+  background-color: yellow;
+}
+
+
+#color{
+display:flex;
+flex-flow: column;
+align-items:center;
+justify-content: center;
+}
+
+
+#sizePicker:hover{
+  cursor: pointer;
+}
+
+#sizePicker{
+  /* background-color:magenta; */
+  margin-top:0px;
+  margin-right:-16px;
+  /* background-color: lightGrey; */
+  z-index:200;
+}
+
+#activateButton{
+  height:24px;
+  width:auto;
+  background-color: grey;
+    text-align:center;
+    vertical-align: middle;
+    line-height: 24px;
+}
+#activateButton:hover {
+  cursor: pointer;
+  filter: brightness(150%);
+}
+
+#goToRandomDrawing{
+
+}

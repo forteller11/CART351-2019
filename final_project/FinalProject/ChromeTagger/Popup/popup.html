@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+  <link rel = "stylesheet"
+    type = "text/css"
+    href = "popup.css" />
+    <title>Chrome Tagger Popup</title>
+  </head>
+
+  <script src = "js/colorPicker.js"></script>
+  <script src = "js/sizePicker.js"></script>
+  <script src = "js/main.js"></script>
+</head>
+<body>
+  <div id="randomPageButton">?</div>
+
+  <div id="ultimateContainer">
+  <div id = vertSpaceContainer>
+
+    <div id="vertSpacerTop"></div>
+
+    <div id="brushTools">
+      <canvas id = 'sizePicker' width=100 height=128></canvas>
+
+      <div id= "color">
+        <div id = colorWheel >
+          <canvas id ='colorCursor' width=128 height=128></canvas>
+          <canvas id ='colorPicker' width=128 height=128></canvas>
+        </div>
+        <canvas id ='valuePicker' width=128 height=16></canvas>
+    </div>
+
+  </div>
+
+  <div id="vertSpacerBot"></div>
+</div>
+<div id="activateButton"></div>
+</div>
+</body>
+</html>

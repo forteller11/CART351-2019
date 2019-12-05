@@ -19,9 +19,13 @@ function createGraph(){
       let e3 = new Node("Exercise03_(placeholder)", exercises);
       exercises.children.push(e1, e2, e3);
     let projects = new Node("Final_Project", root);
-      let propsall = new Node("Proposal", root, "./assets/FinalProjectProposal.pdf");
-      let project = new Node("Project", root);
-      projects.children.push(propsall, project);
+      let propsall = new Node("Proposal", projects, "./assets/FinalProjectProposal.pdf");
+      let project = new Node("Final", projects);
+        let extension = new Node("Chrome_Tagger", project, "./assets/chromeTagger.zip");
+        let extensionReflection = new Node("Writing", project, "./assets/extensionReflection.pdf");
+        let extensionVideo = new Node("Video", project, "youtube.com");
+      project.children.push(extension, extensionReflection, extensionVideo);
+    projects.children.push(propsall, project);
     let reflections = new Node("Reflections", root);
     let presentations = new Node("Presentations", root);
   root.children.push(baseGithub, exercises, projects, reflections, presentations);

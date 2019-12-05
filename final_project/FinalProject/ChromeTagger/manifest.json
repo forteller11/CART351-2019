@@ -1,0 +1,46 @@
+{
+  "manifest_version": 2,
+  "name": "Chrome Tagger",
+  "author": "Charles Yan Miller",
+  "description": "Allows users to draw on shared canvases which are tied to hostnames.",
+  "version": "1.0",
+  "icons": {
+    "16": "icon19.png",
+    "48": "icon256.png",
+    "128": "icon256.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "Content/helperFunctions.js",
+        "Content/Tools.js",
+        "Content/GraffitiCanvas.js",
+        "Content/main.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "<all_urls>"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "scripts": []
+  },
+  "browser_action": {
+    "default_title": "Brush Properties",
+    "default_icon": {
+      "19": "icon19.png"
+    },
+    "default_popup": "Popup/popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "storage"
+  ],
+  "web_accessible_resources": []
+}
