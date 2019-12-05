@@ -68,7 +68,7 @@ class StrokeBrush extends Tool {
     super(canvas, canvasCtx, strokeDatas);
     this.color = new Color(255, 0, 0, 1);
     this.width = 5;
-    this.pickerPos = new Vertex(64,64);
+    this.pickerPos = new Vertex(64,64,this.width);
     this.valuePos = 55;
     this.sizePos = 110;
 
@@ -92,17 +92,22 @@ class StrokeBrush extends Tool {
             break;
 
           case 'getColor':
-            sendResponse({
-              pickerPos : {x:this.pickerPos.x, y:this.pickerPos.y},
-              valuePos  : this.valuePos,
-              sizePos : this.sizePos
-            });
+          console.log("getcol");
+          console.log(this.pickerPos);
+          let r = {
+            pickerPos : {x:this.pickerPos.x, y:this.pickerPos.y},
+            valuePos  : this.valuePos,
+            sizePos : this.sizePos
+          }
+          console.log(r);
+            sendResponse(r);
+          break;
 
           case 'setSize':
             this.width = request.size*2;
             this.sizePos = request.sizePos;
             sendResponse({msg:"received set size"});
-            break;
+          break;
 
           case 'getActivation':
             if (graffitiCanvas != null){
@@ -120,14 +125,12 @@ class StrokeBrush extends Tool {
                 graffitiCanvas.canvas.style.pointerEvents = "initial";
               else
                 graffitiCanvas.canvas.style.pointerEvents = "none";
-
             }
-
             sendResponse({msg:"recieved set activation"});
           break;
 
           default:
-            //console.warn("unrecognized type of chrome message!");
+            console.warn("unrecognized type of chrome message!");
             break;
 
         } //end of switch

@@ -206,17 +206,18 @@ class ColorPickerCursor {
       currentWindow: true
     }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {type: 'getColor'}, (response) => {
-        colCursor.pos.x = response.pickerPos.x;
-        colCursor.pos.y = response.pickerPos.y;
-        valCursor.x = response.valuePos;
-        sizeCursor.y = response.sizePos;
-        sizeCursor.calcSize();
         console.log(response);
-        valCursor.draw();
-        sizeCursor.draw();
-        drawTriangle(this.canvas, this.ctxToPickFrom, valCursor.value);
-        this.drawSelfInCanvas();
-        sizeCursor.draw();
+          colCursor.pos.x = response.pickerPos.x;
+          colCursor.pos.y = response.pickerPos.y;
+          valCursor.x = response.valuePos;
+          sizeCursor.y = response.sizePos;
+          sizeCursor.calcSize();
+          console.log(response);
+          valCursor.draw();
+          sizeCursor.draw();
+          drawTriangle(this.canvas, this.ctxToPickFrom, valCursor.value);
+          this.drawSelfInCanvas();
+          sizeCursor.draw();
       });
     });
 
